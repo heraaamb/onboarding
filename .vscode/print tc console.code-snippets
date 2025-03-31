@@ -1,0 +1,28 @@
+{
+    "Print to console (con)": {
+        "scope": "javascript,typescript",
+        "prefix": "con",
+        "body": [
+            "console.log($1);"
+        ],
+        "description": "Log output to console"
+    },
+    
+    "Print to console (clg)": {
+        "scope": "javascript,typescript",
+        "prefix": "clg",
+        "body": [
+            "console.log($1);"
+        ],
+        "description": "Log output to console"
+    },
+	
+    "Print to console (prin)": {
+        "scope": "javascript,typescript",
+        "prefix": "prin",
+        "body": [
+            "console.log($1);"
+        ],
+        "description": "Log output to console"
+    }
+}
