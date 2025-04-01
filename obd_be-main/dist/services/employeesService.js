@@ -19,6 +19,7 @@ const employees_queries_1 = require("../queries/employees.queries");
 const users_queries_1 = require("../queries/users.queries");
 const getAllEmployees = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield db_1.default.query(employees_queries_1.GET_ALL_EMPLOYEES);
+    // // Debugging
     console.log(result.rows);
     return result.rows;
 });

@@ -12,6 +12,7 @@ import { USER_INSERT_QUERY } from '../queries/users.queries';
 
 export const getAllEmployees = async () => {
     const result = await pool.query(GET_ALL_EMPLOYEES);
+    // // Debugging
     console.log(result.rows);
     return result.rows;
 };
