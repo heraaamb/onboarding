@@ -29,14 +29,6 @@ const getOnboardingEmployees = () => __awaiter(void 0, void 0, void 0, function*
     return result.rows;
 });
 exports.getOnboardingEmployees = getOnboardingEmployees;
-// export const createEmployee = async (data: any) => {
-//     const { user_id, designation, joining_date, department_id, supervisor_id, document_url } = data;
-//     const result = await pool.query(
-//         CREATE_EMPLOYEE,
-//         [user_id, designation, joining_date, department_id, supervisor_id, document_url]
-//     );
-//     return result.rows[0];
-// };
 const createEmployee = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const client = yield db_1.default.connect();
     try {

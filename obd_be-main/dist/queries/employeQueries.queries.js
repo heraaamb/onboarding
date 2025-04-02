@@ -5,5 +5,5 @@ exports.GET_ALL_EMPLOYEE_QUERIES = `
     SELECT * FROM employee_queries;
 `;
 exports.INSERT_EMPLOYEE_QUERY = `
-    INSERT INTO employee_queries (emp_id, query_text, )
+    INSERT INTO employee_queries (emp_id, query_text, assigned_to) VALUES ($1,$2,$3)
 `;

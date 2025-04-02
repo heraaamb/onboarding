@@ -41,3 +41,7 @@ layout.css
 .sass-cache
 
 #env
+
+
+node_modules/
+package-lock.json/

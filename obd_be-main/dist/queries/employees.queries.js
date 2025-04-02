@@ -1,8 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DELETE_EMPLOYEE = exports.UPDATE_EMPLOYEE = exports.EMPLOYEE_INSERT_QUERY = exports.CREATE_EMPLOYEE = exports.GET_ONBOARDING_EMPLOYEES = exports.GET_ALL_EMPLOYEES = void 0;
+exports.DELETE_EMPLOYEE = exports.UPDATE_EMPLOYEE = exports.EMPLOYEE_INSERT_QUERY = exports.GET_ONBOARDING_EMPLOYEES = exports.GET_ALL_EMPLOYEES = void 0;
 exports.GET_ALL_EMPLOYEES = `
-  SELECT * FROM employees;
+  SELECT 
+      e.emp_id,
+      u.name AS employee_name,
+      u.email,
+      e.joining_date,
+      d.name AS department_name,
+      u.role,
+      u.status,
+      e.designation,
+      s.name AS supervisor_name
+  FROM employees e
+  JOIN users u ON e.user_id = u.user_id
+  LEFT JOIN departments d ON e.department_id = d.dept_id
+  LEFT JOIN employees es ON e.supervisor_id = es.emp_id
+  LEFT JOIN users s ON es.user_id = s.user_id;
 `;
 exports.GET_ONBOARDING_EMPLOYEES = `
   SELECT * FROM employees 
@@ -10,16 +24,10 @@ exports.GET_ONBOARDING_EMPLOYEES = `
     SELECT emp_id FROM onboarding_tasks WHERE status != 'Completed'
   );
 `;
-exports.CREATE_EMPLOYEE = `
+exports.EMPLOYEE_INSERT_QUERY = `
   INSERT INTO employees (
     user_id, designation, joining_date, department_id, supervisor_id, document_url
-  ) VALUES (
-    $1, $2, $3, $4, $5, $6
-  ) RETURNING *;
-`;
-exports.EMPLOYEE_INSERT_QUERY = `
-  INSERT INTO employees (user_id, designation, joining_date, department_id, supervisor_id, document_url)
-  VALUES ($1, $2, $3, $4, $5, $6)
+  ) VALUES ($1, $2, $3, $4, $5, $6)
   RETURNING *;
 `;
 // export const UPDATE_EMPLOYEE = `

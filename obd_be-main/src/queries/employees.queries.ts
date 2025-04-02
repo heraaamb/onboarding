@@ -1,5 +1,19 @@
 export const GET_ALL_EMPLOYEES = `
-  SELECT * FROM employees;
+  SELECT 
+      e.emp_id,
+      u.name AS employee_name,
+      u.email,
+      e.joining_date,
+      d.name AS department_name,
+      u.role,
+      u.status,
+      e.designation,
+      s.name AS supervisor_name
+  FROM employees e
+  JOIN users u ON e.user_id = u.user_id
+  LEFT JOIN departments d ON e.department_id = d.dept_id
+  LEFT JOIN employees es ON e.supervisor_id = es.emp_id
+  LEFT JOIN users s ON es.user_id = s.user_id;
 `;
 
 export const GET_ONBOARDING_EMPLOYEES = `
@@ -9,17 +23,10 @@ export const GET_ONBOARDING_EMPLOYEES = `
   );
 `;
 
-export const CREATE_EMPLOYEE = `
+export const EMPLOYEE_INSERT_QUERY = `
   INSERT INTO employees (
     user_id, designation, joining_date, department_id, supervisor_id, document_url
-  ) VALUES (
-    $1, $2, $3, $4, $5, $6
-  ) RETURNING *;
-`;
-
-export const EMPLOYEE_INSERT_QUERY = `
-  INSERT INTO employees (user_id, designation, joining_date, department_id, supervisor_id, document_url)
-  VALUES ($1, $2, $3, $4, $5, $6)
+  ) VALUES ($1, $2, $3, $4, $5, $6)
   RETURNING *;
 `;
 

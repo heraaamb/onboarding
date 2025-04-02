@@ -31,17 +31,6 @@ export const createEmployee = async (req: Request, res: Response) => {
     }
 };
 
-// export const updateEmployee = async (req: Request, res: Response) => {
-//     try {
-//         const updated = await employeeService.updateEmployee(Number(req.params.id), req.body);
-//         res.json(updated);
-//     } catch (err) {
-//         // // Debugging
-//         console.log(err);
-//         res.status(500).json({ error: 'Failed to update employee' });
-//     }
-// };
-
 export const updateEmployee = async (req: Request, res: Response) => {
     
         // // Debugging

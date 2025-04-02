@@ -3,12 +3,14 @@ import pool from '../db/db';
 import {
     GET_ALL_EMPLOYEES,
     GET_ONBOARDING_EMPLOYEES,
-    CREATE_EMPLOYEE,
     UPDATE_EMPLOYEE,
     DELETE_EMPLOYEE,
     EMPLOYEE_INSERT_QUERY
 } from '../queries/employees.queries';
 import { USER_INSERT_QUERY } from '../queries/users.queries';
+import crypto from 'crypto';
+import { sendEmail } from '../services/emailService'; // A function to send emails
+import bcrypt from 'bcrypt';
 
 export const getAllEmployees = async () => {
     const result = await pool.query(GET_ALL_EMPLOYEES);
@@ -22,38 +24,55 @@ export const getOnboardingEmployees = async () => {
     return result.rows;
 };
 
-// export const createEmployee = async (data: any) => {
-//     const { user_id, designation, joining_date, department_id, supervisor_id, document_url } = data;
-//     const result = await pool.query(
-//         CREATE_EMPLOYEE,
-//         [user_id, designation, joining_date, department_id, supervisor_id, document_url]
-//     );
-//     return result.rows[0];
-// };
-
 export const createEmployee = async (data: any) => {
-    const client = await pool.connect();
-    
-    try {
+  const client = await pool.connect();
+  
+  try {
       await client.query('BEGIN'); // Start the transaction
 
-      const userValues = [data.name, data.email, data.password_hash, data.role, data.department_id, data.status];
+      // Generate a secure random password
+      const plainPassword = crypto.randomBytes(8).toString('hex'); // Example: "f3a9b4c1e8d2"
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+
+      // Insert into users table
+      const userValues = [data.name, data.email, hashedPassword, data.role, data.department_id, data.status];
       const userResult = await client.query(USER_INSERT_QUERY, userValues);
       const userId = userResult.rows[0].user_id;
 
+      // Insert into employees table
       const employeeValues = [userId, data.designation, data.joining_date, data.department_id, data.supervisor_id, data.document_url];
       const employeeResult = await client.query(EMPLOYEE_INSERT_QUERY, employeeValues);
-  
+
       await client.query('COMMIT'); // Commit the transaction
-      return employeeResult.rows[0];
-  
-    } catch (error) {
+
+      // // Send the generated password to the user's email
+      // const emailSubject = 'Your Account Credentials';
+      // const emailBody = `
+      //     Hello ${data.name},
+
+      //     Your account has been created successfully.
+      //     Here are your login details:
+
+      //     Email: ${data.email}
+      //     Temporary Password: ${plainPassword}
+
+      //     Please change your password upon first login.
+
+      //     Regards,
+      //     Your Company
+      // `;
+      // await sendEmail(data.email, emailSubject, emailBody);
+
+      return { ...employeeResult.rows[0], plainPassword }; // Return password for further use if needed
+
+  } catch (error) {
       await client.query('ROLLBACK'); // Rollback in case of error
       console.error('Transaction failed:', error);
       throw error;
-    } finally {
+  } finally {
       client.release(); // Release the client
-    }
+  }
 };
 
 export const updateEmployee = async (id: number, data: any) => {
