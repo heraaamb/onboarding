@@ -18,6 +18,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const employeesRoutes_1 = __importDefault(require("./routes/employeesRoutes"));
 const tasksRoutes_1 = __importDefault(require("./routes/tasksRoutes"));
 const employeeQueriesRoute_1 = __importDefault(require("./routes/employeeQueriesRoute"));
+const usersRoute_1 = __importDefault(require("./routes/usersRoute"));
 const db_1 = __importDefault(require("./db/db"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -51,7 +52,7 @@ const registerRoutes = () => {
     });
     app.use("/api/employees", employeesRoutes_1.default);
     app.use("/api/tasks", tasksRoutes_1.default);
-    // app.use("/api/users", usersRoute);
+    app.use("/api/users", usersRoute_1.default);
     app.use("/api/employee-queries", employeeQueriesRoute_1.default);
 };
 const handleErrors = () => {

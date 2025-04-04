@@ -16,6 +16,8 @@ exports.deleteUser = exports.updateUser = exports.createUser = exports.getAllUse
 // src/services/users.service.ts
 const db_1 = __importDefault(require("../db/db"));
 const users_queries_1 = require("../queries/users.queries");
+const crypto_1 = __importDefault(require("crypto"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield db_1.default.query(users_queries_1.GET_ALL_USERS);
     // // Debugging
@@ -24,7 +26,14 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getAllUsers = getAllUsers;
 const createUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password_hash, role, department_id, status } = data;
+    const plainPassword = crypto_1.default.randomBytes(8).toString('hex');
+    const saltRounds = 10;
+    const password_hash = yield bcrypt_1.default.hash(plainPassword, saltRounds);
+    // // Debugging
+    // console.log(password_hash);
+    const { name, email, role, department_name, status } = data;
+    const department_id = yield db_1.default.query(`SELECT dept_id FROM departments where name='$1'`, [department_name]);
+    console.log(department_id);
     const result = yield db_1.default.query(users_queries_1.CREATE_USER, [name, email, password_hash, role, department_id, status]);
     return result.rows[0];
 });

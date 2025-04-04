@@ -67,7 +67,7 @@ exports.getOnboardingEmployees = getOnboardingEmployees;
 const createEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // // Debugging
-        // console.log(req.body);
+        console.log(req.body);
         const employee = yield employeeService.createEmployee(req.body);
         res.status(201).json(employee);
     }
@@ -77,16 +77,6 @@ const createEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.createEmployee = createEmployee;
-// export const updateEmployee = async (req: Request, res: Response) => {
-//     try {
-//         const updated = await employeeService.updateEmployee(Number(req.params.id), req.body);
-//         res.json(updated);
-//     } catch (err) {
-//         // // Debugging
-//         console.log(err);
-//         res.status(500).json({ error: 'Failed to update employee' });
-//     }
-// };
 const updateEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // // Debugging
     // console.log(req.body);

@@ -15,7 +15,7 @@ import bcrypt from 'bcrypt';
 export const getAllEmployees = async () => {
     const result = await pool.query(GET_ALL_EMPLOYEES);
     // // Debugging
-    console.log(result.rows);
+    // console.log(result.rows);
     return result.rows;
 };
 
@@ -27,6 +27,31 @@ export const getOnboardingEmployees = async () => {
 export const createEmployee = async (data: any) => {
   const client = await pool.connect();
   
+  // // Debugging
+  console.log("data: ",data);
+
+  const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`)
+  // // Debugging
+  console.log("resultDept: ",resultDept); console.log("endoo");
+  const department_id = resultDept.rows[0].dept_id
+  // // Debugging
+  // console.log("deparID: ", department_id); 
+
+  const resultSupervisor = await client.query(
+    `
+      SELECT e.emp_id 
+      FROM employees e
+      JOIN users u ON u.user_id = e.user_id
+      WHERE u.name = $1;
+    `,
+    [data.supervisor_name]
+  );
+  // // Debugging
+  // console.log("supdervisor result: ",resultSupervisor);
+  const supervisor_id = resultSupervisor.rows[0].emp_id
+  // // Debugging
+  // console.log("supervisor_id: ", supervisor_id);
+
   try {
       await client.query('BEGIN'); // Start the transaction
 
@@ -36,12 +61,12 @@ export const createEmployee = async (data: any) => {
       const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
 
       // Insert into users table
-      const userValues = [data.name, data.email, hashedPassword, data.role, data.department_id, data.status];
+      const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
       const userResult = await client.query(USER_INSERT_QUERY, userValues);
       const userId = userResult.rows[0].user_id;
 
       // Insert into employees table
-      const employeeValues = [userId, data.designation, data.joining_date, data.department_id, data.supervisor_id, data.document_url];
+      const employeeValues = [userId, data.designation, data.joining_date, department_id, supervisor_id, data.document_url];
       const employeeResult = await client.query(EMPLOYEE_INSERT_QUERY, employeeValues);
 
       await client.query('COMMIT'); // Commit the transaction

@@ -47,7 +47,7 @@ const registerRoutes = () => {
 
   app.use("/api/employees", employeesRoutes);
   app.use("/api/tasks", tasksRoutes);
-  // app.use("/api/users", usersRoute);
+  app.use("/api/users", usersRoute);
   app.use("/api/employee-queries", employeeQueriesRoute);
 };
 
