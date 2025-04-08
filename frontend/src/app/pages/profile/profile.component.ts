@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class ProfileComponent implements OnInit {
   employee: Employee | null = null;
+employee_name: any;
 
   constructor(private employeeService: EmployeeService) {}
 

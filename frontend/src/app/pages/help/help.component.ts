@@ -1,39 +1,49 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextarea } from 'primeng/inputtextarea';
-import { ButtonModule } from 'primeng/button';
-import { HelpRequest } from '../../service/help.service';
 import { CommonModule } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { PanelModule } from 'primeng/panel';
+import { HelpService, HelpRequest } from '../../service/help.service';
+import { InputTextarea } from 'primeng/inputtextarea';
 
 @Component({
-  selector: 'app-help-dialog',
+  selector: 'app-help',
   standalone: true,
+  templateUrl: './help.component.html',
   imports: [
     CommonModule,
     FormsModule,
-    DialogModule,
     InputTextModule,
-    InputTextModule,
-    ButtonModule
-  ],
-  templateUrl: './help.component.html',
-  styleUrls: ['./help.component.css']
+    InputTextarea, // ✅ correct way to import
+    ButtonModule,
+    PanelModule
+  ]
 })
-export class HelpDialogComponent {
-  @Input() visible: boolean = false;
-  @Output() save = new EventEmitter<HelpRequest>();
-  @Output() close = new EventEmitter<void>();
-
+export class HelpComponent {
   email: string = '';
   message: string = '';
+  submitted: boolean = false;
+
+  constructor(private helpService: HelpService) {}
 
   submitForm() {
     if (this.email && this.message) {
-      this.save.emit({ email: this.email, message: this.message });
-      this.email = '';
-      this.message = '';
+      const helpRequest: HelpRequest = {
+        email: this.email,
+        message: this.message
+      };
+
+      this.helpService.submitHelpRequest(helpRequest).subscribe({
+        next: () => {
+          this.submitted = true;
+          this.email = '';
+          this.message = '';
+        },
+        error: (err) => {
+          console.error('Error submitting help request:', err);
+        }
+      });
     }
   }
 }

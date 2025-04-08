@@ -4,7 +4,7 @@
         <div class="flex flex-col gap-6">
             <div>
                 <label for="name">Employee Name</label>
-                <input id="name" type="text" pInputText [(ngModel)]="employee.name" required fluid />
+                <input id="name" type="text" pInputText [(ngModel)]="employee.employee_name" required fluid />
             </div>
 
             <div>
@@ -14,7 +14,7 @@
 
             <div>
                 <label for="department">Department</label>
-                <p-dropdown id="department" [options]="departments" optionLabel="name" 
+                <p-dropdown id="department" [options]="departments" optionLabel="department name" 
                     [(ngModel)]="employee.department_name" placeholder="Select Department" required fluid >
                 </p-dropdown>
             </div>
@@ -25,7 +25,7 @@
                 </p-calendar>
             </div>
 
-            <!-- ✅ Role Dropdown -->
+        
             <div>
                 <label for="role">Role</label>
                 <p-dropdown id="role" [options]="roles" optionLabel="label" optionValue="value" 
@@ -33,7 +33,6 @@
                 </p-dropdown>
             </div>
 
-            <!-- ✅ Status Dropdown (Corrected) -->
             <div>
                 <label for="status">Status</label>
                 <p-dropdown id="status" [options]="statuses" optionLabel="label" optionValue="value" 
