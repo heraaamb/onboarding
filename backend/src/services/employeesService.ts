@@ -14,36 +14,36 @@ import bcrypt from 'bcrypt';
 import {generatePassword, hashPassword, sendmail} from '../utils/utils'
 
 export const getAllEmployees = async () => {
-    const result = await pool.query(GET_ALL_EMPLOYEES);
-    // // Debugging
-    // console.log(result.rows);
-    return result.rows;
+  const result = await pool.query(GET_ALL_EMPLOYEES);
+  // // Debugging
+  // console.log(result.rows);
+  return result.rows;
 };
 
 export const getOnboardingEmployees = async () => {
-    const result = await pool.query(GET_ONBOARDING_EMPLOYEES);
-    return result.rows;
+  const result = await pool.query(GET_ONBOARDING_EMPLOYEES);
+  return result.rows;
 };
 
 export const createEmployee = async (data: any) => {
   const client = await pool.connect();
   
   // // Debugging
-  // console.log("employee data: ",data);
-  // console.log(data.role);
+  console.log("employee data while creating: ",data);
+  console.log(data.role);
 
   if(data.role === 'Admin'){
-    const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`)
+    const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name}';`)
     // // Debugging
-    // console.log("resultDept: ",resultDept); console.log("endoo");
+    console.log("resultDept: ",resultDept); console.log("endoo");
     const department_id = resultDept.rows[0].dept_id
     // // Debugging
-    // console.log("deparID: ", department_id); 
+    console.log("deparID: ", department_id); 
  
     const plainPassword = await generatePassword();
     const hashedPassword = await hashPassword( plainPassword);
 
-    const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
+    const userValues = [data.employee_name, data.email, hashedPassword, data.role, department_id, data.status];
     const userResult = await client.query(USER_INSERT_QUERY, userValues);
 
       // // send mail (send password) 
@@ -51,12 +51,12 @@ export const createEmployee = async (data: any) => {
     return plainPassword;
   }
 
-  const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`)
+  const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name}';`)
   // // Debugging
-  // console.log("resultDeptId: ",resultDept); console.log("endoo");
+  console.log("resultDeptId: ",resultDept); console.log("endoo");
   const department_id = resultDept.rows[0].dept_id
   // // Debugging
-  // console.log("deparID: ", department_id); 
+  console.log("deparID: ", department_id); 
 
   const resultSupervisor = await client.query(
     `
@@ -80,7 +80,7 @@ export const createEmployee = async (data: any) => {
       const hashedPassword = await hashPassword( plainPassword)
 
       // Insert into users table
-      const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
+      const userValues = [data.employee_name, data.email, hashedPassword, data.role, department_id, data.status];
       const userResult = await client.query(USER_INSERT_QUERY, userValues);
       const userId = userResult.rows[0].user_id;
 
@@ -105,45 +105,83 @@ export const createEmployee = async (data: any) => {
 };
 
 export const updateEmployee = async (id: number, data: any) => {
-    const { designation, joining_date, department_id, supervisor_id, document_url } = data;
-  
-    const employeeDetails = {
-      designation,
-      joining_date,
-      department_id,
-      supervisor_id,
-      document_url,
-    };
-  
-    // Extract both field names and values
-    const filteredEntries = Object.entries(employeeDetails).filter(([_, value]) => value !== undefined);
-  
-    if (filteredEntries.length === 0) {
-      throw new Error('No fields to update');
+  // // Debugging
+  console.log("Data received:", data);
+
+  const {
+    employee_name,
+    email,
+    department_name,
+    joining_date,
+    role,
+    status,
+    designation,
+    supervisor_name,
+  } = data;
+
+  try {
+    // Get user_id from employee ID
+    const userRes = await pool.query(`SELECT user_id FROM employees WHERE emp_id = $1`, [id]);
+    if (userRes.rows.length === 0) throw new Error("Employee not found");
+    const user_id = userRes.rows[0].user_id;
+
+    // Update employee name
+    if (employee_name !== undefined) {
+      await pool.query(`UPDATE users SET name = $1 WHERE user_id = $2`, [employee_name, user_id]);
     }
-  
-    const employee_update_Details = filteredEntries.map(([_, value]) => value);
-    const employeeFields = filteredEntries.map(([key, value]) => 
-        `${key} = $${employee_update_Details.indexOf(value) + 1}`
+
+    // Update email
+    if (email !== undefined) {
+      await pool.query(`UPDATE users SET email = $1 WHERE user_id = $2`, [email, user_id]);
+    }
+
+    // Update department
+    if (department_name !== undefined) {
+      const deptRes = await pool.query(`SELECT dept_id FROM departments WHERE name = $1`, [department_name]);
+      if (deptRes.rows.length === 0) throw new Error("Department not found");
+      const department_id = deptRes.rows[0].dept_id;
+      // // Debugging
+      console.log("DepatmentId: ", department_id);
+      await pool.query(`UPDATE users SET department_id = $1 WHERE user_id = $2`, [department_id, user_id]);
+    }
+
+    // Update joining date
+    if (joining_date !== undefined) {
+      await pool.query(`UPDATE employees SET joining_date = $1 WHERE user_id = $2`, [joining_date, user_id]);
+    }
+
+    // Update role
+    if (role !== undefined) {
+      await pool.query(`UPDATE users SET role = $1 WHERE user_id = $2`, [role, user_id]);
+    }
+
+    // Update status
+    if (status !== undefined) {
+      await pool.query(`UPDATE users SET status = $1 WHERE user_id = $2`, [status, user_id]);
+    }
+
+    // Update designation
+    if (designation !== undefined) {
+      await pool.query(`UPDATE employees SET designation = $1 WHERE user_id = $2`, [designation, user_id]);
+    }
+
+    // Update supervisor
+    if (supervisor_name !== undefined) {
+      const supervisorRes = await pool.query(
+        `SELECT e.emp_id 
+        FROM employees e
+        JOIN users u ON u.user_id = e.user_id
+        WHERE u.name = $1`, [supervisor_name]
       );
-      
-  
-    // Build query
-    const query = `
-      UPDATE employees
-      SET ${employeeFields.join(', ')}
-      WHERE emp_id = $${employee_update_Details.length + 1}
-      RETURNING *;
-    `;
-  
-    try {
-      const result = await pool.query(query, [...employee_update_Details, id]);
-      return result.rows[0];
-    } catch (error) {
-      console.error('Error updating employee:', error);
-      throw new Error('Failed to update employee');
+      if (supervisorRes.rows.length === 0) throw new Error("Supervisor not found");
+      const supervisor_id = supervisorRes.rows[0].emp_id;
+      await pool.query(`UPDATE employees SET supervisor_id = $1 WHERE user_id = $2`, [supervisor_id, user_id]);
     }
-  };
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
   
 
 export const deleteEmployee = async (id: number) => {

@@ -33,29 +33,31 @@ exports.getOnboardingEmployees = getOnboardingEmployees;
 const createEmployee = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const client = yield db_1.default.connect();
     // // Debugging
-    // console.log("employee data: ",data);
-    // console.log(data.role);
+    console.log("employee data while creating: ", data);
+    console.log(data.role);
     if (data.role === 'Admin') {
-        const resultDept = yield client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`);
+        const resultDept = yield client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name}';`);
         // // Debugging
-        // console.log("resultDept: ",resultDept); console.log("endoo");
+        console.log("resultDept: ", resultDept);
+        console.log("endoo");
         const department_id = resultDept.rows[0].dept_id;
         // // Debugging
-        // console.log("deparID: ", department_id); 
+        console.log("deparID: ", department_id);
         const plainPassword = yield (0, utils_1.generatePassword)();
         const hashedPassword = yield (0, utils_1.hashPassword)(plainPassword);
-        const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
+        const userValues = [data.employee_name, data.email, hashedPassword, data.role, department_id, data.status];
         const userResult = yield client.query(users_queries_1.USER_INSERT_QUERY, userValues);
         // // send mail (send password) 
         // await sendmail(data.name, data.email, plainPassword)
         return plainPassword;
     }
-    const resultDept = yield client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`);
+    const resultDept = yield client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name}';`);
     // // Debugging
-    // console.log("resultDeptId: ",resultDept); console.log("endoo");
+    console.log("resultDeptId: ", resultDept);
+    console.log("endoo");
     const department_id = resultDept.rows[0].dept_id;
     // // Debugging
-    // console.log("deparID: ", department_id); 
+    console.log("deparID: ", department_id);
     const resultSupervisor = yield client.query(`
       SELECT e.emp_id 
       FROM employees e
@@ -72,7 +74,7 @@ const createEmployee = (data) => __awaiter(void 0, void 0, void 0, function* () 
         const plainPassword = yield (0, utils_1.generatePassword)();
         const hashedPassword = yield (0, utils_1.hashPassword)(plainPassword);
         // Insert into users table
-        const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
+        const userValues = [data.employee_name, data.email, hashedPassword, data.role, department_id, data.status];
         const userResult = yield client.query(users_queries_1.USER_INSERT_QUERY, userValues);
         const userId = userResult.rows[0].user_id;
         // Insert into employees table
@@ -94,35 +96,64 @@ const createEmployee = (data) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.createEmployee = createEmployee;
 const updateEmployee = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    const { designation, joining_date, department_id, supervisor_id, document_url } = data;
-    const employeeDetails = {
-        designation,
-        joining_date,
-        department_id,
-        supervisor_id,
-        document_url,
-    };
-    // Extract both field names and values
-    const filteredEntries = Object.entries(employeeDetails).filter(([_, value]) => value !== undefined);
-    if (filteredEntries.length === 0) {
-        throw new Error('No fields to update');
-    }
-    const employee_update_Details = filteredEntries.map(([_, value]) => value);
-    const employeeFields = filteredEntries.map(([key, value]) => `${key} = $${employee_update_Details.indexOf(value) + 1}`);
-    // Build query
-    const query = `
-      UPDATE employees
-      SET ${employeeFields.join(', ')}
-      WHERE emp_id = $${employee_update_Details.length + 1}
-      RETURNING *;
-    `;
+    // // Debugging
+    console.log("Data received:", data);
+    const { employee_name, email, department_name, joining_date, role, status, designation, supervisor_name, } = data;
     try {
-        const result = yield db_1.default.query(query, [...employee_update_Details, id]);
-        return result.rows[0];
+        // Get user_id from employee ID
+        const userRes = yield db_1.default.query(`SELECT user_id FROM employees WHERE emp_id = $1`, [id]);
+        if (userRes.rows.length === 0)
+            throw new Error("Employee not found");
+        const user_id = userRes.rows[0].user_id;
+        // Update employee name
+        if (employee_name !== undefined) {
+            yield db_1.default.query(`UPDATE users SET name = $1 WHERE user_id = $2`, [employee_name, user_id]);
+        }
+        // Update email
+        if (email !== undefined) {
+            yield db_1.default.query(`UPDATE users SET email = $1 WHERE user_id = $2`, [email, user_id]);
+        }
+        // Update department
+        if (department_name !== undefined) {
+            const deptRes = yield db_1.default.query(`SELECT dept_id FROM departments WHERE name = $1`, [department_name]);
+            if (deptRes.rows.length === 0)
+                throw new Error("Department not found");
+            const department_id = deptRes.rows[0].dept_id;
+            // // Debugging
+            console.log("DepatmentId: ", department_id);
+            yield db_1.default.query(`UPDATE users SET department_id = $1 WHERE user_id = $2`, [department_id, user_id]);
+        }
+        // Update joining date
+        if (joining_date !== undefined) {
+            yield db_1.default.query(`UPDATE employees SET joining_date = $1 WHERE user_id = $2`, [joining_date, user_id]);
+        }
+        // Update role
+        if (role !== undefined) {
+            yield db_1.default.query(`UPDATE users SET role = $1 WHERE user_id = $2`, [role, user_id]);
+        }
+        // Update status
+        if (status !== undefined) {
+            yield db_1.default.query(`UPDATE users SET status = $1 WHERE user_id = $2`, [status, user_id]);
+        }
+        // Update designation
+        if (designation !== undefined) {
+            yield db_1.default.query(`UPDATE employees SET designation = $1 WHERE user_id = $2`, [designation, user_id]);
+        }
+        // Update supervisor
+        if (supervisor_name !== undefined) {
+            const supervisorRes = yield db_1.default.query(`SELECT e.emp_id 
+        FROM employees e
+        JOIN users u ON u.user_id = e.user_id
+        WHERE u.name = $1`, [supervisor_name]);
+            if (supervisorRes.rows.length === 0)
+                throw new Error("Supervisor not found");
+            const supervisor_id = supervisorRes.rows[0].emp_id;
+            yield db_1.default.query(`UPDATE employees SET supervisor_id = $1 WHERE user_id = $2`, [supervisor_id, user_id]);
+        }
     }
     catch (error) {
-        console.error('Error updating employee:', error);
-        throw new Error('Failed to update employee');
+        console.log(error);
+        return error;
     }
 });
 exports.updateEmployee = updateEmployee;
