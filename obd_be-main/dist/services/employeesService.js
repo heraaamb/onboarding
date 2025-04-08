@@ -17,8 +17,7 @@ exports.deleteEmployee = exports.updateEmployee = exports.createEmployee = expor
 const db_1 = __importDefault(require("../db/db"));
 const employees_queries_1 = require("../queries/employees.queries");
 const users_queries_1 = require("../queries/users.queries");
-const crypto_1 = __importDefault(require("crypto"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const utils_1 = require("../utils/utils");
 const getAllEmployees = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield db_1.default.query(employees_queries_1.GET_ALL_EMPLOYEES);
     // // Debugging
@@ -34,11 +33,26 @@ exports.getOnboardingEmployees = getOnboardingEmployees;
 const createEmployee = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const client = yield db_1.default.connect();
     // // Debugging
-    console.log("data: ", data);
+    // console.log("employee data: ",data);
+    // console.log(data.role);
+    if (data.role === 'Admin') {
+        const resultDept = yield client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`);
+        // // Debugging
+        // console.log("resultDept: ",resultDept); console.log("endoo");
+        const department_id = resultDept.rows[0].dept_id;
+        // // Debugging
+        // console.log("deparID: ", department_id); 
+        const plainPassword = yield (0, utils_1.generatePassword)();
+        const hashedPassword = yield (0, utils_1.hashPassword)(plainPassword);
+        const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
+        const userResult = yield client.query(users_queries_1.USER_INSERT_QUERY, userValues);
+        // // send mail (send password) 
+        // await sendmail(data.name, data.email, plainPassword)
+        return plainPassword;
+    }
     const resultDept = yield client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`);
     // // Debugging
-    console.log("resultDept: ", resultDept);
-    console.log("endoo");
+    // console.log("resultDeptId: ",resultDept); console.log("endoo");
     const department_id = resultDept.rows[0].dept_id;
     // // Debugging
     // console.log("deparID: ", department_id); 
@@ -48,17 +62,15 @@ const createEmployee = (data) => __awaiter(void 0, void 0, void 0, function* () 
       JOIN users u ON u.user_id = e.user_id
       WHERE u.name = $1;
     `, [data.supervisor_name]);
-    // // Debugging
+    // // Debugging 
     // console.log("supdervisor result: ",resultSupervisor);
     const supervisor_id = resultSupervisor.rows[0].emp_id;
     // // Debugging
     // console.log("supervisor_id: ", supervisor_id);
     try {
         yield client.query('BEGIN'); // Start the transaction
-        // Generate a secure random password
-        const plainPassword = crypto_1.default.randomBytes(8).toString('hex'); // Example: "f3a9b4c1e8d2"
-        const saltRounds = 10;
-        const hashedPassword = yield bcrypt_1.default.hash(plainPassword, saltRounds);
+        const plainPassword = yield (0, utils_1.generatePassword)();
+        const hashedPassword = yield (0, utils_1.hashPassword)(plainPassword);
         // Insert into users table
         const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
         const userResult = yield client.query(users_queries_1.USER_INSERT_QUERY, userValues);
@@ -67,19 +79,8 @@ const createEmployee = (data) => __awaiter(void 0, void 0, void 0, function* () 
         const employeeValues = [userId, data.designation, data.joining_date, department_id, supervisor_id, data.document_url];
         const employeeResult = yield client.query(employees_queries_1.EMPLOYEE_INSERT_QUERY, employeeValues);
         yield client.query('COMMIT'); // Commit the transaction
-        // // Send the generated password to the user's email
-        // const emailSubject = 'Your Account Credentials';
-        // const emailBody = `
-        //     Hello ${data.name},
-        //     Your account has been created successfully.
-        //     Here are your login details:
-        //     Email: ${data.email}
-        //     Temporary Password: ${plainPassword}
-        //     Please change your password upon first login.
-        //     Regards,
-        //     Your Company
-        // `;
-        // await sendEmail(data.email, emailSubject, emailBody);
+        // // send mail (pasword) to the employee send password 
+        // await sendmail(data.name, data.email, plainPassword)
         return Object.assign(Object.assign({}, employeeResult.rows[0]), { plainPassword }); // Return password for further use if needed
     }
     catch (error) {

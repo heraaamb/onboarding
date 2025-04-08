@@ -59,7 +59,7 @@ exports.getTasks = getTasks;
 const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield taskService.deleteTask(req.params.id);
-        res.send("Task Deleted");
+        res.json({ "status message": "Task Deleted", "id": req.params.id });
     }
     catch (error) {
         // // Debugging

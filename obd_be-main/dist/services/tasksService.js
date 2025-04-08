@@ -22,7 +22,7 @@ const tasks_queries_1 = require("../queries/tasks.queries");
 const getAllTasks = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield db_1.default.query(tasks_queries_1.GET_ALL_TASKS);
     // // Debugging
-    console.log(result.rows);
+    // console.log("tasks: ",result.rows);
     return result.rows;
 });
 exports.getAllTasks = getAllTasks;
@@ -33,7 +33,9 @@ function deleteTask(id) {
 }
 function createTask(data) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield db_1.default.query(tasks_queries_1.CREATE_TASK, [data.emp_id, data.assigned_by, data.department_id, data.task_name, data.description, data.status, data.due_date]);
+        // // Debugging
+        console.log("Create task data: ", data);
+        yield db_1.default.query(tasks_queries_1.CREATE_TASK, [data.employee_name, data.assigned_by_name, data.department_name, data.task_name, data.description, data.due_date]);
     });
 }
 function updateTaskStatus(id) {

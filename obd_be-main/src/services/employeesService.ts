@@ -11,6 +11,7 @@ import { USER_INSERT_QUERY } from '../queries/users.queries';
 import crypto from 'crypto';
 import { sendEmail } from '../services/emailService'; // A function to send emails
 import bcrypt from 'bcrypt';
+import {generatePassword, hashPassword, sendmail} from '../utils/utils'
 
 export const getAllEmployees = async () => {
     const result = await pool.query(GET_ALL_EMPLOYEES);
@@ -28,11 +29,31 @@ export const createEmployee = async (data: any) => {
   const client = await pool.connect();
   
   // // Debugging
-  console.log("data: ",data);
+  // console.log("employee data: ",data);
+  // console.log(data.role);
+
+  if(data.role === 'Admin'){
+    const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`)
+    // // Debugging
+    // console.log("resultDept: ",resultDept); console.log("endoo");
+    const department_id = resultDept.rows[0].dept_id
+    // // Debugging
+    // console.log("deparID: ", department_id); 
+ 
+    const plainPassword = await generatePassword();
+    const hashedPassword = await hashPassword( plainPassword);
+
+    const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
+    const userResult = await client.query(USER_INSERT_QUERY, userValues);
+
+      // // send mail (send password) 
+      // await sendmail(data.name, data.email, plainPassword)
+    return plainPassword;
+  }
 
   const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`)
   // // Debugging
-  console.log("resultDept: ",resultDept); console.log("endoo");
+  // console.log("resultDeptId: ",resultDept); console.log("endoo");
   const department_id = resultDept.rows[0].dept_id
   // // Debugging
   // console.log("deparID: ", department_id); 
@@ -46,7 +67,7 @@ export const createEmployee = async (data: any) => {
     `,
     [data.supervisor_name]
   );
-  // // Debugging
+  // // Debugging 
   // console.log("supdervisor result: ",resultSupervisor);
   const supervisor_id = resultSupervisor.rows[0].emp_id
   // // Debugging
@@ -55,10 +76,8 @@ export const createEmployee = async (data: any) => {
   try {
       await client.query('BEGIN'); // Start the transaction
 
-      // Generate a secure random password
-      const plainPassword = crypto.randomBytes(8).toString('hex'); // Example: "f3a9b4c1e8d2"
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+      const plainPassword = await generatePassword()
+      const hashedPassword = await hashPassword( plainPassword)
 
       // Insert into users table
       const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
@@ -71,23 +90,8 @@ export const createEmployee = async (data: any) => {
 
       await client.query('COMMIT'); // Commit the transaction
 
-      // // Send the generated password to the user's email
-      // const emailSubject = 'Your Account Credentials';
-      // const emailBody = `
-      //     Hello ${data.name},
-
-      //     Your account has been created successfully.
-      //     Here are your login details:
-
-      //     Email: ${data.email}
-      //     Temporary Password: ${plainPassword}
-
-      //     Please change your password upon first login.
-
-      //     Regards,
-      //     Your Company
-      // `;
-      // await sendEmail(data.email, emailSubject, emailBody);
+      // // send mail (pasword) to the employee send password 
+      // await sendmail(data.name, data.email, plainPassword)
 
       return { ...employeeResult.rows[0], plainPassword }; // Return password for further use if needed
 

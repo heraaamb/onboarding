@@ -15,7 +15,7 @@ export const getTasks = async (req: Request, res: Response) => {
 export const deleteTask = async(req: Request,res: Response) => {
     try {
         await taskService.deleteTask(req.params.id);
-        res.send("Task Deleted")
+        res.json({"status message":"Task Deleted","id": req.params.id}) 
     } catch (error) {
         // // Debugging
         console.log(error);

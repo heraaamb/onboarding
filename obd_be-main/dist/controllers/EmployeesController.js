@@ -67,7 +67,7 @@ exports.getOnboardingEmployees = getOnboardingEmployees;
 const createEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // // Debugging
-        console.log(req.body);
+        // console.log(req.body);
         const employee = yield employeeService.createEmployee(req.body);
         res.status(201).json(employee);
     }
