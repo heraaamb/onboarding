@@ -1,0 +1,62 @@
+<p-dialog [(visible)]="visible" modal="'true" header="Employee Form" [closable]="false" [style]="{ width: '500px' }">
+    
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+            <div>
+                <label for="name">Employee Name</label>
+                <input id="name" type="text" pInputText [(ngModel)]="employee.name" required fluid />
+            </div>
+
+            <div>
+                <label for="email">Email</label>
+                <input id="email" type="text" pInputText [(ngModel)]="employee.email" required fluid />
+            </div>
+
+            <div>
+                <label for="department">Department</label>
+                <p-dropdown id="department" [options]="departments" optionLabel="name" 
+                    [(ngModel)]="employee.department_name" placeholder="Select Department" required fluid >
+                </p-dropdown>
+            </div>
+
+            <div>
+                <label for="joining_date">Joining Date</label>
+                <p-calendar id="joining_date" [(ngModel)]="employee.joining_date" dateFormat="yy-mm-dd" showIcon required fluid >
+                </p-calendar>
+            </div>
+
+            <!-- ✅ Role Dropdown -->
+            <div>
+                <label for="role">Role</label>
+                <p-dropdown id="role" [options]="roles" optionLabel="label" optionValue="value" 
+                    [(ngModel)]="employee.role" placeholder="Select Role" required fluid >
+                </p-dropdown>
+            </div>
+
+            <!-- ✅ Status Dropdown (Corrected) -->
+            <div>
+                <label for="status">Status</label>
+                <p-dropdown id="status" [options]="statuses" optionLabel="label" optionValue="value" 
+                    [(ngModel)]="employee.status" placeholder="Select Status" required fluid >
+                </p-dropdown>
+            </div>
+
+            <div>
+                <label for="designation">Designation</label>
+                <input id="designation" type="text" pInputText [(ngModel)]="employee.designation" required fluid />
+            </div>
+
+            <div>
+                <label for="supervisor_id">Supervisor Name</label>
+                <input id="supervisor_id" type="text" pInputText [(ngModel)]="employee.supervisor_name" required fluid />
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></p-button>
+        <p-button label="Save" icon="pi pi-check" (click)="saveEmployee()" 
+            [disabled]="!employee.email || !employee.designation || !employee.department_name">
+        </p-button>
+    </ng-template>
+</p-dialog>

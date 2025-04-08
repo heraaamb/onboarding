@@ -1,0 +1,83 @@
+<div class="card">
+  <!-- Toolbar with Add Button -->
+  <p-toolbar class="mb-6">
+    <ng-template pTemplate="start">
+      <p-button
+        label="New Task"
+        icon="pi pi-user-plus"
+        severity="primary"
+        class="mr-2"
+        (click)="openNewTaskDialog()"
+      ></p-button>
+    </ng-template>
+  </p-toolbar>
+
+  <!-- Task Table -->
+  <p-table
+    [value]="tasks"
+    [paginator]="true"
+    [rows]="10"
+    dataKey="task_name"
+    [rowHover]="true"
+    [showGridlines]="true"
+    [tableStyle]="{ 'min-width': '80rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="emp_id">
+          Employee name <p-sortIcon field="employee_name" />
+        </th>
+        <th pSortableColumn="assigned_by">
+          Assigned By name<p-sortIcon field="assigned_by_name" />
+        </th>
+        <th pSortableColumn="department_id">
+          Department name <p-sortIcon field="department_name" />
+        </th>
+        <th pSortableColumn="task_name">
+          Task Name <p-sortIcon field="task_name" />
+        </th>
+        <th pSortableColumn="description">
+          Description <p-sortIcon field="description" />
+        </th>
+        <th pSortableColumn="due_date">
+          Due Date <p-sortIcon field="due_date" />
+        </th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-task>
+      <tr>
+        <td>{{ task.employee_name}}</td>
+        <td>{{ task.assigned_by_name }}</td>
+        <td>{{ task.department_name }}</td>
+        <td>{{ task.task_name }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.due_date | date: 'yyyy-MM-dd' }}</td>
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            class="mr-2"
+            [rounded]="true"
+            (click)="editTask(task)"
+          ></p-button>
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [rounded]="true"
+            (click)="deleteTask(task)"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Task Dialog Component -->
+<app-task-dialog 
+  [visible]="taskDialogVisible" 
+  [task]="selectedTask" 
+  [departments]="departments" 
+  (save)="addTask($event)" 
+  (close)="taskDialogVisible = false">
+</app-task-dialog>

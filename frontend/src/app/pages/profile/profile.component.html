@@ -1,0 +1,12 @@
+<div class="card flex justify-center">
+    <p-panel header="Employee Profile" [toggleable]="true">
+      <ng-container *ngIf="employee as emp">
+        <h3>{{ emp.name }}</h3>
+        <p>Email: {{ emp.email }}</p>
+        <p>Department: {{ emp.department_name }}</p>
+        <!-- Add additional employee properties as needed -->
+      </ng-container>
+      <p *ngIf="!employee">Loading employee data...</p>
+    </p-panel>
+  </div>
+  

@@ -1,0 +1,47 @@
+<p-dialog [(visible)]="visible" modal="true" header="Task Form" [style]="{ width: '500px' }" (onHide)="onClose()">
+  <ng-template pTemplate="content">
+    <div class="flex flex-col gap-6">
+      <div>
+        <label>Employee Name</label>
+        <input pInputText [(ngModel)]="task.employee_name" required fluid />
+      </div>
+
+      <div class="p-field">
+        <label>Assigned By</label>
+        <input pInputText [(ngModel)]="task.assigned_by_name" required fluid />
+      </div>
+
+      <div class="p-field">
+        <label>Department Name</label>
+        <p-dropdown
+          [options]="departments"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Department"
+          [(ngModel)]="task.department_name"
+          required fluid 
+        ></p-dropdown>
+      </div>
+
+      <div class="p-field">
+        <label>Task Name</label>
+        <input pInputText [(ngModel)]="task.task_name" required fluid />
+      </div>
+
+      <div class="p-field">
+        <label>Description</label>
+        <input pInputText [(ngModel)]="task.description" required fluid />
+      </div>
+
+      <div class="p-field">
+        <label>Due Date</label>
+        <p-calendar [(ngModel)]="task.due_date" dateFormat="yy-mm-dd" showIcon required fluid  ></p-calendar>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" icon="pi pi-times" class="p-button-secondary" (click)="onClose()"></p-button>
+    <p-button label="Save" icon="pi pi-check" class="p-button-primary" (click)="onSave()"></p-button>
+  </ng-template>
+</p-dialog>

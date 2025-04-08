@@ -1,0 +1,52 @@
+<div class="card">
+    <p-toolbar [ngClass]="'mb-6'">
+
+        <ng-template #start>
+            <p-button label="New Employee" icon="pi pi-user-plus" severity="primary" class="mr-2" (click)="openNewEmployeeDialog()"></p-button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table [value]="employees" [paginator]="true" [rows]="10" dataKey="emp_id" [rowHover]="true" [showGridlines]="true" [tableStyle]="{ 'min-width': '80rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="name">employee_Name <p-sortIcon field="name" /></th>
+                <th pSortableColumn="email">Email ID <p-sortIcon field="email" /></th>
+                <th pSortableColumn="email">Department Name <p-sortIcon field="depname" /></th>
+                <th pSortableColumn="role">Joining date <p-sortIcon field="role" /></th>
+                <th pSortableColumn="role">Role <p-sortIcon field="role" /></th>
+                <th pSortableColumn="status">Status<p-sortIcon field="status" /></th>
+                <th pSortableColumn="designation">Designation<p-sortIcon field="designation" /></th>
+                <th pSortableColumn="Supervisor id">Supervisor Name <p-sortIcon field="Supervisor id" /></th>
+               
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-employee>
+            <tr>
+                <td>{{ employee.employee_name }}</td>
+                <td>{{ employee.email }}</td>
+                <td>{{ employee.department_name }}</td>
+                <td>{{ employee.joining_date | date:'yyyy-MM-dd' }}</td>
+                <td>{{ employee.role }}</td>
+                <td>{{ employee.status }}</td>
+                <td>{{ employee.designation}}</td>
+                <td>{{ employee.supervisor_name }}</td>
+        
+                <td>
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" (click)="editEmployee(employee)"></p-button>
+                    <p-button icon="pi pi-trash" severity="danger" [rounded]="true" (click)="deleteEmployee(employee)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+
+<app-employee-dialog 
+    [visible]="employeeDialogVisible" 
+    [employee]="selectedEmployee" 
+    [departments]="departments" 
+    (save)="addEmployee($event)" 
+    (close)="employeeDialogVisible = false">
+</app-employee-dialog>
