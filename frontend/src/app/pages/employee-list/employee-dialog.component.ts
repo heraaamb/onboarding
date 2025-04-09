@@ -34,10 +34,18 @@ export class EmployeeDialogComponent {
         role: '',
         status: '',
         designation: '',
-        supervisor_name: ''
+        supervisor_name: '',
+        emp_id: 0,
+        fromEdit: false
     };
 
-    @Input() departments: any[] = [];
+    departments = [
+        { name: 'HR', value: 'HR' },
+        { name: 'Finance', value: 'Finance' },
+        { name: 'IT', value: 'IT' },
+        { name: 'R&D', value: 'R&D' },
+        { name: 'Marketing', value: 'Marketing' }
+    ];
     @Output() save: EventEmitter<Employee> = new EventEmitter();
     @Output() close: EventEmitter<void> = new EventEmitter();
 
@@ -45,7 +53,6 @@ export class EmployeeDialogComponent {
         { label: 'Employee', value: 'Employee' },
         { label: 'Admin', value: 'Admin' },
         { label: 'Department User', value: 'Department User' },
-        { label: 'R&D', value: 'R&D' },
         { label: 'Supervisor', value: 'Supervisor' }
     ];
 

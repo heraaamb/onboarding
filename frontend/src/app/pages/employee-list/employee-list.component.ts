@@ -59,25 +59,65 @@ export class EmployeeListComponent implements OnInit {
         this.employeeDialogVisible = true;
     }
 
-    editEmployee(employee: Employee) {
+    updateEmployee(employee: Employee) {
+        // // Debugging
+        console.log("employee from edit: " ,employee);
+        employee.fromEdit = true;
         this.selectedEmployee = { ...employee };
         this.employeeDialogVisible = true;
     }
 
-    addEmployee(newEmployee: Employee) {
+    // updateEmployee(employee: Employee){
+    //     // // Debugging
+    //     // console.log(employee.emp_id);
+    //     this.employeeDialogVisible = true;
+    //     this.employeeService.updateEmployee(employee.emp_id, employee).subscribe({
+    //         next: (response) => {
+    //             console.log('Employee updated successfully:', response);
+    //             alert('Employee updated successfully!');
+    //             this.loadEmployees();
+    //             this.employeeDialogVisible = false; 
+    //         },
+    //         error: (error) => {
+    //             console.log('Error updating employee:', error);
+    //             alert('Failed to update employee.');
+    //         }
+    //     })
+    // }
 
-        this.employeeService.addEmployee(newEmployee).subscribe({
-            next: (response) => {
-                console.log('Employee added successfully:', response);
-                alert('Employee added successfully!');
-                this.loadEmployees();
-                this.employeeDialogVisible = false; 
-            },
-            error: (error) => {
-                console.error('Error adding employee:', error);
-                alert('Failed to add employee.');
-            }
-        });
+    addEmployee(newEmployee: Employee) {
+        if (newEmployee.fromEdit === true) {
+            // // Debugging
+            console.log("from edit employee: " , newEmployee);
+            this.employeeDialogVisible = true;
+            this.employeeService.updateEmployee(newEmployee.emp_id, newEmployee).subscribe({
+                next: (response) => {
+                    console.log('Employee updated successfully:', response);
+                    alert('Employee updated successfully!');
+                    this.loadEmployees();
+                    this.employeeDialogVisible = false; 
+                },
+                error: (error) => {
+                    console.log('Error updating employee:', error);
+                    alert('Failed to update employee.');
+                }
+            })
+        } 
+        else {
+            console.log("from add New Employee employee: " , newEmployee);
+            this.employeeService.addEmployee(newEmployee).subscribe({
+                next: (response) => {
+                    console.log('Employee added successfully:', response);
+                    alert('Employee added successfully!');
+                    this.loadEmployees();
+                    this.employeeDialogVisible = false; 
+                },
+                error: (error) => {
+                    console.error('Error adding employee:', error);
+                    alert('Failed to add employee.');
+                }
+            });
+        }
     }
 
     deleteEmployee(employee: Employee) {
@@ -95,14 +135,16 @@ export class EmployeeListComponent implements OnInit {
 
     getEmptyEmployee(): Employee {
         return {
-            name: '',
-            email: '',
+            emp_id: 0,
+            name: undefined,
+            email: undefined,
             department_name: '',
             joining_date: '',
             role: '',
             status: '',
             designation: '',
-            supervisor_name: '',
+            supervisor_name: undefined,
+            fromEdit: false
         };
     }
 }

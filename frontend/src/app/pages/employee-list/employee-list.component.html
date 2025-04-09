@@ -24,7 +24,7 @@
 
         <ng-template pTemplate="body" let-employee>
             <tr>
-                <td>{{ employee.employee_name }}</td>
+                <td>{{ employee.name }}</td>
                 <td>{{ employee.email }}</td>
                 <td>{{ employee.department_name }}</td>
                 <td>{{ employee.joining_date | date:'yyyy-MM-dd' }}</td>
@@ -34,7 +34,7 @@
                 <td>{{ employee.supervisor_name }}</td>
         
                 <td>
-                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" (click)="editEmployee(employee)"></p-button>
+                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" (click)="updateEmployee(employee)"></p-button>
                     <p-button icon="pi pi-trash" severity="danger" [rounded]="true" (click)="deleteEmployee(employee)"></p-button>
                 </td>
             </tr>
