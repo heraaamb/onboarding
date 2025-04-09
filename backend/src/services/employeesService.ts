@@ -5,13 +5,16 @@ import {
     GET_ONBOARDING_EMPLOYEES,
     UPDATE_EMPLOYEE,
     DELETE_EMPLOYEE,
-    EMPLOYEE_INSERT_QUERY
+    EMPLOYEE_INSERT_QUERY,
+    GET_EMPLOYEE_BY_ID
 } from '../queries/employees.queries';
 import { USER_INSERT_QUERY } from '../queries/users.queries';
 import crypto from 'crypto';
 import { sendEmail } from '../services/emailService'; // A function to send emails
 import bcrypt from 'bcrypt';
 import {generatePassword, hashPassword, sendmail} from '../utils/utils'
+import { DefaultNamingStrategy } from 'typeorm';
+import { error } from 'console';
 
 export const getAllEmployees = async () => {
     const result = await pool.query(GET_ALL_EMPLOYEES);
@@ -105,47 +108,185 @@ export const createEmployee = async (data: any) => {
 };
 
 export const updateEmployee = async (id: number, data: any) => {
-    const { designation, joining_date, department_id, supervisor_id, document_url } = data;
-  
-    const employeeDetails = {
-      designation,
-      joining_date,
-      department_id,
-      supervisor_id,
-      document_url,
-    };
-  
-    // Extract both field names and values
-    const filteredEntries = Object.entries(employeeDetails).filter(([_, value]) => value !== undefined);
-  
-    if (filteredEntries.length === 0) {
-      throw new Error('No fields to update');
-    }
-  
-    const employee_update_Details = filteredEntries.map(([_, value]) => value);
-    const employeeFields = filteredEntries.map(([key, value]) => 
-        `${key} = $${employee_update_Details.indexOf(value) + 1}`
-      );
-      
-  
-    // Build query
-    const query = `
-      UPDATE employees
-      SET ${employeeFields.join(', ')}
-      WHERE emp_id = $${employee_update_Details.length + 1}
-      RETURNING *;
-    `;
-  
-    try {
-      const result = await pool.query(query, [...employee_update_Details, id]);
-      return result.rows[0];
-    } catch (error) {
-      console.error('Error updating employee:', error);
-      throw new Error('Failed to update employee');
-    }
+  const { designation, joining_date, department_name, supervisor_name, email, role, status, name } = data;
+
+  if (!designation || !joining_date || !department_name || !supervisor_name || !email || !role || !status || !name) {
+    return "Fill out all fields!";
+  }
+
+  const supervisor_result = await pool.query(
+    `SELECT e.emp_id FROM employees e JOIN users u ON e.user_id = u.user_id WHERE u.name = $1`,
+    [supervisor_name]
+  );
+  const supervisor_id = supervisor_result.rows[0]?.emp_id;
+
+  const departmentResult = await pool.query(
+    `SELECT dept_id FROM departments WHERE name = $1`,
+    [department_name.name]
+  );
+  const department_id = departmentResult.rows[0]?.dept_id;
+
+  const userIdResult = await pool.query(`SELECT user_id FROM employees WHERE emp_id = $1`, [id]);
+  const user_id = userIdResult.rows[0]?.user_id;
+
+  const employeeDetails = {
+    designation,
+    joining_date,
+    department_id,
+    supervisor_id
   };
+
+  const userDetails = {
+    name,
+    email,
+    role,
+    department_id,
+    status
+  };
+
+  const filteredEmployeeEntries = Object.entries(employeeDetails).filter(([_, value]) => value);
+  const filteredUserEntries = Object.entries(userDetails).filter(([_, value]) => value);
+
+  const employee_update_Details = filteredEmployeeEntries.map(([_, value]) => value);
+  const employeeFields = filteredEmployeeEntries.map(([key], index) =>
+    `${key} = $${index + 1}`
+  );
+
+  const user_update_Details = filteredUserEntries.map(([_, value]) => value);
+  const userFields = filteredUserEntries.map(([key], index) =>
+    `${key} = $${index + 1}`
+  );
+
+  const employeeQuery = `
+    UPDATE employees
+    SET ${employeeFields.join(', ')}
+    WHERE emp_id = $${employee_update_Details.length + 1}
+    RETURNING *;
+  `;
+
+  const usersQuery = `
+    UPDATE users
+    SET ${userFields.join(', ')}
+    WHERE user_id = $${user_update_Details.length + 1}
+    RETURNING *;
+  `;
+
+  try {
+    const result = await pool.query(employeeQuery, [...employee_update_Details, id]);
+    const result2 = await pool.query(usersQuery, [...user_update_Details, user_id]);
+
+    return {
+      employee: result.rows[0],
+      user: result2.rows[0]
+    };
+  } catch (error) {
+    console.error('Error updating employee:', error);
+    throw new Error('Failed to update employee');
+  }
+};
+
+
+// export const updateEmployee = async (id: number, data: any) => {
+//   const { designation, joining_date, department_name, supervisor_name, document_url, email,  role, status, name} = data;
+
+//   // do validation
+
+//   // if(!designation){
+//   //   throw error "empty designation";
+//   // }
+
+  
+//   const supervisor_result = await pool.query(`
+//     SELECT e.emp_id
+//     FROM employees e
+//     JOIN users u ON e.user_id = u.user_id
+//     WHERE name=$1`,[supervisor_name])
+//   const supervisor_id = supervisor_result.rows[0].emp_id
+//   // // Debugging
+//   // console.log(supervisor_result);
+
+//   const departmentResult = await pool.query(`SELECT dept_id FROM departments WHERE name = '${department_name}'`)
+//   const department_id = departmentResult.rows[0].dept_id
+
+//   const userIdresult = await pool.query(`SELECT user_id FROM employees WHERE emp_id=${id}`)
+//   const user_id = userIdresult.rows[0].user_id
+
+//   const employeeDetails = {
+//     designation,
+//     joining_date,
+//     department_id,
+//     supervisor_id
+//   };
+
+//   const userDetails = {
+//     name,
+//     email,
+//     role,
+//     department_id,
+//     status
+//   }
+
+//   console.log("====",userDetails);
+
+//   const filteredEmployeeEntries = Object.entries(employeeDetails).filter(([_, value]) => value !== undefined);
+//   const filteredUserEntries = Object.entries(userDetails).filter(([_, value]) => value !== undefined);
+//   // // Debugging
+//   console.log("filteredEmployeeEntries", filteredEmployeeEntries);
+//   console.log("filteredUserEntries", filteredUserEntries);
+
+//   const employee_update_Details = filteredEmployeeEntries.map(([_, value]) => value);
+//   const employeeFields = filteredEmployeeEntries.map(([key, value]) => 
+//     `${key} = $${employee_update_Details.indexOf(value) + 1}`
+//   );
+//   // // Debugging
+//   console.log("employee_update_Details", employee_update_Details);
+//   console.log("employeeFields", employeeFields);
+
+//   const user_update_Details = filteredUserEntries.map(([_, value]) => value);
+//   const userFields = filteredUserEntries.map(([key, value]) => 
+//       `${key} = $${user_update_Details.indexOf(value) + 1}`
+//     );
+//   // // Debugging
+//   console.log("user_update_Details", user_update_Details);
+//   console.log("userFields", userFields);    
+
+//   // employee query
+//   const employeeQuery = `
+//     UPDATE employees
+//     SET ${employeeFields.join(', ')}
+//     WHERE emp_id = $${employee_update_Details.length + 1}
+//     RETURNING *;
+//   `;
+
+//   // users query
+//   const usersQuery = `
+//     UPDATE users
+//     SET ${userFields.join(', ')}
+//     WHERE emp_id = $${user_update_Details.length + 1}
+//     RETURNING *;
+//   `;
+
+//   try {
+//     const result = await pool.query(employeeQuery, [...employee_update_Details, id]);
+//     const result2 = await pool.query(usersQuery, [...user_update_Details, user_id]);
+
+//     const returnStuff = result.rows[0] + result2.rows[0]
+//     return returnStuff;
+//   } catch (error) {
+//     console.error('Error updating employee:', error);
+//     throw new Error('Failed to update employee');
+//   }
+// };
   
 
 export const deleteEmployee = async (id: number) => {
     await pool.query(DELETE_EMPLOYEE, [id]);
+};
+
+
+export const getEmployeeById = async (id: number) => {
+    const employee = await pool.query(GET_EMPLOYEE_BY_ID, [id]);
+    // // Debugging
+    // console.log(employee.rows[0]);
+    return employee.rows[0];
 };

@@ -55,3 +55,14 @@ export const deleteEmployee = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Failed to delete employee' });
     }
 };
+
+export const getEmployeeById = async (req: Request, res: Response) => {
+    try {
+        const employee = await employeeService.getEmployeeById(Number(req.params.id));
+        // // Debugging
+        console.log(employee);
+        res.status(200).json(employee);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch employee' });
+    }
+};

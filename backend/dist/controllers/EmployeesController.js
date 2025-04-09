@@ -42,7 +42,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEmployee = exports.updateEmployee = exports.createEmployee = exports.getOnboardingEmployees = exports.getEmployees = void 0;
+exports.getEmployeeById = exports.deleteEmployee = exports.updateEmployee = exports.createEmployee = exports.getOnboardingEmployees = exports.getEmployees = void 0;
 const employeeService = __importStar(require("../services/employeesService"));
 const getEmployees = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -102,3 +102,15 @@ const deleteEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deleteEmployee = deleteEmployee;
+const getEmployeeById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const employee = yield employeeService.getEmployeeById(Number(req.params.id));
+        // // Debugging
+        console.log(employee);
+        res.status(200).json(employee);
+    }
+    catch (err) {
+        res.status(500).json({ error: 'Failed to fetch employee' });
+    }
+});
+exports.getEmployeeById = getEmployeeById;

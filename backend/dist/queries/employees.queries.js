@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DELETE_EMPLOYEE = exports.UPDATE_EMPLOYEE = exports.EMPLOYEE_INSERT_QUERY = exports.GET_ONBOARDING_EMPLOYEES = exports.GET_ALL_EMPLOYEES = void 0;
+exports.GET_EMPLOYEE_BY_ID = exports.DELETE_EMPLOYEE = exports.UPDATE_EMPLOYEE = exports.EMPLOYEE_INSERT_QUERY = exports.GET_ONBOARDING_EMPLOYEES = exports.GET_ALL_EMPLOYEES = void 0;
 exports.GET_ALL_EMPLOYEES = `
   SELECT 
       e.emp_id,
-      u.name AS employee_name,
+      u.name AS name,
       u.email,
       e.joining_date,
       d.name AS department_name,
@@ -47,4 +47,7 @@ exports.UPDATE_EMPLOYEE = `UPDATE employees
 `;
 exports.DELETE_EMPLOYEE = `
   DELETE FROM employees WHERE emp_id = $1;
+`;
+exports.GET_EMPLOYEE_BY_ID = `
+  SELECT * FROM employees WHERE emp_id = $1;
 `;
