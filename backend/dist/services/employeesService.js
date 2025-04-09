@@ -147,8 +147,8 @@ const updateEmployee = (id, data) => __awaiter(void 0, void 0, void 0, function*
         };
     }
     catch (error) {
-        console.log(error);
-        return error;
+        console.error('Error updating employee:', error);
+        throw new Error('Failed to update employee');
     }
 });
 exports.updateEmployee = updateEmployee;
