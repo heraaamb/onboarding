@@ -26,7 +26,7 @@ export const deleteTask = async(req: Request,res: Response) => {
 export const createTask = async(req: Request, res: Response) => {
     try {
         await taskService.createTask(req.body)
-        res.send("Task created successfully")
+        res.status(200).json({"message":"Task created successfully"})
     } catch (error) {
         // // Debugging
         console.log(error);

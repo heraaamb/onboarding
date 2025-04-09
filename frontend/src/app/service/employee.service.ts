@@ -26,7 +26,11 @@ export class EmployeeService {
     }
     
     updateEmployee(id: number, employee: Employee): Observable<Employee> {
+        // // Debugging
+        // console.log(`${this.apiUrl}/${id}`);
+        // console.log("employeeee:", employee);
         return this.http.put<Employee>(`${this.apiUrl}/${id}`, employee);
+        // return this.http.patch<Employee>(`${this.apiUrl}/${id}`, employee);
     }
     
 

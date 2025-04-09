@@ -1,5 +1,5 @@
 import express from 'express';
-import { getEmployees, getOnboardingEmployees, createEmployee, updateEmployee, deleteEmployee } from '../controllers/EmployeesController';
+import { getEmployees, getOnboardingEmployees, createEmployee, updateEmployee, deleteEmployee, getEmployeeById } from '../controllers/EmployeesController';
 // import auth from '../middleware/auth';
 // import authorize from '../middleware/authorizeRole';
 
@@ -7,9 +7,10 @@ const router = express.Router();
 
 router.get('/', getEmployees);
 router.get('/onboarding', getOnboardingEmployees);
+router.get('/:id', getEmployeeById);
 router.post('/', createEmployee); // (name, email, password_hash, role, department_id, status, designation, joining_date, supervisor_id, document_url)
-// router.put('/:id', updateEmployee);
-router.patch('/:id', updateEmployee);
+router.put('/:id', updateEmployee);
+// router.patch('/:id', updateEmployee);
 router.delete('/:id', deleteEmployee);
 
 // router.get('/', auth, authorize(['Admin', 'Super_Admin']), getEmployees);

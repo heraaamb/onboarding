@@ -6,20 +6,15 @@ import {
   zindexutils
 } from "./chunk-NMOYQVAO.js";
 import {
-  RouterLink,
-  RouterLinkActive,
-  RouterModule
-} from "./chunk-GQITGLQ3.js";
-import {
   Badge,
   BadgeModule
 } from "./chunk-UIALXU6H.js";
 import {
-  Ripple
-} from "./chunk-CQSWJ775.js";
-import {
   ConnectedOverlayScrollHandler
 } from "./chunk-5G7WYC4N.js";
+import {
+  Ripple
+} from "./chunk-CQSWJ775.js";
 import {
   BaseComponent
 } from "./chunk-GRKHFVXY.js";
@@ -50,6 +45,11 @@ import {
 } from "./chunk-J2347JD2.js";
 import "./chunk-CWYBPNCF.js";
 import "./chunk-NJ25EVEJ.js";
+import {
+  RouterLink,
+  RouterLinkActive,
+  RouterModule
+} from "./chunk-GQITGLQ3.js";
 import {
   DomSanitizer
 } from "./chunk-4MZE5ERV.js";

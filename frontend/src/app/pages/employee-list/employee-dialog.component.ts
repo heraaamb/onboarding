@@ -34,7 +34,9 @@ export class EmployeeDialogComponent {
         role: '',
         status: '',
         designation: '',
-        supervisor_name: ''
+        supervisor_name: '',
+        emp_id: 0,
+        fromEdit: false
     };
 
     @Input() departments: any[] = [];
@@ -45,7 +47,6 @@ export class EmployeeDialogComponent {
         { label: 'Employee', value: 'Employee' },
         { label: 'Admin', value: 'Admin' },
         { label: 'Department User', value: 'Department User' },
-        { label: 'R&D', value: 'R&D' },
         { label: 'Supervisor', value: 'Supervisor' }
     ];
 

@@ -20,7 +20,7 @@ export async function deleteTask(id: string) {
 
 export async function createTask(data: any){
     // // Debugging
-    console.log("Create task data: ",data);
+    // console.log("Create task data: ",data);
     await pool.query(CREATE_TASK, [data.employee_name, data.assigned_by_name, data.department_name, data.task_name, data.description, data.due_date])
 }
 

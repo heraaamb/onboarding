@@ -71,7 +71,7 @@ exports.deleteTask = deleteTask;
 const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield taskService.createTask(req.body);
-        res.send("Task created successfully");
+        res.status(200).json({ "message": "Task created successfully" });
     }
     catch (error) {
         // // Debugging

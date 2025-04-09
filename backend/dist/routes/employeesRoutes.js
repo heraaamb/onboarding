@@ -10,9 +10,10 @@ const EmployeesController_1 = require("../controllers/EmployeesController");
 const router = express_1.default.Router();
 router.get('/', EmployeesController_1.getEmployees);
 router.get('/onboarding', EmployeesController_1.getOnboardingEmployees);
+router.get('/:id', EmployeesController_1.getEmployeeById);
 router.post('/', EmployeesController_1.createEmployee); // (name, email, password_hash, role, department_id, status, designation, joining_date, supervisor_id, document_url)
-// router.put('/:id', updateEmployee);
-router.patch('/:id', EmployeesController_1.updateEmployee);
+router.put('/:id', EmployeesController_1.updateEmployee);
+// router.patch('/:id', updateEmployee);
 router.delete('/:id', EmployeesController_1.deleteEmployee);
 // router.get('/', auth, authorize(['Admin', 'Super_Admin']), getEmployees);
 // router.get('/onboarding', auth, authorize(['Admin', 'Super_Admin']), getOnboardingEmployees);
