@@ -33,29 +33,31 @@ exports.getOnboardingEmployees = getOnboardingEmployees;
 const createEmployee = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const client = yield db_1.default.connect();
     // // Debugging
-    // console.log("employee data: ",data);
-    // console.log(data.role);
+    console.log("employee data while creating: ", data);
+    console.log(data.role);
     if (data.role === 'Admin') {
-        const resultDept = yield client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`);
+        const resultDept = yield client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name}';`);
         // // Debugging
-        // console.log("resultDept: ",resultDept); console.log("endoo");
+        console.log("resultDept: ", resultDept);
+        console.log("endoo");
         const department_id = resultDept.rows[0].dept_id;
         // // Debugging
-        // console.log("deparID: ", department_id); 
+        console.log("deparID: ", department_id);
         const plainPassword = yield (0, utils_1.generatePassword)();
         const hashedPassword = yield (0, utils_1.hashPassword)(plainPassword);
-        const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
+        const userValues = [data.employee_name, data.email, hashedPassword, data.role, department_id, data.status];
         const userResult = yield client.query(users_queries_1.USER_INSERT_QUERY, userValues);
         // // send mail (send password) 
         // await sendmail(data.name, data.email, plainPassword)
         return plainPassword;
     }
-    const resultDept = yield client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`);
+    const resultDept = yield client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name}';`);
     // // Debugging
-    // console.log("resultDeptId: ",resultDept); console.log("endoo");
+    console.log("resultDeptId: ", resultDept);
+    console.log("endoo");
     const department_id = resultDept.rows[0].dept_id;
     // // Debugging
-    // console.log("deparID: ", department_id); 
+    console.log("deparID: ", department_id);
     const resultSupervisor = yield client.query(`
       SELECT e.emp_id 
       FROM employees e
@@ -72,7 +74,7 @@ const createEmployee = (data) => __awaiter(void 0, void 0, void 0, function* () 
         const plainPassword = yield (0, utils_1.generatePassword)();
         const hashedPassword = yield (0, utils_1.hashPassword)(plainPassword);
         // Insert into users table
-        const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
+        const userValues = [data.employee_name, data.email, hashedPassword, data.role, department_id, data.status];
         const userResult = yield client.query(users_queries_1.USER_INSERT_QUERY, userValues);
         const userId = userResult.rows[0].user_id;
         // Insert into employees table
@@ -145,8 +147,8 @@ const updateEmployee = (id, data) => __awaiter(void 0, void 0, void 0, function*
         };
     }
     catch (error) {
-        console.error('Error updating employee:', error);
-        throw new Error('Failed to update employee');
+        console.log(error);
+        return error;
     }
 });
 exports.updateEmployee = updateEmployee;

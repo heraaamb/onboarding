@@ -17,36 +17,36 @@ import { DefaultNamingStrategy } from 'typeorm';
 import { error } from 'console';
 
 export const getAllEmployees = async () => {
-    const result = await pool.query(GET_ALL_EMPLOYEES);
-    // // Debugging
-    // console.log(result.rows);
-    return result.rows;
+  const result = await pool.query(GET_ALL_EMPLOYEES);
+  // // Debugging
+  // console.log(result.rows);
+  return result.rows;
 };
 
 export const getOnboardingEmployees = async () => {
-    const result = await pool.query(GET_ONBOARDING_EMPLOYEES);
-    return result.rows;
+  const result = await pool.query(GET_ONBOARDING_EMPLOYEES);
+  return result.rows;
 };
 
 export const createEmployee = async (data: any) => {
   const client = await pool.connect();
   
   // // Debugging
-  // console.log("employee data: ",data);
-  // console.log(data.role);
+  console.log("employee data while creating: ",data);
+  console.log(data.role);
 
   if(data.role === 'Admin'){
-    const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`)
+    const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name}';`)
     // // Debugging
-    // console.log("resultDept: ",resultDept); console.log("endoo");
+    console.log("resultDept: ",resultDept); console.log("endoo");
     const department_id = resultDept.rows[0].dept_id
     // // Debugging
-    // console.log("deparID: ", department_id); 
+    console.log("deparID: ", department_id); 
  
     const plainPassword = await generatePassword();
     const hashedPassword = await hashPassword( plainPassword);
 
-    const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
+    const userValues = [data.employee_name, data.email, hashedPassword, data.role, department_id, data.status];
     const userResult = await client.query(USER_INSERT_QUERY, userValues);
 
       // // send mail (send password) 
@@ -54,12 +54,12 @@ export const createEmployee = async (data: any) => {
     return plainPassword;
   }
 
-  const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name.name}';`)
+  const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name}';`)
   // // Debugging
-  // console.log("resultDeptId: ",resultDept); console.log("endoo");
+  console.log("resultDeptId: ",resultDept); console.log("endoo");
   const department_id = resultDept.rows[0].dept_id
   // // Debugging
-  // console.log("deparID: ", department_id); 
+  console.log("deparID: ", department_id); 
 
   const resultSupervisor = await client.query(
     `
@@ -83,7 +83,7 @@ export const createEmployee = async (data: any) => {
       const hashedPassword = await hashPassword( plainPassword)
 
       // Insert into users table
-      const userValues = [data.name, data.email, hashedPassword, data.role, department_id, data.status];
+      const userValues = [data.employee_name, data.email, hashedPassword, data.role, department_id, data.status];
       const userResult = await client.query(USER_INSERT_QUERY, userValues);
       const userId = userResult.rows[0].user_id;
 
