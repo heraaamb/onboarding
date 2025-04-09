@@ -39,13 +39,7 @@ export class EmployeeDialogComponent {
         fromEdit: false
     };
 
-    departments = [
-        { name: 'HR', value: 'HR' },
-        { name: 'Finance', value: 'Finance' },
-        { name: 'IT', value: 'IT' },
-        { name: 'R&D', value: 'R&D' },
-        { name: 'Marketing', value: 'Marketing' }
-    ];
+    @Input() departments: any[] = [];
     @Output() save: EventEmitter<Employee> = new EventEmitter();
     @Output() close: EventEmitter<void> = new EventEmitter();
 

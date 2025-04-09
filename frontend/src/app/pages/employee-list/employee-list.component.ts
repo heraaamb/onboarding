@@ -67,24 +67,6 @@ export class EmployeeListComponent implements OnInit {
         this.employeeDialogVisible = true;
     }
 
-    // updateEmployee(employee: Employee){
-    //     // // Debugging
-    //     // console.log(employee.emp_id);
-    //     this.employeeDialogVisible = true;
-    //     this.employeeService.updateEmployee(employee.emp_id, employee).subscribe({
-    //         next: (response) => {
-    //             console.log('Employee updated successfully:', response);
-    //             alert('Employee updated successfully!');
-    //             this.loadEmployees();
-    //             this.employeeDialogVisible = false; 
-    //         },
-    //         error: (error) => {
-    //             console.log('Error updating employee:', error);
-    //             alert('Failed to update employee.');
-    //         }
-    //     })
-    // }
-
     addEmployee(newEmployee: Employee) {
         if (newEmployee.fromEdit === true) {
             // // Debugging
