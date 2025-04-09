@@ -1,7 +1,7 @@
 export const GET_ALL_EMPLOYEES = `
   SELECT 
       e.emp_id,
-      u.name AS employee_name,
+      u.name AS name,
       u.email,
       e.joining_date,
       d.name AS department_name,
@@ -50,3 +50,9 @@ export const UPDATE_EMPLOYEE = `UPDATE employees
 export const DELETE_EMPLOYEE = `
   DELETE FROM employees WHERE emp_id = $1;
 `;
+
+
+export const GET_EMPLOYEE_BY_ID = `
+  SELECT * FROM employees WHERE emp_id = $1;
+`;
+

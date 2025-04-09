@@ -34,7 +34,7 @@ function deleteTask(id) {
 function createTask(data) {
     return __awaiter(this, void 0, void 0, function* () {
         // // Debugging
-        console.log("Create task data: ", data);
+        // console.log("Create task data: ",data);
         yield db_1.default.query(tasks_queries_1.CREATE_TASK, [data.employee_name, data.assigned_by_name, data.department_name, data.task_name, data.description, data.due_date]);
     });
 }

@@ -4,6 +4,8 @@ import * as employeeService from '../services/employeesService';
 export const getEmployees = async (req: Request, res: Response) => {
     try {
         const employees = await employeeService.getAllEmployees();
+        // // Debugging
+        // console.log(employees);
         res.json(employees);
     } catch (err) {
         res.status(500).json({ error: 'Failed to fetch employees' });
@@ -34,8 +36,8 @@ export const createEmployee = async (req: Request, res: Response) => {
 export const updateEmployee = async (req: Request, res: Response) => {
     
         // // Debugging
-        // console.log(req.body);
-        // console.log(req.params.id);
+        console.log(req.body);
+        console.log(req.params.id);
 
     try {
         const updated = await employeeService.updateEmployee(Number(req.params.id), req.body);
@@ -53,5 +55,16 @@ export const deleteEmployee = async (req: Request, res: Response) => {
         res.status(204).send();
     } catch (err) {
         res.status(500).json({ error: 'Failed to delete employee' });
+    }
+};
+
+export const getEmployeeById = async (req: Request, res: Response) => {
+    try {
+        const employee = await employeeService.getEmployeeById(Number(req.params.id));
+        // // Debugging
+        console.log(employee);
+        res.status(200).json(employee);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch employee' });
     }
 };
