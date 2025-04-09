@@ -42,7 +42,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTaskStatus = exports.createTask = exports.deleteTask = exports.getTasks = void 0;
+exports.editTask = exports.updateTaskStatus = exports.createTask = exports.deleteTask = exports.getTasks = void 0;
 const taskService = __importStar(require("../services/tasksService"));
 const getTasks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -92,3 +92,18 @@ const updateTaskStatus = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.updateTaskStatus = updateTaskStatus;
+const editTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // // Debugging
+    // console.log(req.body);
+    // console.log(req.params.id);
+    try {
+        taskService.editTask(req.params.id, req.body);
+        res.status(200).json({ 'message': 'Task edited Successsfully' });
+    }
+    catch (error) {
+        // // Debugging
+        console.log(error);
+        res.status(500).json({ error: "could not edit task" });
+    }
+});
+exports.editTask = editTask;

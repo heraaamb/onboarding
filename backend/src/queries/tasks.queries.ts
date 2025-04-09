@@ -61,3 +61,9 @@ export const UPDATE_TASK_STATUS = `
   SET status = 'Completed'
   WHERE task_id = $1;
 `;
+
+// export const EDIT_TASK = `
+//   UPDATE onboarding_tasks 
+//   SET status = 'Completed'
+//   WHERE task_id = $1;
+// `;

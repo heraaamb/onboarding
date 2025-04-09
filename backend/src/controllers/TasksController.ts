@@ -44,3 +44,17 @@ export const updateTaskStatus = async (req: Request, res: Response) => {
         res.status(500).json({error: "could not update task"})
     }
 };
+
+export const editTask = async (req: Request, res: Response) => {
+    // // Debugging
+    // console.log(req.body);
+    // console.log(req.params.id);
+    try {
+        taskService.editTask(req.params.id, req.body)
+        res.status(200).json({'message': 'Task edited Successsfully'})
+    } catch (error) {
+        // // Debugging
+        console.log(error);
+        res.status(500).json({error: "could not edit task"})
+    }
+};

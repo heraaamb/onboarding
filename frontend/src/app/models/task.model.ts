@@ -7,5 +7,5 @@ export interface Task {
     task_name: string;
     description: string;
     due_date: string;
-   
+    fromEdit: boolean;
 }

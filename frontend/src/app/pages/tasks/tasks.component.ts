@@ -59,23 +59,39 @@ export class TaskComponent implements OnInit {
   }
 
   editTask(task: Task) {
+    task.fromEdit = true;
     this.selectedTask = { ...task };
     this.taskDialogVisible = true;
   }
 
   addTask(newTask: Task) {
-    this.taskService.addTask(newTask).subscribe({
-      next: (response) => {
-        console.log('Task added successfully:', response);
-        alert('Task added successfully!');
-        this.loadTasks();
-        this.taskDialogVisible = false;
-      },
-      error: (error) => {
-        console.error('Error adding task:', error);
-        alert('Failed to add task.');
-      },
-    });
+    if (newTask.fromEdit === true) {
+      this.taskService.editTask(newTask.task_id, newTask).subscribe({
+        next: (response) => {
+          console.log('Task edited successfully:', response);
+          alert('Task edited successfully!');
+          this.loadTasks();
+          this.taskDialogVisible = false;
+        },
+        error: (error) => {
+          console.error('Error editing task:', error);
+          alert('Failed to edit task.');
+        },
+      });
+    } else {
+      this.taskService.addTask(newTask).subscribe({
+        next: (response) => {
+          console.log('Task added successfully:', response);
+          alert('Task added successfully!');
+          this.loadTasks();
+          this.taskDialogVisible = false;
+        },
+        error: (error) => {
+          console.error('Error adding task:', error);
+          alert('Failed to add task.');
+        },
+      });
+    }
   }
 
   deleteTask(task: Task) {
@@ -94,13 +110,14 @@ export class TaskComponent implements OnInit {
 
   getEmptyTask(): Task {
     return {
-      task_id: 0,
       employee_name: '',
       assigned_by_name: '',
       department_name: '',
+      task_id: 0,
       task_name: '',
       description: '',
       due_date: '',
+      fromEdit: false
     };
   }
 }
