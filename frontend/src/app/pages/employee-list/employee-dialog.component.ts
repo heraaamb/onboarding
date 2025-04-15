@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
@@ -27,7 +27,7 @@ import { Employee } from '../../models/employee.model';
 export class EmployeeDialogComponent {
     @Input() visible: boolean = false;
     @Input() employee: Employee = {
-        name: '',
+        employee_name: '',
         email: '',
         department_name: '',
         joining_date: '',
@@ -36,9 +36,13 @@ export class EmployeeDialogComponent {
         designation: '',
         supervisor_name: '',
         emp_id: 0,
+<<<<<<< HEAD
+        
+=======
         fromEdit: false
+>>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
     };
-
+    
     @Input() departments: any[] = [];
     @Output() save: EventEmitter<Employee> = new EventEmitter();
     @Output() close: EventEmitter<void> = new EventEmitter();
