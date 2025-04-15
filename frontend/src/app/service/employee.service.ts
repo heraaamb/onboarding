@@ -22,7 +22,7 @@ export class EmployeeService {
     }
 
     addEmployee(employee: Employee): Observable<any> {
-        return this.http.post(`${this.apiUrl}/addEmployee`, employee);
+        return this.http.post(`${this.apiUrl}`, employee);
       }
       
     

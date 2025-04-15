@@ -62,7 +62,7 @@ export class EmployeeListComponent implements OnInit {
 
     updateEmployee(employee: Employee) {
         // // Debugging
-        // console.log("employee from edit: " ,employee);
+        console.log("employee from edit: " ,employee);
         
 
         employee.fromEdit = true;

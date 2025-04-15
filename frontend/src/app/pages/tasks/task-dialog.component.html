@@ -7,14 +7,30 @@
 >
   <ng-template pTemplate="content">
     <div class="flex flex-col gap-6">
-      <div>
+      <div class="p-field">
         <label>Employee Name</label>
-        <input pInputText [(ngModel)]="task.employee_name" required fluid />
+        <p-dropdown
+          [options]="employeeOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Employee"
+          [(ngModel)]="task.employee_name"
+          required
+          fluid
+        ></p-dropdown>
       </div>
+      
 
       <div class="p-field">
         <label>Assigned By</label>
-        <input pInputText [(ngModel)]="task.assigned_by_name" required fluid />
+        <p-dropdown
+          [options]="assigned_by_nameOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Assigned By"
+          [(ngModel)]="task.assigned_by_name"
+          required fluid 
+        ></p-dropdown>
       </div>
 
       <div class="p-field">
@@ -31,8 +47,17 @@
 
       <div class="p-field">
         <label>Task Name</label>
-        <input pInputText [(ngModel)]="task.task_name" required fluid />
+        <p-dropdown
+          [options]="taskOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select Task"
+          [(ngModel)]="task.task_name"
+          required
+          fluid
+        ></p-dropdown>
       </div>
+      
 
       <div class="p-field">
         <label>Description</label>

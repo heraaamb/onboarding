@@ -31,6 +31,14 @@ export class TaskComponent implements OnInit {
     { label: 'R&D', value: 'R&D' }
   ];
   
+  employeeOptions = [
+    { label: 'Nick Fury', value: 'Nick Fury' },
+    { label: 'Maria Hill', value: 'Maria Hill' },
+    { label: 'Peter Parker', value: 'Peter Parker' },
+    { label: 'Steve Rogers', value: 'Steve Rogers' },
+    { label: 'Wanda Maximoff', value: 'Wanda Maximoff' },
+  ];
+  
 
   selectedTask: Task = this.getEmptyTask();
   taskDialogVisible = false;

@@ -33,7 +33,6 @@ export const createEmployee = async (data: any) => {
   
   // // Debugging
   console.log("employee data while creating: ",data);
-  console.log(data.role);
 
   if(data.role === 'Admin'){
     const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name}';`)
@@ -187,7 +186,7 @@ export const createEmployee = async (data: any) => {
 
 
 export const updateEmployee = async (id: number, data: any) => {
-  const { designation, joining_date, department_name, supervisor_name, document_url, email,  role, status, name} = data;
+  const { designation, joining_date, department_name, supervisor_name, document_url, email,  role, status, employee_name} = data;
 
   // do validation
 
@@ -219,7 +218,7 @@ export const updateEmployee = async (id: number, data: any) => {
   };
 
   const userDetails = {
-    name,
+    name:employee_name,
     email,
     role,
     department_id,
@@ -228,27 +227,30 @@ export const updateEmployee = async (id: number, data: any) => {
 
   console.log("====",userDetails);
 
-  const filteredEmployeeEntries = Object.entries(employeeDetails).filter(([_, value]) => value !== undefined);
-  const filteredUserEntries = Object.entries(userDetails).filter(([_, value]) => value !== undefined);
+  console.log(Object.keys(userDetails))
+  console.log(Object)
+
+  const filteredEmployeeEntries = Object.entries(employeeDetails).filter(value => value);
+  const filteredUserEntries = Object.entries(userDetails).filter(value => value);
   // // Debugging
-  console.log("filteredEmployeeEntries", filteredEmployeeEntries);
-  console.log("filteredUserEntries", filteredUserEntries);
+  // console.log("filteredEmployeeEntries", filteredEmployeeEntries);
+  // console.log("filteredUserEntries", filteredUserEntries);
 
   const employee_update_Details = filteredEmployeeEntries.map(([_, value]) => value);
   const employeeFields = filteredEmployeeEntries.map(([key, value]) => 
-    `${key} = $${employee_update_Details.indexOf(value) + 1}`
+    `${key} = $${employee_update_Details.indexOf(value) + 1} `
   );
   // // Debugging
-  console.log("employee_update_Details", employee_update_Details);
-  console.log("employeeFields", employeeFields);
+  // console.log("employee_update_Details", employee_update_Details);
+  // console.log("employeeFields", employeeFields);
 
   const user_update_Details = filteredUserEntries.map(([_, value]) => value);
   const userFields = filteredUserEntries.map(([key, value]) => 
       `${key} = $${user_update_Details.indexOf(value) + 1}`
     );
   // // Debugging
-  console.log("user_update_Details", user_update_Details);
-  console.log("userFields", userFields);    
+  // console.log("user_update_Details", user_update_Details);
+  // console.log("userFields", userFields);    
 
   // employee query
   const employeeQuery = `

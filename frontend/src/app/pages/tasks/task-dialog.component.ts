@@ -34,11 +34,41 @@ export class TaskDialogComponent {
     task_id: 0,
     fromEdit: false
   };
+  employeeOptions = [
+    { label: 'Nick Fury', value: 'Nick Fury' },
+    { label: 'Maria Hill', value: 'Maria Hill' },
+    { label: 'Peter Parker', value: 'Peter Parker' },
+    { label: 'Steve Rogers', value: 'Steve Rogers' },
+    { label: 'Wanda Maximoff', value: 'Wanda Maximoff' },
+   
+  ];
+
+ taskOptions = [
+    { label: 'R&D Policies', value: 'R&D Policies' },
+    { label: 'Intro to Stark Tech', value: 'Intro to Stark Tech' },
+    { label: 'Operations Briefing', value: 'Operations Briefing' },
+    { label: 'HR Documentation', value: 'HR Documentation' },
+    { label: 'Developing software', value: 'Developing software' },
+   
+  ];
+
+  assigned_by_nameOptions = [
+    { label: 'Nick Fury', value: 'Nick Fury' },
+    { label: 'Maria Hill', value: 'Maria Hill' },
+    { label: 'Peter Parker', value: 'Peter Parker' },
+    { label: 'Steve Rogers', value: 'Steve Rogers' },
+    { label: 'Wanda Maximoff', value: 'Wanda Maximoff' },
+  ]
+
+
+  
 
   @Input() departments: { label: string; value: string }[] = [];
 
   @Output() save = new EventEmitter<Task>();
   @Output() close = new EventEmitter<void>();
+assigned_by: any[]|undefined;
+
 
   onSave() {
     this.save.emit(this.task);
