@@ -55,7 +55,6 @@ throw new Error('Method not implemented.');
         this.employeeDialogVisible = true;
     }
 
-<<<<<<< HEAD
     // editEmployee(employee: Employee) {
     //     this.isEdit=true;
     //     this.selectedEmployee = {} as Employee;
@@ -81,27 +80,11 @@ throw new Error('Method not implemented.');
 
     addEmployee(newEmployee: Employee) {
         if (this.isEdit ){
-=======
-    updateEmployee(employee: Employee) {
-        // // Debugging
-        console.log("employee from edit: " ,employee);
-        employee.fromEdit = true;
-        this.selectedEmployee = { ...employee };
-        this.employeeDialogVisible = true;
-    }
-
-    addEmployee(newEmployee: Employee) {
-        if (newEmployee.fromEdit === true) {
-            // // Debugging
-            console.log("from edit employee: " , newEmployee);
-            this.employeeDialogVisible = true;
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
             this.employeeService.updateEmployee(newEmployee.emp_id, newEmployee).subscribe({
                 next: (response) => {
                     console.log('Employee updated successfully:', response);
                     alert('Employee updated successfully!');
                     this.loadEmployees();
-<<<<<<< HEAD
                     this.employeeDialogVisible = false;
                 },
                 error: (error) => {
@@ -111,28 +94,12 @@ throw new Error('Method not implemented.');
             });
         }
         else {
-=======
-                    this.employeeDialogVisible = false; 
-                },
-                error: (error) => {
-                    console.log('Error updating employee:', error);
-                    alert('Failed to update employee.');
-                }
-            })
-        } 
-        else {
-            console.log("from add New Employee employee: " , newEmployee);
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
             this.employeeService.addEmployee(newEmployee).subscribe({
                 next: (response) => {
                     console.log('Employee added successfully:', response);
                     alert('Employee added successfully!');
                     this.loadEmployees();
-<<<<<<< HEAD
                     this.employeeDialogVisible = false;
-=======
-                    this.employeeDialogVisible = false; 
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
                 },
                 error: (error) => {
                     console.error('Error adding employee:', error);
@@ -140,10 +107,7 @@ throw new Error('Method not implemented.');
                 }
             });
         }
-<<<<<<< HEAD
         
-=======
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
     }
 
     deleteEmployee(employee: Employee) {
@@ -161,26 +125,15 @@ throw new Error('Method not implemented.');
 
     getEmptyEmployee(): Employee {
         return {
-<<<<<<< HEAD
             employee_name: '',
             email: '',
-=======
-            emp_id: 0,
-            name: undefined,
-            email: undefined,
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
             department_name: '',
             joining_date: '',
             role: '',
             status: '',
             designation: '',
-<<<<<<< HEAD
             supervisor_name: '',
             emp_id: 0
-=======
-            supervisor_name: undefined,
-            fromEdit: false
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
         };
     }
 }
