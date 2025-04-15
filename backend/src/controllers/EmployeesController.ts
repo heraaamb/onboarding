@@ -24,7 +24,7 @@ export const getOnboardingEmployees = async (req: Request, res: Response) => {
 export const createEmployee = async (req: Request, res: Response) => {
     try {
         // // Debugging
-        // console.log(req.body);
+        console.log(req.body);
         const employee = await employeeService.createEmployee(req.body);
         res.status(201).json(employee);
     } catch (err) {
@@ -36,7 +36,7 @@ export const createEmployee = async (req: Request, res: Response) => {
 export const updateEmployee = async (req: Request, res: Response) => {
     
         // // Debugging
-        // console.log(req.body);
+        console.log(req.body);
         // console.log(req.params.id);
 
     try {
