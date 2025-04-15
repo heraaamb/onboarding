@@ -3,19 +3,19 @@ import {
   TooltipModule
 } from "./chunk-THFN7UTO.js";
 import {
-<<<<<<< HEAD
   RouterLink,
   RouterLinkActive,
   RouterModule
 } from "./chunk-GQITGLQ3.js";
 import {
-  DomSanitizer
-} from "./chunk-4MZE5ERV.js";
-import {
-=======
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
   zindexutils
 } from "./chunk-NMOYQVAO.js";
+import {
+  animate,
+  style,
+  transition,
+  trigger
+} from "./chunk-J2347JD2.js";
 import {
   Badge,
   BadgeModule
@@ -48,28 +48,13 @@ import {
   relativePosition,
   uuid
 } from "./chunk-WBS44QWF.js";
-import {
-  animate,
-  style,
-  transition,
-  trigger
-} from "./chunk-J2347JD2.js";
-import "./chunk-EWYPZBPJ.js";
 import "./chunk-CWYBPNCF.js";
 import "./chunk-NJ25EVEJ.js";
-import {
-<<<<<<< HEAD
-=======
-  RouterLink,
-  RouterLinkActive,
-  RouterModule
-} from "./chunk-GQITGLQ3.js";
 import {
   DomSanitizer
 } from "./chunk-4MZE5ERV.js";
 import "./chunk-EWYPZBPJ.js";
 import {
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
   CommonModule,
   NgClass,
   NgForOf,
@@ -142,8 +127,8 @@ import {
   ɵɵtextInterpolate,
   ɵɵviewQuery
 } from "./chunk-SAS3ZIMR.js";
-import "./chunk-5OPE3T2R.js";
 import "./chunk-4N4GOYJH.js";
+import "./chunk-5OPE3T2R.js";
 import "./chunk-FHTVLBLO.js";
 import "./chunk-WDMUDEB6.js";
 

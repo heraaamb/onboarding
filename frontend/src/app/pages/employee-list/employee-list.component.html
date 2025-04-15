@@ -9,16 +9,10 @@
     <p-table [value]="employees" [paginator]="true" [rows]="10" dataKey="emp_id" [rowHover]="true" [showGridlines]="true" [tableStyle]="{ 'min-width': '80rem' }">
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="name">employee_Name <p-sortIcon field="name" /></th>
-<<<<<<< HEAD
+                <th pSortableColumn="employee_name">Employee Name <p-sortIcon field="employee_name" /></th>
                 <th pSortableColumn="email">Email ID <p-sortIcon field="email" /></th>
-                <th pSortableColumn="email">department_name <p-sortIcon field="department name" /></th>
-                <th pSortableColumn="role">joining_date <p-sortIcon field="joining date" /></th>
-=======
-                <th pSortableColumn="email">Email ID <p-sortIcon field="department_name" /></th>
-                <th pSortableColumn="department_name">Department Name <p-sortIcon field="depname" /></th>
-                <th pSortableColumn="joining_date">Joining date <p-sortIcon field="joining_date" /></th>
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
+                <th pSortableColumn="department_name">department_name <p-sortIcon field="department_name" /></th>
+                <th pSortableColumn="joining_date">joining_date <p-sortIcon field="joining_date" /></th>
                 <th pSortableColumn="role">Role <p-sortIcon field="role" /></th>
                 <th pSortableColumn="status">Status<p-sortIcon field="status" /></th>
                 <th pSortableColumn="designation">Designation<p-sortIcon field="designation" /></th>
@@ -30,7 +24,7 @@
 
         <ng-template pTemplate="body" let-employee>
             <tr>
-                <td>{{ employee.name }}</td>
+                <td>{{ employee.employee_name }}</td>
                 <td>{{ employee.email }}</td>
                 <td>{{ employee.department_name }}</td>
                 <td>{{ employee.joining_date | date:'yyyy-MM-dd' }}</td>
@@ -40,11 +34,7 @@
                 <td>{{ employee.supervisor_name }}</td>
         
                 <td>
-<<<<<<< HEAD
-                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" (click)="addEmployee(employee)"></p-button>
-=======
                     <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" (click)="updateEmployee(employee)"></p-button>
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
                     <p-button icon="pi pi-trash" severity="danger" [rounded]="true" (click)="deleteEmployee(employee)"></p-button>
                 </td>
             </tr>

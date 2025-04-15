@@ -1,22 +1,4 @@
 import {
-<<<<<<< HEAD
-=======
-  SelectButtonModule
-} from "./chunk-PHJEUTIE.js";
-import {
-  Checkbox,
-  CheckboxModule
-} from "./chunk-MPHAI6G7.js";
-import {
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
-  IconField,
-  InputIcon,
-  Overlay,
-  Scroller,
-  ScrollerModule
-} from "./chunk-VP5TRGSK.js";
-<<<<<<< HEAD
-import {
   SelectButtonModule
 } from "./chunk-2QCOLKM7.js";
 import {
@@ -24,22 +6,31 @@ import {
   CheckboxModule
 } from "./chunk-3AIR6CPR.js";
 import {
+  IconField,
+  InputIcon,
+  Overlay,
+  Scroller,
+  ScrollerModule
+} from "./chunk-DBJ4J6K7.js";
+import {
   Tooltip
 } from "./chunk-THFN7UTO.js";
-=======
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
 import {
   InputText,
   InputTextModule
 } from "./chunk-OEIXRTVM.js";
 import {
-  Tooltip
-} from "./chunk-THFN7UTO.js";
-import {
   ObjectUtils,
   UniqueComponentId,
   zindexutils
 } from "./chunk-NMOYQVAO.js";
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger
+} from "./chunk-J2347JD2.js";
 import {
   Button,
   ButtonModule
@@ -76,21 +67,12 @@ import {
 } from "./chunk-U7I4BWIA.js";
 import "./chunk-UIALXU6H.js";
 import {
-<<<<<<< HEAD
-  Ripple
-} from "./chunk-CQSWJ775.js";
-import {
-  ConnectedOverlayScrollHandler,
-  DomHandler
-} from "./chunk-5G7WYC4N.js";
-=======
   ConnectedOverlayScrollHandler,
   DomHandler
 } from "./chunk-5G7WYC4N.js";
 import {
   Ripple
 } from "./chunk-CQSWJ775.js";
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
 import {
   BaseComponent
 } from "./chunk-GRKHFVXY.js";
@@ -130,20 +112,6 @@ import {
   unblockBodyScroll,
   uuid
 } from "./chunk-WBS44QWF.js";
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger
-} from "./chunk-J2347JD2.js";
-import {
-  FormsModule,
-  NG_VALUE_ACCESSOR,
-  NgControl,
-  NgControlStatus,
-  NgModel
-} from "./chunk-P73PIM3P.js";
 import "./chunk-CWYBPNCF.js";
 import {
   deepEquals,
@@ -262,8 +230,8 @@ import {
   ɵɵtwoWayProperty,
   ɵɵviewQuery
 } from "./chunk-SAS3ZIMR.js";
-import "./chunk-5OPE3T2R.js";
 import "./chunk-4N4GOYJH.js";
+import "./chunk-5OPE3T2R.js";
 import {
   Subject
 } from "./chunk-FHTVLBLO.js";

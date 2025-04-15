@@ -27,8 +27,8 @@ export class TaskComponent implements OnInit {
   departments = [
     { label: 'HR', value: 'HR' },
     { label: 'IT', value: 'IT' },
-    { label: 'Finance', value: 'Finance' },
-    { label: 'Admin', value: 'Admin' }
+    { label: 'Operations', value: 'Operations' },
+    { label: 'R&D', value: 'R&D' }
   ];
   
 
@@ -59,8 +59,15 @@ export class TaskComponent implements OnInit {
   }
 
   editTask(task: Task) {
+    console.log("task: ", task);
+    console.log('Editing task with department:', task.department_name);
+    console.log('Dropdown values:', this.departments.map(d => d.value));
+
     task.fromEdit = true;
-    this.selectedTask = { ...task };
+    this.selectedTask = { ...task ,
+      due_date: typeof task.due_date === 'string' ? new Date(task.due_date) : task.due_date,
+      department_name: task.department_name
+    };
     this.taskDialogVisible = true;
   }
 

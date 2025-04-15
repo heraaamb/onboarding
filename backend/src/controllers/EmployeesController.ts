@@ -36,8 +36,8 @@ export const createEmployee = async (req: Request, res: Response) => {
 export const updateEmployee = async (req: Request, res: Response) => {
     
         // // Debugging
-        console.log(req.body);
-        console.log(req.params.id);
+        // console.log(req.body);
+        // console.log(req.params.id);
 
     try {
         const updated = await employeeService.updateEmployee(Number(req.params.id), req.body);

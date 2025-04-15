@@ -1,6 +1,12 @@
-<p-dialog [(visible)]="visible" modal="'true" header="Employee Form" [closable]="false" [style]="{ width: '500px' }">
+<p-dialog
+ [(visible)]="visible" 
+ modal="true" 
+ header="Employee Form"  
+ [style]="{ width: '500px' }" 
+ (onHide)="onClose()"
+>
     
-    <ng-template #content>
+    <ng-template pTemplate="content">
         <div class="flex flex-col gap-6">
             <div>
                 <label for="name">Employee Name</label>
@@ -14,7 +20,7 @@
 
             <div>
                 <label for="department">Department</label>
-                <p-dropdown id="department" [options]="departments" optionLabel="department name" 
+                <p-dropdown id="department" [options]="departments" optionLabel="name" optionValue="value"
                     [(ngModel)]="employee.department_name" placeholder="Select Department" required fluid >
                 </p-dropdown>
             </div>
@@ -52,7 +58,7 @@
         </div>
     </ng-template>
 
-    <ng-template #footer>
+    <ng-template pTemplate="footer">
         <p-button label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></p-button>
         <p-button label="Save" icon="pi pi-check" (click)="saveEmployee()" 
             [disabled]="!employee.email || !employee.designation || !employee.department_name">

@@ -1,4 +1,10 @@
-<p-dialog [(visible)]="visible" modal="true" header="Task Form" [style]="{ width: '500px' }" (onHide)="onClose()">
+<p-dialog 
+  [(visible)]="visible" 
+  modal="true" 
+  header="Task Form" 
+  [style]="{ width: '500px' }" 
+  (onHide)="onClose()"
+>
   <ng-template pTemplate="content">
     <div class="flex flex-col gap-6">
       <div>

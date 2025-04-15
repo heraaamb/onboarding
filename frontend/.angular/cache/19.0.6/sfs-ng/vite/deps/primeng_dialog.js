@@ -2,6 +2,14 @@ import {
   zindexutils
 } from "./chunk-NMOYQVAO.js";
 import {
+  animate,
+  animation,
+  style,
+  transition,
+  trigger,
+  useAnimation
+} from "./chunk-J2347JD2.js";
+import {
   Button
 } from "./chunk-KNRA6NY5.js";
 import "./chunk-5UE6GGMV.js";
@@ -11,17 +19,10 @@ import {
   WindowMinimizeIcon
 } from "./chunk-U7I4BWIA.js";
 import "./chunk-UIALXU6H.js";
-<<<<<<< HEAD
-import "./chunk-CQSWJ775.js";
-import {
-  DomHandler
-} from "./chunk-5G7WYC4N.js";
-=======
 import {
   DomHandler
 } from "./chunk-5G7WYC4N.js";
 import "./chunk-CQSWJ775.js";
->>>>>>> 1669103b6b7ebc1c0c654c62022a79ee7d7851d1
 import {
   BaseComponent
 } from "./chunk-GRKHFVXY.js";
@@ -51,14 +52,6 @@ import {
   unblockBodyScroll,
   uuid
 } from "./chunk-WBS44QWF.js";
-import {
-  animate,
-  animation,
-  style,
-  transition,
-  trigger,
-  useAnimation
-} from "./chunk-J2347JD2.js";
 import "./chunk-CWYBPNCF.js";
 import "./chunk-NJ25EVEJ.js";
 import {
@@ -131,8 +124,8 @@ import {
   ɵɵtextInterpolate,
   ɵɵviewQuery
 } from "./chunk-SAS3ZIMR.js";
-import "./chunk-5OPE3T2R.js";
 import "./chunk-4N4GOYJH.js";
+import "./chunk-5OPE3T2R.js";
 import "./chunk-FHTVLBLO.js";
 import {
   __spreadValues
