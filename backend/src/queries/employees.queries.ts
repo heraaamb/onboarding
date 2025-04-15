@@ -49,6 +49,7 @@ export const UPDATE_EMPLOYEE = `UPDATE employees
 
 export const DELETE_EMPLOYEE = `
   DELETE FROM employees WHERE emp_id = $1;
+  RETURNING user_id;
 `;
 
 

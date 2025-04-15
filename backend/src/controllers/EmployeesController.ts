@@ -51,10 +51,11 @@ export const updateEmployee = async (req: Request, res: Response) => {
 
 export const deleteEmployee = async (req: Request, res: Response) => {
     try {
-        await employeeService.deleteEmployee(Number(req.params.id));
+        const result = await employeeService.deleteEmployee(Number(req.params.id));
+        console.log(result);
         res.status(204).send();
     } catch (err) {
-        res.status(500).json({ error: 'Failed to delete employee' });
+        res.status(500).json({ error: `Failed to delete employee: ${err}` });
     }
 };
 
