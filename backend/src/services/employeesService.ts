@@ -8,13 +8,13 @@ import {
     EMPLOYEE_INSERT_QUERY,
     GET_EMPLOYEE_BY_ID
 } from '../queries/employees.queries';
+import { DELETE_TASK_EMPID } from '../queries/tasks.queries';
+import {DELETE_USER} from '../queries/users.queries'
 import { USER_INSERT_QUERY } from '../queries/users.queries';
 import crypto from 'crypto';
 import { sendEmail } from '../services/emailService'; // A function to send emails
 import bcrypt from 'bcrypt';
 import {generatePassword, hashPassword, sendmail} from '../utils/utils'
-import { DefaultNamingStrategy } from 'typeorm';
-import { error } from 'console';
 
 export const getAllEmployees = async () => {
   const result = await pool.query(GET_ALL_EMPLOYEES);
@@ -280,7 +280,29 @@ export const updateEmployee = async (id: number, data: any) => {
   
 
 export const deleteEmployee = async (id: number) => {
-    await pool.query(DELETE_EMPLOYEE, [id]);
+    // const deleted = await pool.query(DELETE_EMPLOYEE, [id]);
+    // const userId = deleted.rows[0]?.user_id;
+    // await pool.query(DELETE_USER, [userId]);
+    // await pool.query(DELETE_TASK_EMPID, [id]);
+    // console.log(deleted);
+
+    try {
+      const user_idres = await pool.query(`SELECT user_id FROM employees WHERE emp_id = $1`,[id]);
+      // // Debugging
+      // console.log(user_idres);
+      const user_id = user_idres.rows[0].user_id
+      // // Debugging
+      // console.log(user_id);
+
+
+      await pool.query(`DELETE FROM onboarding_tasks WHERE emp_id = $1`, [id]);
+      await pool.query(`DELETE FROM employees WHERE user_id = $1`, [user_id])
+      await pool.query(`DELETE FROM users WHERE user_id = $1`, [user_id])
+
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
 };
 
 

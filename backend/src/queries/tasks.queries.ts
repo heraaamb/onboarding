@@ -21,6 +21,11 @@ export const DELETE_TASK = `
   WHERE task_id = $1;
 `;
 
+export const DELETE_TASK_EMPID = `
+  DELETE FROM onboarding_tasks
+  WHERE emp_id = $1;
+`;
+
 export const CREATE_TASK = `
 INSERT INTO onboarding_tasks (
     emp_id,
