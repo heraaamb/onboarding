@@ -34,8 +34,18 @@
                 <td>{{ employee.supervisor_name }}</td>
         
                 <td>
-                    <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" (click)="updateEmployee(employee)"></p-button>
-                    <p-button icon="pi pi-trash" severity="danger" [rounded]="true" (click)="deleteEmployee(employee)"></p-button>
+                    
+                    <p-button 
+                     icon="pi pi-pencil" 
+                     class="mr-2" [rounded]="true" 
+                     (click)="updateEmployee(employee)"
+                     ></p-button>
+                    <p-button 
+                    icon="pi pi-trash" severity="danger" 
+                    [rounded]="true" 
+                    (click)="deleteEmployee(employee)"
+                    ></p-button>
+                
                 </td>
             </tr>
         </ng-template>

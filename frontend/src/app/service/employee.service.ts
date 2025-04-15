@@ -21,9 +21,10 @@ export class EmployeeService {
         return this.http.get<Employee>(`${this.apiUrl}/${id}`);
     }
 
-    addEmployee( employee: Employee): Observable<Employee> {
-        return this.http.post<Employee>(this.apiUrl, employee);
-    }
+    addEmployee(employee: Employee): Observable<any> {
+        return this.http.post(`${this.apiUrl}/addEmployee`, employee);
+      }
+      
     
     updateEmployee(id: number, employee: Employee): Observable<Employee> {
         return this.http.put<Employee>(`${this.apiUrl}/${id}`, employee);

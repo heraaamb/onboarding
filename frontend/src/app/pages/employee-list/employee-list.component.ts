@@ -7,12 +7,17 @@ import { ButtonModule } from 'primeng/button';
 import { Employee } from '../../models/employee.model';
 import { EmployeeService } from '../../service/employee.service';
 import { EmployeeDialogComponent } from '../employee-list/employee-dialog.component';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
 
 @Component({
     selector: 'app-employee-list',
     standalone: true,
     templateUrl: './employee-list.component.html',
-    imports: [CommonModule, FormsModule, TableModule, ButtonModule, ToolbarModule, EmployeeDialogComponent]
+    providers: [MessageService],
+    
+    imports: [CommonModule, FormsModule, TableModule, ButtonModule,ToolbarModule,EmployeeDialogComponent ,ToastModule]
 })
 export class EmployeeListComponent implements OnInit {
     employees: Employee[] = [];
@@ -29,7 +34,11 @@ export class EmployeeListComponent implements OnInit {
 
     newEmployee: Employee = this.getEmptyEmployee();
 
-    constructor(private employeeService: EmployeeService) {}
+    constructor(
+        private employeeService: EmployeeService,
+        private messageService: MessageService
+      ) {}
+      
 
     ngOnInit() {
         this.loadEmployees();
@@ -66,38 +75,47 @@ export class EmployeeListComponent implements OnInit {
 
     addEmployee(newEmployee: Employee) {
         if (newEmployee.fromEdit === true) {
-            // // Debugging
-            console.log("from edit employee: " , newEmployee);
-            this.employeeDialogVisible = true;
-            this.employeeService.updateEmployee(newEmployee.emp_id, newEmployee).subscribe({
-                next: (response) => {
-                    console.log('Employee updated successfully:', response);
-                    alert('Employee updated successfully!');
-                    this.loadEmployees();
-                    this.employeeDialogVisible = false; 
-                },
-                error: (error) => {
-                    console.log('Error updating employee:', error);
-                    alert('Failed to update employee.');
-                }
-            })
-        } 
-        else {
-            console.log("from add New Employee employee: " , newEmployee);
-            this.employeeService.addEmployee(newEmployee).subscribe({
-                next: (response) => {
-                    console.log('Employee added successfully:', response);
-                    alert('Employee added successfully!');
-                    this.loadEmployees();
-                    this.employeeDialogVisible = false; 
-                },
-                error: (error) => {
-                    console.error('Error adding employee:', error);
-                    alert('Failed to add employee.');
-                }
-            });
+          this.employeeDialogVisible = true;
+          this.employeeService.updateEmployee(newEmployee.emp_id, newEmployee).subscribe({
+            next: (response) => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Employee updated successfully!'
+              });
+              this.loadEmployees();
+              this.employeeDialogVisible = false;
+            },
+            error: (error) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Failed to update employee.'
+              });
+            }
+          });
+        } else {
+          this.employeeService.addEmployee(newEmployee).subscribe({
+            next: (response) => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Employee added successfully!'
+              });
+              this.loadEmployees();
+              this.employeeDialogVisible = false;
+            },
+            error: (error) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Failed to add employee.'
+              });
+            }
+          });
         }
-    }
+      }
+      
 
     deleteEmployee(employee: Employee) {
         this.employeeService.deleteEmployee(employee.emp_id).subscribe({
