@@ -64,7 +64,6 @@ export class EmployeeListComponent implements OnInit {
         // // Debugging
         console.log("employee from edit: " ,employee);
         
-
         employee.fromEdit = true;
         this.selectedEmployee = { 
             ...employee , 
@@ -74,6 +73,8 @@ export class EmployeeListComponent implements OnInit {
     }
 
     addEmployee(newEmployee: Employee) {
+        // // Debugging
+        console.log(newEmployee);
         if (newEmployee.fromEdit === true) {
           this.employeeDialogVisible = true;
           this.employeeService.updateEmployee(newEmployee.emp_id, newEmployee).subscribe({
@@ -90,7 +91,7 @@ export class EmployeeListComponent implements OnInit {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
-                detail: 'Failed to update employee.'
+                detail: `Failed to update employee.: ${error}`
               });
             }
           });
@@ -109,7 +110,7 @@ export class EmployeeListComponent implements OnInit {
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
-                detail: 'Failed to add employee.'
+                detail: `Failed to add employee.: ${error}`
               });
             }
           });

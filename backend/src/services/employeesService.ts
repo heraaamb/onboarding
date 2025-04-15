@@ -188,37 +188,35 @@ export const createEmployee = async (data: any) => {
 export const updateEmployee = async (id: number, data: any) => {
   const { designation, joining_date, department_name, supervisor_name, document_url, email,  role, status, employee_name} = data;
 
-  // do validation
-
-  // if(!designation){
-  //   throw error "empty designation";
-  // }
-
-  
-  const supervisor_result = await pool.query(`
-    SELECT e.emp_id
-    FROM employees e
-    JOIN users u ON e.user_id = u.user_id
-    WHERE name=$1`,[supervisor_name])
-  const supervisor_id = supervisor_result.rows[0].emp_id
-  // // Debugging
-  // console.log(supervisor_result);
-
   const departmentResult = await pool.query(`SELECT dept_id FROM departments WHERE name = '${department_name}'`)
   const department_id = departmentResult.rows[0].dept_id
 
   const userIdresult = await pool.query(`SELECT user_id FROM employees WHERE emp_id=${id}`)
   const user_id = userIdresult.rows[0].user_id
 
-  const employeeDetails = {
+  const employeeDetails: Record<string, any> = {
     designation,
     joining_date,
-    department_id,
-    supervisor_id
+    department_id
   };
+  
+
+  if (supervisor_name?.trim()) {
+    const supervisor_result = await pool.query(
+      `SELECT e.emp_id
+       FROM employees e
+       JOIN users u ON e.user_id = u.user_id
+       WHERE name = $1`,
+      [supervisor_name]
+    );
+  
+    if (supervisor_result.rows.length > 0) {
+      employeeDetails.supervisor_id = supervisor_result.rows[0].emp_id;
+    }
+  }
 
   const userDetails = {
-    name:employee_name,
+    name: employee_name,
     email,
     role,
     department_id,
@@ -227,35 +225,31 @@ export const updateEmployee = async (id: number, data: any) => {
 
   console.log("====",userDetails);
 
-  console.log(Object.keys(userDetails))
-  console.log(Object)
+  const employee_update_Details = Object.values(employeeDetails)
+  const user_update_Details = Object.values(userDetails)
+  // // Debugging upatae details
+  console.log("employee_update_Details", employee_update_Details);
+  console.log("user_update_Details", user_update_Details);
+  
+  
+  const employeeFieldstemp = Object.keys(employeeDetails)
+  const employeeFields = employeeFieldstemp
+  .map((field, index) => `${field}=$${index + 1}`)
+  .join(', ');
 
-  const filteredEmployeeEntries = Object.entries(employeeDetails).filter(value => value);
-  const filteredUserEntries = Object.entries(userDetails).filter(value => value);
-  // // Debugging
-  // console.log("filteredEmployeeEntries", filteredEmployeeEntries);
-  // console.log("filteredUserEntries", filteredUserEntries);
+  const userFieldstemp = Object.keys(userDetails)
+  const userFields = userFieldstemp
+  .map((field, index) => `${field}=$${index + 1}`)
+  .join(', ');
 
-  const employee_update_Details = filteredEmployeeEntries.map(([_, value]) => value);
-  const employeeFields = filteredEmployeeEntries.map(([key, value]) => 
-    `${key} = $${employee_update_Details.indexOf(value) + 1} `
-  );
-  // // Debugging
-  // console.log("employee_update_Details", employee_update_Details);
-  // console.log("employeeFields", employeeFields);
+  // // Debugging update fields
+  console.log("employeeFields: ", employeeFields);
+  console.log("userFields: ", userFields);
 
-  const user_update_Details = filteredUserEntries.map(([_, value]) => value);
-  const userFields = filteredUserEntries.map(([key, value]) => 
-      `${key} = $${user_update_Details.indexOf(value) + 1}`
-    );
-  // // Debugging
-  // console.log("user_update_Details", user_update_Details);
-  // console.log("userFields", userFields);    
-
-  // employee query
+   // employee query
   const employeeQuery = `
     UPDATE employees
-    SET ${employeeFields.join(', ')}
+    SET ${employeeFields}
     WHERE emp_id = $${employee_update_Details.length + 1}
     RETURNING *;
   `;
@@ -263,7 +257,7 @@ export const updateEmployee = async (id: number, data: any) => {
   // users query
   const usersQuery = `
     UPDATE users
-    SET ${userFields.join(', ')}
+    SET ${userFields}
     WHERE user_id = $${user_update_Details.length + 1}
     RETURNING *;
   `;
@@ -278,6 +272,55 @@ export const updateEmployee = async (id: number, data: any) => {
     console.error('Error updating employee:', error);
     throw new Error('Failed to update employee');
   }
+
+  // const filteredEmployeeEntries = Object.entries(employeeDetails).filter(([_, value]) => value !== undefined);
+  // const filteredUserEntries = Object.entries(userDetails).filter(([_, value]) => value !== undefined);
+  // // // Debugging
+  // console.log("filteredEmployeeEntries", filteredEmployeeEntries);
+  // console.log("filteredUserEntries", filteredUserEntries);
+
+  // const employee_update_Details = filteredEmployeeEntries.map(([_, value]) => value);
+  // const employeeFields = filteredEmployeeEntries.map(([key, value]) => 
+  //   `${key} = $${employee_update_Details.indexOf(value) + 1}`
+  // );
+  // // // Debugging
+  // console.log("employee_update_Details", employee_update_Details);
+  // console.log("employeeFields", employeeFields);
+
+  // const user_update_Details = filteredUserEntries.map(([_, value]) => value);
+  // const userFields = filteredUserEntries.map(([key, value]) => 
+  //     `${key} = $${user_update_Details.indexOf(value) + 1}`
+  //   );
+  // // // Debugging
+  // console.log("user_update_Details", user_update_Details);
+  // console.log("userFields", userFields);    
+
+  // // employee query
+  // const employeeQuery = `
+  //   UPDATE employees
+  //   SET ${employeeFields.join(', ')}
+  //   WHERE emp_id = $${employee_update_Details.length + 1}
+  //   RETURNING *;
+  // `;
+
+  // // users query
+  // const usersQuery = `
+  //   UPDATE users
+  //   SET ${userFields.join(', ')}
+  //   WHERE user_id = $${user_update_Details.length + 1}
+  //   RETURNING *;
+  // `;
+
+  // try {
+  //   const result = await pool.query(employeeQuery, [...employee_update_Details, id]);
+  //   const result2 = await pool.query(usersQuery, [...user_update_Details, user_id]);
+
+  //   const returnStuff = result.rows[0] + result2.rows[0]
+  //   return returnStuff;
+  // } catch (error) {
+  //   console.error('Error updating employee:', error);
+  //   throw new Error('Failed to update employee');
+  // }
 };
   
 
