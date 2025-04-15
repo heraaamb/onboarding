@@ -4,7 +4,7 @@ exports.GET_EMPLOYEE_BY_ID = exports.DELETE_EMPLOYEE = exports.UPDATE_EMPLOYEE =
 exports.GET_ALL_EMPLOYEES = `
   SELECT 
       e.emp_id,
-      u.name AS name,
+      u.name AS employee_name,
       u.email,
       e.joining_date,
       d.name AS department_name,

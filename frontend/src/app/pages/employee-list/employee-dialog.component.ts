@@ -36,7 +36,7 @@ export class EmployeeDialogComponent {
         designation: '',
         supervisor_name: '',
         emp_id: 0,
-        
+        fromEdit: false
     };
     
     @Input() departments: any[] = [];
@@ -61,5 +61,8 @@ export class EmployeeDialogComponent {
 
     saveEmployee() {
         this.save.emit(this.employee);
+    }
+    onClose() {
+        this.close.emit();
     }
 }

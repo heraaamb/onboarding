@@ -31,7 +31,8 @@ export class TaskDialogComponent {
     task_name: '',
     description: '',
     due_date: '',
-    task_id: 0
+    task_id: 0,
+    fromEdit: false
   };
 
   @Input() departments: { label: string; value: string }[] = [];

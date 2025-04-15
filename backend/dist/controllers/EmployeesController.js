@@ -81,8 +81,8 @@ const createEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.createEmployee = createEmployee;
 const updateEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // // Debugging
-    console.log(req.body);
-    console.log(req.params.id);
+    // console.log(req.body);
+    // console.log(req.params.id);
     try {
         const updated = yield employeeService.updateEmployee(Number(req.params.id), req.body);
         res.json(updated);

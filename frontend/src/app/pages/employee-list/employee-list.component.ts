@@ -15,14 +15,10 @@ import { EmployeeDialogComponent } from '../employee-list/employee-dialog.compon
     imports: [CommonModule, FormsModule, TableModule, ButtonModule, ToolbarModule, EmployeeDialogComponent]
 })
 export class EmployeeListComponent implements OnInit {
-editEmployee(_t52: any) {
-throw new Error('Method not implemented.');
-}
-    employees: Employee[] = []; // Initialize employees array
-    isEdit = false;
+    employees: Employee[] = [];
     departments = [
         { name: 'HR', value: 'HR' },
-        { name: 'Finance', value: 'Finance' },
+        { name: 'Operations', value: 'Operations' },
         { name: 'IT', value: 'IT' },
         { name: 'R&D', value: 'R&D' },
         { name: 'Marketing', value: 'Marketing' }
@@ -55,51 +51,45 @@ throw new Error('Method not implemented.');
         this.employeeDialogVisible = true;
     }
 
-    // editEmployee(employee: Employee) {
-    //     this.isEdit=true;
-    //     this.selectedEmployee = {} as Employee;
-    //     this.selectedEmployee = employee;
-    //     console.log(this.selectedEmployee);
-    //     this.employeeDialogVisible = true;
-    // }
+    updateEmployee(employee: Employee) {
+        // // Debugging
+        // console.log("employee from edit: " ,employee);
+        
 
-    updateEmployee(){
-        this.employeeService.updateEmployee(this.newEmployee.emp_id, this.newEmployee).subscribe({
-            next: (response) => {
-                console.log('Employee added successfully:', response);
-                alert('Employee added successfully!');
-                this.loadEmployees();
-                this.employeeDialogVisible = false;
-            },
-            error: (error) => {
-                console.error('Error adding employee:', error);
-                alert('Failed to add employee.');
-            }
-        });  
+        employee.fromEdit = true;
+        this.selectedEmployee = { 
+            ...employee , 
+            joining_date: typeof employee.joining_date === 'string' ? new Date(employee.joining_date) : employee.joining_date,
+        };
+        this.employeeDialogVisible = true;
     }
 
     addEmployee(newEmployee: Employee) {
-        if (this.isEdit ){
+        if (newEmployee.fromEdit === true) {
+            // // Debugging
+            console.log("from edit employee: " , newEmployee);
+            this.employeeDialogVisible = true;
             this.employeeService.updateEmployee(newEmployee.emp_id, newEmployee).subscribe({
                 next: (response) => {
                     console.log('Employee updated successfully:', response);
                     alert('Employee updated successfully!');
                     this.loadEmployees();
-                    this.employeeDialogVisible = false;
+                    this.employeeDialogVisible = false; 
                 },
                 error: (error) => {
-                    console.error('Error adding employee:', error);
+                    console.log('Error updating employee:', error);
                     alert('Failed to update employee.');
                 }
-            });
-        }
+            })
+        } 
         else {
+            console.log("from add New Employee employee: " , newEmployee);
             this.employeeService.addEmployee(newEmployee).subscribe({
                 next: (response) => {
                     console.log('Employee added successfully:', response);
                     alert('Employee added successfully!');
                     this.loadEmployees();
-                    this.employeeDialogVisible = false;
+                    this.employeeDialogVisible = false; 
                 },
                 error: (error) => {
                     console.error('Error adding employee:', error);
@@ -107,7 +97,6 @@ throw new Error('Method not implemented.');
                 }
             });
         }
-        
     }
 
     deleteEmployee(employee: Employee) {
@@ -132,8 +121,9 @@ throw new Error('Method not implemented.');
             role: '',
             status: '',
             designation: '',
-            supervisor_name: '',
-            emp_id: 0
+            supervisor_name: undefined,
+            emp_id: 0,
+            fromEdit: false
         };
     }
 }
