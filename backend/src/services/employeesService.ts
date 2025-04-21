@@ -50,8 +50,8 @@ export const createEmployee = async (data: any) => {
     const userResult = await client.query(USER_INSERT_QUERY, userValues);
 
     // send mail (send password) 
-    await sendmail(data.name, data.email, plainPassword)
-    
+    // await sendmail(data.name, data.email, plainPassword)
+
     return plainPassword;
   }
   else{
