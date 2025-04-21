@@ -51,7 +51,7 @@ export class TaskComponent implements OnInit {
   }
 
   loadTasks() {
-    this.taskService.getAlltasks().subscribe({
+    this.taskService.getAllTasks().subscribe({
       next: (data) => {
         this.tasks = data;
       },

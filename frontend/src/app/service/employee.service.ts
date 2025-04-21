@@ -13,16 +13,17 @@ export class EmployeeService {
 
     constructor(private http: HttpClient) { }
 
-    getAllEmployees(): Observable<Employee[]> {
-        return this.http.get<Employee[]>(this.apiUrl);
-    }
-
+   // employee.service.ts
+getAllEmployees(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/employees');
+  }
+  
     getEmployeeById(id: number): Observable<Employee> {
         return this.http.get<Employee>(`${this.apiUrl}/${id}`);
     }
 
     addEmployee(employee: Employee): Observable<any> {
-        return this.http.post(`${this.apiUrl}`, employee);
+        return this.http.post<{ message: string }>(`${this.apiUrl}`, employee);
       }
       
     

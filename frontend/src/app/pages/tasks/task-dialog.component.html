@@ -47,15 +47,13 @@
 
       <div class="p-field">
         <label>Task Name</label>
-        <p-dropdown
-          [options]="taskOptions"
-          optionLabel="label"
-          optionValue="value"
-          placeholder="Select Task"
+        <input
+          type="text"
+          pInputText
           [(ngModel)]="task.task_name"
-          required
-          fluid
-        ></p-dropdown>
+          placeholder="Enter Task Name"
+          required fluid
+        />
       </div>
       
 

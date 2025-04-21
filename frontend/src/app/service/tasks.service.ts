@@ -12,8 +12,11 @@ export class TaskService {
   private baseUrl = `${HOST_URL}/api/tasks`;
 
   constructor(private http: HttpClient) {}
+  getAllTasks(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/tasks');
+  }
 
-  getAlltasks(): Observable<Task[]> {
+  getTasksById(): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.baseUrl}`);
   }
 

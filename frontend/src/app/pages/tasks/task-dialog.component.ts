@@ -43,14 +43,6 @@ export class TaskDialogComponent {
    
   ];
 
- taskOptions = [
-    { label: 'R&D Policies', value: 'R&D Policies' },
-    { label: 'Intro to Stark Tech', value: 'Intro to Stark Tech' },
-    { label: 'Operations Briefing', value: 'Operations Briefing' },
-    { label: 'HR Documentation', value: 'HR Documentation' },
-    { label: 'Developing software', value: 'Developing software' },
-   
-  ];
 
   assigned_by_nameOptions = [
     { label: 'Nick Fury', value: 'Nick Fury' },
