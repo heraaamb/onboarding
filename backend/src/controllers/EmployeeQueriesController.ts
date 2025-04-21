@@ -13,3 +13,16 @@ export const getAllEmployeeQueries = async(req:Request, res:Response) => {
         res.status(500).json({ error: 'Failed to fetch employee queries' });
     }
 }
+
+export const insertNewQuery = async(req:Request, res:Response) => {
+    try {
+        const result = await employeeQueriesService.insertNewQuery(req.body)
+        // // Debugging
+        // console.log(result); 
+        res.json(result)
+    } catch (error) {
+        // // Debugging
+        console.log(error);
+        res.status(500).json({ error: 'Failed to fetch employee queries' });
+    }
+}

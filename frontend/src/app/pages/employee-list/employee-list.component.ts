@@ -41,14 +41,11 @@ export class EmployeeListComponent implements OnInit {
     selectedEmployee: Employee = this.getEmptyEmployee();
     employeeDialogVisible = false;
 
-    newEmployee: Employee = this.getEmptyEmployee();
-
     constructor(
         private employeeService: EmployeeService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-      ) {}
-      
+      ) {}    
 
     ngOnInit() {
         this.loadEmployees();
@@ -66,9 +63,10 @@ export class EmployeeListComponent implements OnInit {
     }
 
     openNewEmployeeDialog() {
-        this.newEmployee = this.getEmptyEmployee();
-        this.employeeDialogVisible = true;
+      this.selectedEmployee = this.getEmptyEmployee(); // reset to empty
+      this.employeeDialogVisible = true;
     }
+    
 
     updateEmployee(employee: Employee) {
         // // Debugging
