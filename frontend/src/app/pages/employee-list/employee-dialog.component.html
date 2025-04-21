@@ -40,9 +40,14 @@
             </div>
 
             <div>
+                <label for="supervisor_id">Supervisor Name</label>
+                <p-dropdown id="supervisor" [options]="supervisorOptions" optionLabel="label" optionValue="value" [(ngModel)]="employee.supervisor_name"   placeholder="Select Supervisor" [scrollHeight]="'200px'" required fluid
+                ></p-dropdown>
+            </div>
+
+            <div>
                 <label for="status">Status</label>
-                <p-dropdown id="status" [options]="statuses" optionLabel="label" optionValue="value" 
-                    [(ngModel)]="employee.status" placeholder="Select Status" required fluid >
+                <p-dropdown id="status" [options]="statuses" optionLabel="label" optionValue="value" [(ngModel)]="employee.status" placeholder="Select Status" required fluid >
                 </p-dropdown>
             </div>
 
@@ -51,10 +56,7 @@
                 <input id="designation" type="text" pInputText [(ngModel)]="employee.designation" required fluid />
             </div>
 
-            <div>
-                <label for="supervisor_id">Supervisor Name</label>
-                <input id="supervisor_id" type="text" pInputText [(ngModel)]="employee.supervisor_name" required fluid />
-            </div>
+
         </div>
     </ng-template>
 

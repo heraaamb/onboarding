@@ -7,6 +7,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HOST_URL } from '../../utils/utils';
+
 
 @Component({
   selector: 'app-task-dialog',
@@ -20,6 +23,7 @@ import { CommonModule } from '@angular/common';
     DropdownModule,
     CalendarModule,
     ButtonModule,
+    HttpClientModule,
   ]
 })
 export class TaskDialogComponent {
@@ -34,33 +38,49 @@ export class TaskDialogComponent {
     task_id: 0,
     fromEdit: false
   };
-  employeeOptions = [
-    { label: 'Nick Fury', value: 'Nick Fury' },
-    { label: 'Maria Hill', value: 'Maria Hill' },
-    { label: 'Peter Parker', value: 'Peter Parker' },
-    { label: 'Steve Rogers', value: 'Steve Rogers' },
-    { label: 'Wanda Maximoff', value: 'Wanda Maximoff' },
-   
-  ];
-
-
-  assigned_by_nameOptions = [
-    { label: 'Nick Fury', value: 'Nick Fury' },
-    { label: 'Maria Hill', value: 'Maria Hill' },
-    { label: 'Peter Parker', value: 'Peter Parker' },
-    { label: 'Steve Rogers', value: 'Steve Rogers' },
-    { label: 'Wanda Maximoff', value: 'Wanda Maximoff' },
-  ]
-
-
-  
+  employeeOptions: any[] = [];
+  assigned_by_nameOptions: any[] = [];
+  constructor(private http: HttpClient) {}
 
   @Input() departments: { label: string; value: string }[] = [];
 
   @Output() save = new EventEmitter<Task>();
   @Output() close = new EventEmitter<void>();
-assigned_by: any[]|undefined;
+  assigned_by: any[]|undefined;
 
+  ngOnInit() {
+    this.fetchemployeeOptions();
+    this.fetchassigned_by_nameOptions();
+  }
+
+  fetchemployeeOptions() {
+    this.http.get<any[]>(`${HOST_URL}/api/employees`).subscribe({
+        next: (data) => {
+            // Assuming each item has a name or employee_name
+            this.employeeOptions = data.map(user => ({
+                label: user.employee_name,
+                value: user.employee_name
+            }));
+        },
+        error: (err) => {
+            console.error('Error fetching employees:', err);
+        }
+    });
+  }
+  fetchassigned_by_nameOptions() {
+    this.http.get<any[]>(`${HOST_URL}/api/users`).subscribe({
+        next: (data) => {
+            // Assuming each item has a name or employee_name
+            this.assigned_by_nameOptions = data.map(user => ({
+                label: user.name,
+                value: user.name
+            }));
+        },
+        error: (err) => {
+            console.error('Error fetching assigned_by_nameOptions:', err);
+        }
+    });
+  }
 
   onSave() {
     this.save.emit(this.task);

@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
-import { ButtonModule } from 'primeng/button';
+import { ButtonLabel, ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { Employee } from '../../models/employee.model';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HOST_URL } from '../../utils/utils';
 
 @Component({
     selector: 'app-employee-dialog',
@@ -20,7 +22,8 @@ import { Employee } from '../../models/employee.model';
         CalendarModule,
         ButtonModule,
         InputTextModule,
-        TextareaModule
+        TextareaModule,
+        HttpClientModule,
     ],
     templateUrl: './employee-dialog.component.html'
 })
@@ -42,6 +45,7 @@ export class EmployeeDialogComponent {
     @Input() departments: any[] = [];
     @Output() save: EventEmitter<Employee> = new EventEmitter();
     @Output() close: EventEmitter<void> = new EventEmitter();
+    
 
     roles = [
         { label: 'Employee', value: 'Employee' },
@@ -54,6 +58,30 @@ export class EmployeeDialogComponent {
         { label: 'Active', value: 'Active' },
         { label: 'Inactive', value: 'Inactive' }
     ];
+
+    supervisorOptions: any[] = [];
+
+    constructor(private http: HttpClient) {}
+
+    ngOnInit() {
+        this.fetchSupervisors();
+    }
+
+    fetchSupervisors() {
+        this.http.get<any[]>(`${HOST_URL}/api/users`).subscribe({
+            next: (data) => {
+                // Assuming each item has a name or employee_name
+                this.supervisorOptions = data.map(user => ({
+                    label: user.name,
+                    value: user.name
+                }));
+            },
+            error: (err) => {
+                console.error('Error fetching supervisors:', err);
+            }
+        });
+    }
+
 
     hideDialog() {
         this.close.emit();
