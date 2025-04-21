@@ -12,7 +12,7 @@ import { DELETE_TASK_EMPID } from '../queries/tasks.queries';
 import {DELETE_USER} from '../queries/users.queries'
 import { USER_INSERT_QUERY } from '../queries/users.queries';
 import crypto from 'crypto';
-import { sendEmail } from '../services/emailService'; // A function to send emails
+// import { sendEmail } from '../services/emailService'; // A function to send emails
 import bcrypt from 'bcrypt';
 import {generatePassword, hashPassword, sendmail} from '../utils/utils'
 
@@ -49,8 +49,9 @@ export const createEmployee = async (data: any) => {
     const userValues = [data.employee_name, data.email, hashedPassword, data.role, department_id, data.status];
     const userResult = await client.query(USER_INSERT_QUERY, userValues);
 
-      // // send mail (send password) 
-      // await sendmail(data.name, data.email, plainPassword)
+    // send mail (send password) 
+    await sendmail(data.name, data.email, plainPassword)
+    
     return plainPassword;
   }
   else{
@@ -128,7 +129,7 @@ export const createEmployee = async (data: any) => {
       await client.query('COMMIT');
   
       // Optionally send the plain password
-      // await sendmail(data.employee_name, data.email, plainPassword);
+      await sendmail(data.employee_name, data.email, plainPassword);
   
       return {
         ...employeeResult.rows[0],
