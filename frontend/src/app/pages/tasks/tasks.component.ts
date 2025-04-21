@@ -9,6 +9,7 @@ import { TaskService } from '../../service/tasks.service';
 import { TaskDialogComponent } from './task-dialog.component'; // Assuming this is a popup component for add/edit
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import {ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 @Component({
@@ -23,8 +24,9 @@ import { ToastModule } from 'primeng/toast';
     ToolbarModule,
     TaskDialogComponent,
     ToastModule,
+    ConfirmDialogModule,
   ],
-  providers: [MessageService]
+  providers: [MessageService, ConfirmationService]
 })
 export class TaskComponent implements OnInit {
   tasks: Task[] = [];
@@ -50,7 +52,8 @@ export class TaskComponent implements OnInit {
   newTask : Task = this.getEmptyTask();
 
   constructor(private taskService: TaskService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
@@ -126,22 +129,34 @@ export class TaskComponent implements OnInit {
   }
 
   deleteTask(task: Task) {
-    this.taskService.deleteTask(task.task_id).subscribe({
-      next: () => {
-        // this.tasks = this.tasks.filter((t) => task.task_name !== task.task_name);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Task Deleted successfully!'
-        }); 
-      this.loadTasks();
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this task?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        // Proceed with the deletion if the user confirms
+        this.taskService.deleteTask(task.task_id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Task Deleted successfully!'
+            });
+            this.loadTasks(); // Refresh the task list
+          },
+          error: (error) => {
+            console.error('Error deleting task:', error);
+            alert('Failed to delete task.');
+          }
+        });
       },
-      error: (error) => {
-        console.error('Error deleting task:', error);
-        alert('Failed to delete task.');
-      },
+      reject: () => {
+        // Optionally handle rejection (optional for now)
+        console.log('Task deletion canceled');
+      }
     });
   }
+  
 
   getEmptyTask(): Task {
     return {

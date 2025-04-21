@@ -8,6 +8,7 @@ import { Employee } from '../../models/employee.model';
 import { EmployeeService } from '../../service/employee.service';
 import { EmployeeDialogComponent } from '../employee-list/employee-dialog.component';
 import { ToastModule } from 'primeng/toast';
+import {ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 
@@ -17,7 +18,15 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     templateUrl: './employee-list.component.html',
     providers: [MessageService,ConfirmationService],
     
-    imports: [CommonModule, FormsModule, TableModule, ButtonModule,ToolbarModule,EmployeeDialogComponent ,ToastModule]
+    imports: [
+      CommonModule, 
+      FormsModule, 
+      TableModule, 
+      ButtonModule,
+      ToolbarModule,
+      EmployeeDialogComponent ,
+      ToastModule, 
+      ConfirmDialogModule]
 })
 export class EmployeeListComponent implements OnInit {
     employees: Employee[] = [];
@@ -122,21 +131,34 @@ export class EmployeeListComponent implements OnInit {
       
 
     deleteEmployee(employee: Employee) {
-        this.employeeService.deleteEmployee(employee.emp_id).subscribe({
+      this.confirmationService.confirm({
+        message: `Are you sure you want to delete ${employee.employee_name}?`,
+        header: 'Confirm Delete',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.employeeService.deleteEmployee(employee.emp_id).subscribe({
             next: () => {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Success',
-                detail: 'Employee Deleted successfully!'
+                detail: 'Employee deleted successfully!'
               });
-              this.loadEmployees();
+              this.loadEmployees(); // refresh list
             },
             error: (error) => {
-                console.error('Error deleting employee:', error);
-                alert('Failed to delete employee.');
+              console.error('Error deleting employee:', error);
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Failed to delete employee.'
+              });
             }
-        });
+          });
+        }
+      });
     }
+    
+    
 
     getEmptyEmployee(): Employee {
         return {
