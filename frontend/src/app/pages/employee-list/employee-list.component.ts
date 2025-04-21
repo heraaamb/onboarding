@@ -75,7 +75,7 @@ export class EmployeeListComponent implements OnInit {
 
     addEmployee(newEmployee: Employee) {
       // // Debugging
-      // console.log(newEmployee);
+      // console.log(newEmployee);  
     
       if (newEmployee.fromEdit === true) {
         this.employeeDialogVisible = true;
