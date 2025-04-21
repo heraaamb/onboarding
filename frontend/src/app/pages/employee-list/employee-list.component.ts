@@ -8,14 +8,14 @@ import { Employee } from '../../models/employee.model';
 import { EmployeeService } from '../../service/employee.service';
 import { EmployeeDialogComponent } from '../employee-list/employee-dialog.component';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 
 @Component({
     selector: 'app-employee-list',
     standalone: true,
     templateUrl: './employee-list.component.html',
-    providers: [MessageService],
+    providers: [MessageService,ConfirmationService],
     
     imports: [CommonModule, FormsModule, TableModule, ButtonModule,ToolbarModule,EmployeeDialogComponent ,ToastModule]
 })
@@ -36,7 +36,8 @@ export class EmployeeListComponent implements OnInit {
 
     constructor(
         private employeeService: EmployeeService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService,
       ) {}
       
 
@@ -62,7 +63,7 @@ export class EmployeeListComponent implements OnInit {
 
     updateEmployee(employee: Employee) {
         // // Debugging
-        console.log("employee from edit: " ,employee);
+        // console.log("employee from edit: " ,employee);
         
         employee.fromEdit = true;
         this.selectedEmployee = { 
@@ -73,56 +74,62 @@ export class EmployeeListComponent implements OnInit {
     }
 
     addEmployee(newEmployee: Employee) {
-        // // Debugging
-        console.log(newEmployee);
-        if (newEmployee.fromEdit === true) {
-          this.employeeDialogVisible = true;
-          this.employeeService.updateEmployee(newEmployee.emp_id, newEmployee).subscribe({
-            next: (response) => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Employee updated successfully!'
-              });
-              this.loadEmployees();
-              this.employeeDialogVisible = false;
-            },
-            error: (error) => {
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: `Failed to update employee.: ${error}`
-              });
-            }
-          });
-        } else {
-          this.employeeService.addEmployee(newEmployee).subscribe({
-            next: (response) => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Employee added successfully!'
-              });
-              this.loadEmployees();
-              this.employeeDialogVisible = false;
-            },
-            error: (error) => {
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: `Failed to add employee.: ${error}`
-              });
-            }
-          });
-        }
+      // // Debugging
+      // console.log(newEmployee);
+    
+      if (newEmployee.fromEdit === true) {
+        this.employeeDialogVisible = true;
+        this.employeeService.updateEmployee(newEmployee.emp_id, newEmployee).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Employee updated successfully!'
+            });
+            this.loadEmployees();
+            this.employeeDialogVisible = false;
+          },
+          error: (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: `Failed to update employee: ${error}`
+            });
+          }
+        });
+      } else {
+        this.employeeService.addEmployee(newEmployee).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Employee added successfully!'
+            });
+            this.loadEmployees();
+            this.employeeDialogVisible = false;
+          },
+          error: (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: `Failed to add employee: ${error}`
+            });
+          }
+        });
       }
+    }
+    
       
 
     deleteEmployee(employee: Employee) {
         this.employeeService.deleteEmployee(employee.emp_id).subscribe({
             next: () => {
-                this.loadEmployees();
-                alert('Employee deleted successfully!');
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Employee Deleted successfully!'
+              });
+              this.loadEmployees();
             },
             error: (error) => {
                 console.error('Error deleting employee:', error);

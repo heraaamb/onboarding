@@ -7,6 +7,9 @@ import { ButtonModule } from 'primeng/button';
 import { Task } from '../../models/task.model';
 import { TaskService } from '../../service/tasks.service';
 import { TaskDialogComponent } from './task-dialog.component'; // Assuming this is a popup component for add/edit
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+
 
 @Component({
   selector: 'app-task',
@@ -19,7 +22,9 @@ import { TaskDialogComponent } from './task-dialog.component'; // Assuming this 
     ButtonModule,
     ToolbarModule,
     TaskDialogComponent,
+    ToastModule,
   ],
+  providers: [MessageService]
 })
 export class TaskComponent implements OnInit {
   tasks: Task[] = [];
@@ -44,7 +49,9 @@ export class TaskComponent implements OnInit {
   taskDialogVisible = false;
   newTask : Task = this.getEmptyTask();
 
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
     this.loadTasks();
@@ -81,10 +88,14 @@ export class TaskComponent implements OnInit {
 
   addTask(newTask: Task) {
     if (newTask.fromEdit === true) {
+      this.taskDialogVisible = true;
       this.taskService.editTask(newTask.task_id, newTask).subscribe({
-        next: (response) => {
-          console.log('Task edited successfully:', response);
-          alert('Task edited successfully!');
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Task updated successfully!'
+          });
           this.loadTasks();
           this.taskDialogVisible = false;
         },
@@ -95,9 +106,14 @@ export class TaskComponent implements OnInit {
       });
     } else {
       this.taskService.addTask(newTask).subscribe({
-        next: (response) => {
-          console.log('Task added successfully:', response);
-          alert('Task added successfully!');
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Task added successfully!'
+          });
+          // // Debugging
+          // console.log('Task added successfully:', response);
           this.loadTasks();
           this.taskDialogVisible = false;
         },
@@ -111,10 +127,14 @@ export class TaskComponent implements OnInit {
 
   deleteTask(task: Task) {
     this.taskService.deleteTask(task.task_id).subscribe({
-      next: (response) => {
+      next: () => {
         // this.tasks = this.tasks.filter((t) => task.task_name !== task.task_name);
-        this.loadTasks();
-        alert('Task deleted successfully!');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Task Deleted successfully!'
+        }); 
+      this.loadTasks();
       },
       error: (error) => {
         console.error('Error deleting task:', error);

@@ -30,7 +30,8 @@ export async function updateTaskStatus(id: string) {
 }
 
 export async function editTask(id: string, data: any) {
-    console.log(id);
+    // // Debugging
+    // console.log(id);
     const { employee_name, assigned_by_name, department_name, task_name, description, status, due_date } = data;
 
     if (!employee_name || !assigned_by_name || !department_name || !task_name || !description || !status || !due_date) {
