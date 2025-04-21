@@ -8,7 +8,7 @@ export const getEmployees = async (req: Request, res: Response) => {
         // console.log(employees);
         res.json(employees);
     } catch (err) {
-        res.status(500).json({ error: 'Failed to fetch employees' });
+        res.status(500).json({ error: err });
     }
 };
 
@@ -17,7 +17,7 @@ export const getOnboardingEmployees = async (req: Request, res: Response) => {
         const employees = await employeeService.getOnboardingEmployees();
         res.json(employees);
     } catch (err) {
-        res.status(500).json({ error: 'Failed to fetch onboarding employees' });
+        res.status(500).json({ error: err });
     }
 };
 
@@ -29,7 +29,7 @@ export const createEmployee = async (req: Request, res: Response) => {
         res.status(201).json(employee);
     } catch (err) {
         console.log(err);
-        res.status(500).json({ error: 'Failed to create employee' });
+        res.status(500).json({ error: err });
     }
 };
 
@@ -45,7 +45,7 @@ export const updateEmployee = async (req: Request, res: Response) => {
     } catch (err) {
         // // Debugging
         console.log(err);
-        res.status(500).json({ error: 'Failed to update employee' });
+        res.status(500).json({ error: err });
     }
 }
 
@@ -65,6 +65,6 @@ export const getEmployeeById = async (req: Request, res: Response) => {
         console.log(employee);
         res.status(200).json(employee);
     } catch (err) {
-        res.status(500).json({ error: 'Failed to fetch employee' });
+        res.status(500).json({ error: err });
     }
 };
