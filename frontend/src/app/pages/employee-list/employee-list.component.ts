@@ -119,8 +119,10 @@ export class EmployeeListComponent implements OnInit {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: `Failed to add employee: ${error}`
+              detail: `Failed to add employee: ${error.error.error}`
             });
+            // // Debugging
+            console.log("this is the error in creating empoyee: ",error.error.error);
           }
         });
       }

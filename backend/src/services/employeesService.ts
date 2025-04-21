@@ -32,8 +32,8 @@ export const createEmployee = async (data: any) => {
   const client = await pool.connect();
   
   // // Debugging
-  console.log("employee data while creating: ",data);
-  console.log('role: ',data.role);
+  // console.log("employee data while creating: ",data);
+  // console.log('role: ',data.role);
 
   if (data.role === 'Admin' || data.role === 'Dept_User'){
     const resultDept = await client.query(`SELECT dept_id FROM departments WHERE name='${data.department_name}';`)

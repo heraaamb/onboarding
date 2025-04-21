@@ -24,28 +24,28 @@ export const getOnboardingEmployees = async (req: Request, res: Response) => {
 export const createEmployee = async (req: Request, res: Response) => {
     try {
         // // Debugging
-        console.log("req body: ",req.body);
+        // console.log("req body: ",req.body);
         const employee = await employeeService.createEmployee(req.body);
         res.status(201).json(employee);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: err });
+    } catch (err: any) {
+        console.log(err.detail);
+        res.status(500).json({ error: err.detail });
     }
 };
 
 export const updateEmployee = async (req: Request, res: Response) => {
     
         // // Debugging
-        console.log(req.body);
+        // console.log(req.body);
         // console.log(req.params.id);
 
     try {
         const updated = await employeeService.updateEmployee(Number(req.params.id), req.body);
         res.json(updated);
-    } catch (err) {
+    } catch (err: any) {
         // // Debugging
-        console.log(err);
-        res.status(500).json({ error: err });
+        console.log(err.detail);
+        res.status(500).json({ error: err.detail });
     }
 }
 
