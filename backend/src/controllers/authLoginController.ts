@@ -9,7 +9,7 @@ export async function checkUserDetails(req:Request, res: Response){
 
         const result = await authLoginService.checkUserDetails(req.body);
         // // Debugging
-        // console.log("result from controller auth login : ",result);
+        console.log("result from controller auth login : ",result);
 
         res.json(result)
     } catch (error) {

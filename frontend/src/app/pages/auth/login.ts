@@ -27,12 +27,14 @@ export class LoginComponent {
     email: string = '';
     password: string = '';
     checked: boolean = false;
+    emp_id: any;
     
     onLogin() {
         const loginData = {
           email: this.email,
           password: this.password,
-          id: this.id
+          id: this.id,
+          emp_id: this.emp_id
         };
       
         this.http.post<any>(`${HOST_URL}/api/auth-login`, loginData).subscribe(
