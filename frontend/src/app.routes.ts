@@ -7,7 +7,7 @@ import { AuthGuard } from './app/pages/auth/auth.guard';
 
 
 export const appRoutes: Routes = [
-    { path: '', redirectTo: 'auth/login', pathMatch: 'full' }, // redirect root to login
+    { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
     {
         path: '',
         component: AppLayout,

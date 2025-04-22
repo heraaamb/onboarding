@@ -36,7 +36,6 @@ export class LoginComponent {
             response => {
                 console.log(response);
                 if (response.passwordCheckResult) {
-                    // Save token or user info if needed
                     this.authService.login(); // mark user as logged in
                     this.router.navigate(['/dashboard']);
                 } else {
