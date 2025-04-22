@@ -10,6 +10,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { HOST_URL } from '../../utils/utils';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
     selector: 'app-login',
@@ -19,7 +20,7 @@ import { HOST_URL } from '../../utils/utils';
 })
 
 export class LoginComponent {
-    constructor(private http: HttpClient, private router: Router) {}
+    constructor(private http: HttpClient, private router: Router , private authService: AuthService) {}
     
     email: string = '';
     password: string = '';
@@ -32,20 +33,21 @@ export class LoginComponent {
         };
       
         this.http.post<any>(`${HOST_URL}/api/auth-login`, loginData).subscribe(
-          response => {
-              console.log(response);
-              if (response.passwordCheckResult) {
-                // Save token or user info if needed
-                this.router.navigate(['/dashboard']); // or your target route
-              } else {
-                alert('Invalid credentials');
-              }
-          },
-          error => {
-            console.error('Login error:', error);
-            alert('Server error or wrong credentials');
-          }
+            response => {
+                console.log(response);
+                if (response.passwordCheckResult) {
+                    // Save token or user info if needed
+                    this.authService.login(); // mark user as logged in
+                    this.router.navigate(['/dashboard']);
+                } else {
+                    alert('Invalid credentials');
+                }
+            },
+            error => {
+                console.error('Login error:', error);
+                alert('Server error or wrong credentials');
+            }
         );
-      }
+    }
       
 }
