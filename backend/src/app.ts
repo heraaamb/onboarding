@@ -5,6 +5,7 @@ import employeesRoutes from "./routes/employeesRoutes";
 import tasksRoutes from "./routes/tasksRoutes";
 import employeeQueriesRoute from "./routes/employeeQueriesRoute";
 import usersRoute from "./routes/usersRoute"
+import authloginRoute from "./routes/authLoginRoute"
 import pool from "./db/db";
 
 dotenv.config();
@@ -49,6 +50,7 @@ const registerRoutes = () => {
   app.use("/api/tasks", tasksRoutes);
   app.use("/api/users", usersRoute);
   app.use("/api/employee-queries", employeeQueriesRoute);
+  app.use("/api/auth-login", authloginRoute);
 };
 
 const handleErrors = () => {

@@ -6,16 +6,19 @@ import { Notfound } from './app/pages/notfound/notfound';
 
 
 export const appRoutes: Routes = [
+    { path: '', redirectTo: 'auth/login', pathMatch: 'full' }, // redirect root to login
     {
         path: '',
         component: AppLayout,
         children: [
-            { path: '', component: Dashboard },
+            { path: 'dashboard', component: Dashboard },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
         ]
     },
     { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
-    { path: '**', redirectTo: '/notfound' }
+
+    { path: '**', redirectTo: '/notfound' },
+
     
 ]
