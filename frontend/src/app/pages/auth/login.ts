@@ -34,7 +34,7 @@ export class LoginComponent {
       
         this.http.post<any>(`${HOST_URL}/api/auth-login`, loginData).subscribe(
             response => {
-                console.log(response);
+                console.log("response: ",response);
                 if (response.passwordCheckResult) {
                     this.authService.login(); // mark user as logged in
                     this.router.navigate(['/dashboard']);

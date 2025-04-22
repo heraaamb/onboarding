@@ -5,7 +5,7 @@ import { resourceUsage } from 'process';
 export async function checkUserDetails(req:Request, res: Response){
     try {
         // // Debugging
-        // console.log(req.body);
+        console.log("req body auth login: ",req.body);
 
         const result = await authLoginService.checkUserDetails(req.body);
         // // Debugging

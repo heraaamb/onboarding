@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 
 export async function checkUserDetails(data: any){
     // // Debugging
-    // console.log("data recieved in auth login service: ",data);
+    console.log("data recieved in auth login service: ",data);
     
     const password_result = await pool.query(`SELECT password_hash,role FROM users WHERE email=$1`,[data.email])
     // // Debugging
@@ -14,7 +14,7 @@ export async function checkUserDetails(data: any){
 
     const passwordCheckResult = await bcrypt.compare(data.password,password_hash)
     // // Debugging
-    // console.log("result from service: ",passwordCheckResult);
+    console.log("result from service: ",passwordCheckResult);
 
     return {passwordCheckResult, role};
 }
