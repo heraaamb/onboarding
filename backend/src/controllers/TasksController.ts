@@ -11,6 +11,16 @@ export const getTasks = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Failed to fetch tasks' });
     }
 };
+export const getEmployeeSpecificTasks = async (req: Request, res: Response) => {
+    try {
+        const tasks = await taskService.getEmployeeSpecificTasks(req.params.id);
+        // // Debugging
+        // console.log(tasks);
+        res.json(tasks);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch tasks' });
+    }
+};
 
 export const deleteTask = async(req: Request,res: Response) => {
     try {

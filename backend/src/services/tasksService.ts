@@ -5,14 +5,28 @@ import {
     GET_ALL_TASKS,
     DELETE_TASK,
     CREATE_TASK,
-    UPDATE_TASK_STATUS
+    UPDATE_TASK_STATUS,
+    GET_EMPLOYEE_SPECIFIC_TASKS
 } from '../queries/tasks.queries';
+import { NumericAxisOptions } from 'aws-sdk/clients/quicksight';
 
 export const getAllTasks = async () => {
     const result = await pool.query(GET_ALL_TASKS);
     // // Debugging
     // console.log("tasks: ",result.rows);
     return result.rows;
+};
+
+export const getEmployeeSpecificTasks = async (id:any) => {
+    try {
+        const result = await pool.query(GET_EMPLOYEE_SPECIFIC_TASKS,[id]);
+        // // Debugging
+        // console.log("tasks: ",result.rows);
+        return result.rows;
+    } catch (error) {
+        console.log("Error fetching employee specific tasks: ", error);
+        return error
+    }
 };
 
 export async function deleteTask(id: string) { 

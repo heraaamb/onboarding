@@ -21,7 +21,9 @@ import { AuthService } from '../../service/auth.service';
 
 export class LoginComponent {
     constructor(private http: HttpClient, private router: Router , private authService: AuthService) {}
-    
+
+    // Define the properties for the login form
+    id: any;
     email: string = '';
     password: string = '';
     checked: boolean = false;
@@ -29,15 +31,23 @@ export class LoginComponent {
     onLogin() {
         const loginData = {
           email: this.email,
-          password: this.password
+          password: this.password,
+          id: this.id
         };
       
         this.http.post<any>(`${HOST_URL}/api/auth-login`, loginData).subscribe(
             response => {
                 console.log("response: ",response);
                 if (response.passwordCheckResult) {
-                    this.authService.login(); // mark user as logged in
-                    this.router.navigate(['/dashboard']);
+                    this.authService.login(response.user); // mark user as logged in
+                    
+                    if(response.user.role === 'Employee') {
+                        this.router.navigate(['/pages/tasks']);
+                    } else if(response.user.role === 'Admin') {
+                        this.router.navigate(['/dashboard']);
+                    }
+
+                    // this.router.navigate(['/dashboard']);
                 } else {
                     alert('Invalid credentials');
                 }

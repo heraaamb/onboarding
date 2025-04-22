@@ -1,20 +1,37 @@
-import { stat } from 'fs';
 import pool from '../db/db';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
+import jwt, {SignOptions} from 'jsonwebtoken';
 
-export async function checkUserDetails(data: any){
-    // // Debugging
-    console.log("data recieved in auth login service: ",data);
-    
-    const password_result = await pool.query(`SELECT password_hash,role FROM users WHERE email=$1`,[data.email])
-    // // Debugging
-    // console.log(password_result);
-    const password_hash = password_result.rows[0].password_hash
-    const role = password_result.rows[0].role
+const JWT_SECRET: jwt.Secret = process.env.JWT_SECRET || 'fallback_secret';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 
-    const passwordCheckResult = await bcrypt.compare(data.password,password_hash)
+export async function checkUserDetails(data: any) {
     // // Debugging
-    console.log("result from service: ",passwordCheckResult);
-
-    return {passwordCheckResult, role};
-}
+    // console.log("data in auth login service: ", data);
+    const result = await pool.query(`SELECT user_id, password_hash, role, email FROM users WHERE email=$1`, [data.email]);
+    console.log(result);
+    if (result.rows.length === 0) {
+      return { passwordCheckResult: false };
+    }
+  
+    const { password_hash, role, id, email } = result.rows[0];
+    const passwordCheckResult = await bcrypt.compare(data.password, password_hash);
+  
+    if (!passwordCheckResult) {
+      return { passwordCheckResult: false };
+    }
+  
+    const payload = { id, email, role };
+    const signOptions: SignOptions = {
+      expiresIn: parseInt(JWT_EXPIRES_IN || '3600', 10), // Default to 1 hour if not set
+    //   algorithm: 'HS256' // Specify the algorithm
+    };
+  
+    const token = jwt.sign(payload, JWT_SECRET, signOptions);
+  
+    return {
+      passwordCheckResult: true,
+      token,
+      user: { id, email, role }
+    };
+  }
