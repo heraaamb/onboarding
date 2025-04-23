@@ -43,6 +43,7 @@ export class TaskComponent implements OnInit {
   selectedTask: Task = this.getEmptyTask();
   taskDialogVisible = false;
   newTask : Task = this.getEmptyTask();
+  userRole: any;
 
   constructor(
     private taskService: TaskService,
@@ -53,8 +54,10 @@ export class TaskComponent implements OnInit {
 
   ngOnInit() {
     const user = this.authService.getCurrentUser()
-    console.log("========the user: ",user);
+    // // Debugging
+    console.log("The user: ",user);
     this.loadTasks(user);
+    this.userRole = user.role;
   }
 
   loadTasks(user:any){
@@ -77,19 +80,18 @@ export class TaskComponent implements OnInit {
           console.error('Error fetching tasks:', err);
         },
       });
+    } 
+    else if(user.role === 'Dept_User'){
+      this.taskService.getDepartmentTasks(user.department_id).subscribe({
+        next: (data) => {
+          this.tasks = data;
+        },
+        error:  (err) => {
+          console.error('Error fetching tasks:', err);
+        },
+      });
     }
   }
-
-  // loadTasks() {
-  //   this.taskService.getAllTasks().subscribe({
-  //     next: (data) => {
-  //       this.tasks = data;
-  //     },
-  //     error:  (err) => {
-  //       console.error('Error fetching tasks:', err);
-  //     },
-  //   });
-  // }
 
   openNewTaskDialog() {
     this.newTask = this.getEmptyTask();

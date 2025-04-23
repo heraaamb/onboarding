@@ -6,7 +6,8 @@ import {
     DELETE_TASK,
     CREATE_TASK,
     UPDATE_TASK_STATUS,
-    GET_EMPLOYEE_SPECIFIC_TASKS
+    GET_EMPLOYEE_SPECIFIC_TASKS,
+    GET_DEPARTMENT_TASKS
 } from '../queries/tasks.queries';
 import { NumericAxisOptions } from 'aws-sdk/clients/quicksight';
 
@@ -22,6 +23,17 @@ export const getEmployeeSpecificTasks = async (id:any) => {
         const result = await pool.query(GET_EMPLOYEE_SPECIFIC_TASKS,[id]);
         // // Debugging
         // console.log("tasks: ",result.rows);
+        return result.rows;
+    } catch (error) {
+        console.log("Error fetching employee specific tasks: ", error);
+        return error
+    }
+};
+export const getDepartmentTasks = async (id:any) => {
+    try {
+        const result = await pool.query(GET_DEPARTMENT_TASKS,[id]);
+        // // Debugging
+        console.log("tasks: ",result.rows);
         return result.rows;
     } catch (error) {
         console.log("Error fetching employee specific tasks: ", error);

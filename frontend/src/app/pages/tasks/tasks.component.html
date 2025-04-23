@@ -4,6 +4,7 @@
   <p-toolbar class="mb-6">
     <ng-template pTemplate="start">
       <p-button
+        *ngIf="userRole !== 'Employee'"
         label="New Task"
         icon="pi pi-user-plus"
         severity="primary"
@@ -43,7 +44,7 @@
         <th pSortableColumn="due_date">
           Due Date <p-sortIcon field="due_date" />
         </th>
-        <th>Actions</th>
+        <th *ngIf="userRole !== 'Employee'">Actions</th> 
       </tr>
     </ng-template>
 
@@ -55,7 +56,7 @@
         <td>{{ task.task_name }}</td>
         <td>{{ task.description }}</td>
         <td>{{ task.due_date | date: 'yyyy-MM-dd' }}</td>
-        <td>
+        <td *ngIf="userRole !== 'Employee'">
           <p-button
             icon="pi pi-pencil"
             class="mr-2"

@@ -21,6 +21,10 @@ export class TaskService {
     return this.http.get<Task[]>(`${this.baseUrl}/${emp_id}`);
   }
 
+  getDepartmentTasks(dept_id:any): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.baseUrl}/department/${dept_id}`);
+  }
+
   addTask(task: Task): Observable<any> {
     return this.http.post(`${this.baseUrl}`, task);
   }
