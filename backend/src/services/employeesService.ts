@@ -6,7 +6,8 @@ import {
     UPDATE_EMPLOYEE,
     DELETE_EMPLOYEE,
     EMPLOYEE_INSERT_QUERY,
-    GET_EMPLOYEES_BY_DEPT_ID
+    GET_EMPLOYEES_BY_DEPT_ID,
+    GET_EMPLOYEE_BY_ID
 } from '../queries/employees.queries';
 import { DELETE_TASK_EMPID } from '../queries/tasks.queries';
 import {DELETE_USER} from '../queries/users.queries'
@@ -21,6 +22,17 @@ export const getAllEmployees = async () => {
   // // Debugging
   // console.log(result.rows);
   return result.rows;
+};
+
+export const getEmployeeById = async (user_id:any) => {
+  try {
+    const result = await pool.query(GET_EMPLOYEE_BY_ID,[user_id]);
+    // // Debugging
+    // console.log("result: ",result.rows);
+    return result.rows[0];
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getOnboardingEmployees = async () => {

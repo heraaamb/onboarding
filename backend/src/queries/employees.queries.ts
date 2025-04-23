@@ -16,6 +16,24 @@ export const GET_ALL_EMPLOYEES = `
   LEFT JOIN users s ON es.user_id = s.user_id;
 `;
 
+export const GET_EMPLOYEE_BY_ID = `
+  SELECT 
+    u.name AS employee_name, 
+    u.email, 
+    u.role, 
+    d.name AS department_name,
+    e.joining_date
+  FROM 
+    users u
+  LEFT JOIN 
+    employees e ON e.user_id = u.user_id
+  LEFT JOIN 
+    departments d ON d.dept_id = u.department_id
+  WHERE 
+    u.user_id = $1;
+`;
+
+
 export const GET_ONBOARDING_EMPLOYEES = `
   SELECT * FROM employees 
   WHERE emp_id IN (

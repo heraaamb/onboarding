@@ -6,6 +6,7 @@ import { PanelModule } from 'primeng/panel';
 import { CardModule } from 'primeng/card';
 import { AvatarModule } from 'primeng/avatar';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -15,18 +16,24 @@ import { FormsModule } from '@angular/forms';
 })
 export class ProfileComponent implements OnInit {
   employee: Employee | null = null;
-employee_name: any;
+  employee_name: any;
 
-  constructor(private employeeService: EmployeeService) {}
+  constructor(
+    private employeeService: EmployeeService,
+    private authService: AuthService,
+  ) {}
 
   ngOnInit() {
-    this.loadEmployeeProfile();
+    const user = this.authService.getCurrentUser()
+    console.log("user from profile component: ",user);
+    this.loadProfile(user);
   }
 
-  loadEmployeeProfile() {
+  loadProfile(user:any) {
     // Fetch the employee data from the backend using the service
-    this.employeeService.getEmployeeById(1).subscribe({
+    this.employeeService.getEmployeeById(user.id).subscribe({
       next: (data: Employee) => {
+        console.log("Data in the next function: ",data);
         this.employee = data;
       },
       error: (err: any) => {

@@ -12,6 +12,17 @@ export const getEmployees = async (req: Request, res: Response) => {
     }
 };
 
+export const getEmployeeById = async (req: Request, res: Response) => {
+    try {
+        const employee = await employeeService.getEmployeeById(req.params.user_id);
+        // // Debugging
+        // console.log(employees);
+        res.json(employee);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
 export const getOnboardingEmployees = async (req: Request, res: Response) => {
     try {
         const employees = await employeeService.getOnboardingEmployees();

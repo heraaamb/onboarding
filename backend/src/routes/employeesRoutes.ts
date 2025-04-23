@@ -1,11 +1,12 @@
 import express from 'express';
-import { getEmployees, getOnboardingEmployees, createEmployee, updateEmployee, deleteEmployee, getEmployeesByDeptId } from '../controllers/EmployeesController';
+import { getEmployees, getEmployeeById, getOnboardingEmployees, createEmployee, updateEmployee, deleteEmployee, getEmployeesByDeptId } from '../controllers/EmployeesController';
 // import auth from '../middleware/auth';
 // import authorize from '../middleware/authorizeRole';
 
 const router = express.Router();
 
 router.get('/', getEmployees);
+router.get('/:user_id', getEmployeeById);
 router.get('/onboarding', getOnboardingEmployees);
 router.get('/department/:dept_id', getEmployeesByDeptId);
 router.post('/', createEmployee); // (name, email, password_hash, role, department_id, status, designation, joining_date, supervisor_id, document_url)
