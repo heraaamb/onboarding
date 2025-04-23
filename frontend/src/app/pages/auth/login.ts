@@ -31,34 +31,35 @@ export class LoginComponent {
     
     onLogin() {
         const loginData = {
-          email: this.email,
-          password: this.password,
-          id: this.id,
-          emp_id: this.emp_id
+            email: this.email,
+            password: this.password,
+            id: this.id,
+            emp_id: this.emp_id
         };
       
         this.http.post<any>(`${HOST_URL}/api/auth-login`, loginData).subscribe(
             response => {
-                console.log("response: ",response);
-                if (response.passwordCheckResult) {
-                    this.authService.login(response.user); // mark user as logged in
-                    
-                    if(response.user.role === 'Employee') {
+                // // Debugging
+                console.log(response);
+                if (response.passwordCheckResult && response.token) {
+                    this.authService.login(response.token);
+            
+                    const user = this.authService.getCurrentUser();
+                    const role = user?.role;
+            
+                    if (role === 'Employee') {
                         this.router.navigate(['/pages/tasks']);
-                    } else if(response.user.role === 'Admin') {
+                    } else if (role === 'Admin') {
                         this.router.navigate(['/dashboard']);
                     }
-
-                    // this.router.navigate(['/dashboard']);
                 } else {
                     alert('Invalid credentials');
                 }
             },
             error => {
-                console.error('Login error:', error);
-                alert('Server error or wrong credentials');
+            console.error('Login error:', error);
+            alert('Server error or wrong credentials');
             }
         );
-    }
-      
+    }    
 }

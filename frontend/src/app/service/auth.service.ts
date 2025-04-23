@@ -5,26 +5,31 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-  private isLoggedInStatus = false;
-
-  login(userData: any) {
-    // Store user data in localStorage or sessionStorage
-    localStorage.setItem('user', JSON.stringify(userData)); // or sessionStorage
-    // Set the logged-in status to true
-    this.isLoggedInStatus = true;
+  login(token: string) {
+    localStorage.setItem('authToken', token);
   }
 
   logout() {
-    this.isLoggedInStatus = false;
+    localStorage.removeItem('authToken');
   }
 
   isLoggedIn(): boolean {
-    return this.isLoggedInStatus;
+    return !!localStorage.getItem('authToken');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('authToken');
   }
 
   getCurrentUser() {
-    const userData = localStorage.getItem('user'); // or sessionStorage
-    return userData ? JSON.parse(userData) : null;
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload;  // includes id, email, role, emp_id
+    } catch {
+      return null;
+    }
   }
-  
 }
