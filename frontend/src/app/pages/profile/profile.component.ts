@@ -16,7 +16,6 @@ import { AuthService } from '../../service/auth.service';
 })
 export class ProfileComponent implements OnInit {
   employee: Employee | null = null;
-  employee_name: any;
 
   constructor(
     private employeeService: EmployeeService,
@@ -24,21 +23,32 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const user = this.authService.getCurrentUser()
-    console.log("user from profile component: ",user);
+    const user = this.authService.getCurrentUser();
+    console.log("user from profile component: ", user);
     this.loadProfile(user);
   }
 
-  loadProfile(user:any) {
-    // Fetch the employee data from the backend using the service
+  loadProfile(user: any) {
     this.employeeService.getEmployeeById(user.id).subscribe({
       next: (data: Employee) => {
-        console.log("Data in the next function: ",data);
+        console.log("Data in the next function: ", data);
+        if (typeof data.joining_date === 'string') {
+          data.joining_date = new Date(data.joining_date);
+        }
         this.employee = data;
       },
       error: (err: any) => {
         console.error('Error fetching employee profile:', err);
       }
     });
+  }
+
+  // Getter for formatted date
+  get formattedJoiningDate(): string {
+    if (this.employee?.joining_date) {
+      return this.employee.joining_date instanceof Date ? 
+        this.employee.joining_date.toISOString().split('T')[0] : '';
+    }
+    return 'Not Available';
   }
 }

@@ -54,10 +54,10 @@ export class EmployeeDialogComponent {
         { label: 'Supervisor', value: 'Supervisor' }
     ];
 
-    statuses = [
-        { label: 'Active', value: 'Active' },
-        { label: 'Inactive', value: 'Inactive' }
-    ];
+    // statuses = [
+    //     { label: 'Active', value: 'Active' },
+    //     { label: 'Inactive', value: 'Inactive' }
+    // ];
 
     supervisorOptions: any[] = [];
 
@@ -88,6 +88,7 @@ export class EmployeeDialogComponent {
     }
 
     saveEmployee() {
+        this.employee.status = 'Active';
         this.save.emit(this.employee);
     }
     onClose() {

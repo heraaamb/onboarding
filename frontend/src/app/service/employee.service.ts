@@ -23,12 +23,11 @@ export class EmployeeService {
     }
 
     getEmployeesByDeptId(dept_id: number): Observable<Employee[]> {
-        console.log("dept id from service", dept_id);
-        return this.http.get<Employee[]>(`${this.apiUrl}/department/${dept_id}`);
-        
+        // // Debugging
+        // console.log("dept id from service", dept_id);
+        return this.http.get<Employee[]>(`${this.apiUrl}/department/${dept_id}`);    
     }
     
-
     addEmployee(employee: Employee): Observable<any> {
         return this.http.post<{ message: string }>(`${this.apiUrl}`, employee);
       }

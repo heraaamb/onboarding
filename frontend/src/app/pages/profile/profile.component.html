@@ -1,64 +1,65 @@
 <!-- Full-screen container with padding and background -->
-<div class="layout-main w-full flex justify-center">
+<div class="absolute top-32 left-1/2 transform -translate-x-1/2 w-full flex justify-center">
   <div class="w-full max-w-3xl">
 
-  <!-- Responsive profile card using PrimeNG's p-panel -->
-  <p-panel
-    header="Employee Profile"
-    [toggleable]="true"
-    styleClass="w-full max-w-2xl shadow-md rounded-lg bg-white border border-gray-200">
+    <!-- Responsive profile card using PrimeNG's p-panel -->
+    <p-panel
+      header="Employee Profile"
+      [toggleable]="true"
+      styleClass="w-full max-w-3xl shadow-xl rounded-lg bg-white border border-gray-200">
 
-    <!-- Custom header (optional styling) -->
-    <ng-template pTemplate="header">
-      <div class="flex items-center justify-between">
-        <span class="text-lg font-semibold text-blue-700">Employee Profile</span>
-      </div>
-    </ng-template>
-
-    <!-- Loading State -->
-    <div *ngIf="!employee" class="text-center py-8 text-gray-500">
-      <i class="pi pi-spin pi-spinner text-xl text-primary"></i>
-      <p>Loading employee data...</p>
-    </div>
-
-    <!-- Profile Display -->
-    <div *ngIf="employee as emp" class="p-6 space-y-5 text-gray-700 text-sm">
-
-      <!-- Name & Role -->
-      <div class="flex items-center gap-4">
-        <div
-          class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-xl font-bold text-blue-700 uppercase">
-          {{ emp.employee_name?.charAt(0) }}
+      <!-- Custom header (optional styling) -->
+      <ng-template pTemplate="header">
+        <div class="flex items-center justify-between">
+          <span class="text-xl font-semibold text-blue-700">Employee Profile</span>
         </div>
-        <div>
-          <h2 class="text-xl font-semibold text-gray-800">{{ emp.employee_name || 'Employee Name' }}</h2>
-          <p class="text-gray-500">{{ emp.role || 'Role' }}</p>
+      </ng-template>
+
+      <!-- Loading State -->
+      <div *ngIf="!employee" class="text-center py-8 text-gray-500">
+        <i class="pi pi-spin pi-spinner text-2xl text-primary"></i>
+        <p class="text-lg">Loading employee data...</p>
+      </div>
+
+      <!-- Profile Display -->
+      <div *ngIf="employee as emp" class="p-8 space-y-6 text-gray-700 text-base">
+
+        <!-- Photo at the top -->
+        <div class="flex justify-center mb-6">
+          <div
+            class="w-32 h-32 rounded-full bg-blue-100 flex items-center justify-center text-4xl font-bold text-blue-700 uppercase shadow-xl">
+            {{ emp.employee_name ? emp.employee_name.charAt(0) : '' }}
+          </div>
+        </div>
+
+        <!-- Name & Role -->
+        <div class="flex items-center gap-6 mb-6">
+          <div>
+            <h2 class="text-3xl font-semibold text-gray-800">{{ emp.employee_name || 'Employee Name' }}</h2>
+            <p class="text-gray-600 text-lg">{{ emp.role || 'Role' }}</p>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="flex items-center gap-4 mb-5">
+          <i class="pi pi-envelope text-blue-500 text-xl"></i>
+          <span class="text-lg"><strong>Email:</strong> {{ emp.email }}</span>
+        </div>
+
+        <!-- Department -->
+        <div class="flex items-center gap-4 mb-5">
+          <i class="pi pi-building text-green-500 text-xl"></i>
+          <span class="text-lg"><strong>Department:</strong> {{ emp.department_name }}</span>
+        </div>
+
+        <!-- Date Joined -->
+        <div class="flex items-center gap-4 mb-6">
+          <i class="pi pi-calendar text-purple-500 text-xl"></i>
+          <span class="text-lg"><strong>Date Joined:</strong> {{ formattedJoiningDate }}</span>
         </div>
       </div>
 
-      <!-- Email -->
-      <div class="flex items-center gap-2">
-        <i class="pi pi-envelope text-blue-500"></i>
-        <span><strong>Email:</strong> {{ emp.email }}</span>
-      </div>
+    </p-panel>
 
-      <!-- Department -->
-      <div class="flex items-center gap-2">
-        <i class="pi pi-building text-green-500"></i>
-        <span><strong>Department:</strong> {{ emp.department_name }}</span>
-      </div>
-
-      <!-- Date Joined -->
-      <div *ngIf="emp.joining_date" class="flex items-center gap-2">
-        <i class="pi pi-calendar text-purple-500"></i>
-        <span><strong>Date Joined:</strong> {{ emp.joining_date | date: 'yyyy-MM-dd' }}</span>
-      </div>
-      <div *ngIf="!emp.joining_date" class="text-gray-500 italic flex items-center gap-2">
-        <i class="pi pi-info-circle"></i>
-        Date Joined: Not Available
-      </div>
-
-    </div>
-  </p-panel>
-</div>
+  </div>
 </div>

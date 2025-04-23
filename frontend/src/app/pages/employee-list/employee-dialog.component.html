@@ -46,17 +46,9 @@
             </div>
 
             <div>
-                <label for="status">Status</label>
-                <p-dropdown id="status" [options]="statuses" optionLabel="label" optionValue="value" [(ngModel)]="employee.status" placeholder="Select Status" required fluid >
-                </p-dropdown>
-            </div>
-
-            <div>
                 <label for="designation">Designation</label>
                 <input id="designation" type="text" pInputText [(ngModel)]="employee.designation" required fluid />
             </div>
-
-
         </div>
     </ng-template>
 
