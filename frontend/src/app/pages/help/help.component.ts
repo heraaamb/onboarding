@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { PanelModule } from 'primeng/panel';
 import { HelpService, HelpRequest } from '../../service/help.service';
 import { InputTextarea } from 'primeng/inputtextarea';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-help',
@@ -15,7 +16,7 @@ import { InputTextarea } from 'primeng/inputtextarea';
     CommonModule,
     FormsModule,
     InputTextModule,
-    InputTextarea, // ✅ correct way to import
+    InputTextarea,
     ButtonModule,
     PanelModule
   ]
@@ -24,8 +25,24 @@ export class HelpComponent {
   email: string = '';
   message: string = '';
   submitted: boolean = false;
+  query: string = '';
+  employeeQuerySubmitted: boolean = false;
+  user: any = '';
+  userRole: string = '';
+  employeeQueries: any[] = [];
+  responseMessage: string = '';
 
-  constructor(private helpService: HelpService) {}
+  constructor(
+    private helpService: HelpService,
+    private authService: AuthService
+  ) {
+    this.user = this.authService.getCurrentUser(); // e.g., 'Admin', 'Employee', etc.
+    this.userRole = this.user.role; // e.g., 'Admin', 'Employee', etc.
+
+    if (this.userRole === 'Admin' || this.userRole === 'Dept_User') {
+      this.loadEmployeeQueries();
+    }
+  }
 
   submitForm() {
     if (this.email && this.message) {
@@ -44,6 +61,21 @@ export class HelpComponent {
           console.error('Error submitting help request:', err);
         }
       });
+    }
+  }
+
+  loadEmployeeQueries() {
+    this.employeeQueries = [
+      { id: 1, employeeName: 'John Doe', query: 'How to reset password?', response: '' },
+      { id: 2, employeeName: 'Jane Smith', query: 'How to access the dashboard?', response: '' },
+    ];
+  }
+
+  replyToQuery(queryId: number, responseMessage: string) {
+    const query = this.employeeQueries.find((q) => q.id === queryId);
+    if (query) {
+      query.response = responseMessage;
+      this.responseMessage = '';
     }
   }
 }

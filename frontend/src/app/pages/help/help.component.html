@@ -1,31 +1,51 @@
 <div class="card flex justify-center">
   <p-panel header="Help & Support" [toggleable]="true" styleClass="w-full md:w-50rem">
-    <div class="p-fluid">
+
+    <!-- Help form for Employees only -->
+    <div *ngIf="userRole === 'Employee'" class="p-fluid">
       <div class="field">
         <label for="email">Email</label>
-        <input id="email" type="email" pInputText [(ngModel)]="email" name="email" required fluid   />
+        <input id="email" type="email" pInputText [(ngModel)]="email" name="email" required fluid />
       </div>
 
       <div class="field">
         <label for="message">Message</label>
-        <textarea id="message"  pInputTextarea  [(ngModel)]="message" name="message" rows="4" required fluid   ></textarea>
+        <textarea id="message" pInputTextarea [(ngModel)]="message" name="message" rows="4" required fluid ></textarea>
       </div>
-      
-
 
       <div class="field mt-3 text-center">
-        <button
-          pButton
-          type="button"
-          label="Submit"
-          (click)="submitForm()"
-          class="p-button-sm"
-        ></button>
+        <button pButton type="button" label="Submit" (click)="submitForm()" class="p-button-sm"></button>
       </div>
 
       <div *ngIf="submitted" class="mt-3 text-green-600 text-center">
         Help request submitted successfully!
       </div>
     </div>
+
+    <!-- Employee Queries for Admin/Dept_User -->
+    <div *ngIf="userRole === 'Admin' || userRole === 'Dept_User'" class="mt-5">
+      <h3>Employee Queries</h3>
+
+      <div *ngFor="let query of employeeQueries" class="p-fluid mt-4 border border-gray-200 p-3 rounded-md shadow-sm">
+        <div class="field">
+          <label>{{ query.employeeName }}'s Query:</label>
+          <textarea pInputTextarea [(ngModel)]="query.query" rows="3" disabled fluid></textarea>
+        </div>
+
+        <div class="field">
+          <label>Your Response:</label>
+          <textarea pInputTextarea [(ngModel)]="responseMessage" rows="3" fluid></textarea>
+        </div>
+
+        <div class="field mt-2 text-center">
+          <button pButton type="button" label="Submit Reply" (click)="replyToQuery(query.id, responseMessage)" class="p-button-sm"></button>
+        </div>
+
+        <div *ngIf="query.response" class="mt-2 text-blue-600 text-center">
+          <strong>Reply Sent:</strong> {{ query.response }}
+        </div>
+      </div>
+    </div>
+
   </p-panel>
 </div>

@@ -12,7 +12,7 @@ export interface HelpRequest {
   providedIn: 'root'
 })
 export class HelpService {
-  private apiUrl = `${HOST_URL}/api/profile`;
+  private apiUrl = `${HOST_URL}/api/employee-queries`;
   constructor(private http: HttpClient) {}
 
   submitHelpRequest(request: HelpRequest): Observable<any> {

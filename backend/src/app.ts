@@ -51,6 +51,7 @@ const registerRoutes = () => {
   app.use("/api/users", usersRoute);
   app.use("/api/employee-queries", employeeQueriesRoute);
   app.use("/api/auth-login", authloginRoute);
+  app.use("/api/help", authloginRoute);
 };
 
 const handleErrors = () => {
