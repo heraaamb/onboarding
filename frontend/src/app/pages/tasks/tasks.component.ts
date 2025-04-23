@@ -10,6 +10,7 @@ import { TaskDialogComponent } from './task-dialog.component'; // Assuming this 
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import {ConfirmDialogModule } from 'primeng/confirmdialog';
+import { AuthService } from '../../service/auth.service';
 
 
 @Component({
@@ -43,25 +44,52 @@ export class TaskComponent implements OnInit {
   taskDialogVisible = false;
   newTask : Task = this.getEmptyTask();
 
-  constructor(private taskService: TaskService,
+  constructor(
+    private taskService: TaskService,
+    private authService: AuthService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
-    this.loadTasks();
+    const user = this.authService.getCurrentUser()
+    console.log("========the user: ",user);
+    this.loadTasks(user);
   }
 
-  loadTasks() {
-    this.taskService.getAllTasks().subscribe({
-      next: (data) => {
-        this.tasks = data;
-      },
-      error:  (err) => {
-        console.error('Error fetching tasks:', err);
-      },
-    });
+  loadTasks(user:any){
+    if(user.role === 'Employee'){
+      this.taskService.getTasksById(user.emp_id).subscribe({
+        next: (data) => {
+          this.tasks = data;
+        },
+        error: (err) => {
+          console.error('Error fetching tasks:', err);
+        }
+      })
+    }
+    else if(user.role === 'Admin'){
+      this.taskService.getAllTasks().subscribe({
+        next: (data) => {
+          this.tasks = data;
+        },
+        error:  (err) => {
+          console.error('Error fetching tasks:', err);
+        },
+      });
+    }
   }
+
+  // loadTasks() {
+  //   this.taskService.getAllTasks().subscribe({
+  //     next: (data) => {
+  //       this.tasks = data;
+  //     },
+  //     error:  (err) => {
+  //       console.error('Error fetching tasks:', err);
+  //     },
+  //   });
+  // }
 
   openNewTaskDialog() {
     this.newTask = this.getEmptyTask();
@@ -91,7 +119,8 @@ export class TaskComponent implements OnInit {
             summary: 'Success',
             detail: 'Task updated successfully!'
           });
-          this.loadTasks();
+          const user = this.authService.getCurrentUser()
+          this.loadTasks(user);
           this.taskDialogVisible = false;
         },
         error: (error) => {
@@ -109,7 +138,8 @@ export class TaskComponent implements OnInit {
           });
           // // Debugging
           // console.log('Task added successfully:', response);
-          this.loadTasks();
+          const user = this.authService.getCurrentUser()
+          this.loadTasks(user);
           this.taskDialogVisible = false;
         },
         error: (error) => {
@@ -134,7 +164,8 @@ export class TaskComponent implements OnInit {
               summary: 'Success',
               detail: 'Task Deleted successfully!'
             });
-            this.loadTasks(); // Refresh the task list
+            const user = this.authService.getCurrentUser()
+            this.loadTasks(user); // Refresh the task list
           },
           error: (error) => {
             console.error('Error deleting task:', error);

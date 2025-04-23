@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Task } from '../models/task.model';
 import { HOST_URL } from '../utils/utils';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +14,11 @@ export class TaskService {
 
   constructor(private http: HttpClient) {}
   getAllTasks(): Observable<any> {
-    return this.http.get('http://localhost:5000/api/tasks');
+    return this.http.get(this.baseUrl);
   }
 
-  getTasksById(): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.baseUrl}`);
+  getTasksById(emp_id:any): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.baseUrl}/${emp_id}`);
   }
 
   addTask(task: Task): Observable<any> {
