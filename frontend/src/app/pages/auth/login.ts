@@ -46,11 +46,14 @@ export class LoginComponent {
             
                     const user = this.authService.getCurrentUser();
                     const role = user?.role;
+                    console.log("user: ",user);
             
                     if (role === 'Employee') {
                         this.router.navigate(['/pages/tasks']);
                     } else if (role === 'Admin') {
                         this.router.navigate(['/dashboard']);
+                    } else if(role === 'Dept_User') {
+                        this.router.navigate(['/pages/employee-list'])
                     }
                 } else {
                     alert('Invalid credentials');

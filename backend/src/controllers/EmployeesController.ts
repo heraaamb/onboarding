@@ -58,12 +58,13 @@ export const deleteEmployee = async (req: Request, res: Response) => {
     }
 };
 
-export const getEmployeeById = async (req: Request, res: Response) => {
+export const getEmployeesByDeptId = async (req: Request, res: Response) => {
     try {
-        const employee = await employeeService.getEmployeeById(Number(req.params.id));
+        console.log("request params: ",req.params);
+        const employees = await employeeService.getEmployeesByDeptId(req.params.dept_id);
         // // Debugging
-        console.log(employee);
-        res.status(200).json(employee);
+        console.log(employees);
+        res.status(200).json(employees);
     } catch (err) {
         res.status(500).json({ error: err });
     }

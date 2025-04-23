@@ -10,6 +10,7 @@ import { EmployeeDialogComponent } from '../employee-list/employee-dialog.compon
 import { ToastModule } from 'primeng/toast';
 import {ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { AuthService } from '../../service/auth.service';
 
 
 @Component({
@@ -45,22 +46,47 @@ export class EmployeeListComponent implements OnInit {
         private employeeService: EmployeeService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
+        private authService: AuthService,
       ) {}    
 
     ngOnInit() {
-        this.loadEmployees();
+      const user = this.authService.getCurrentUser()
+      this.loadEmployees(user);
     }
 
-    loadEmployees() {
+    loadEmployees(user: any) {
+      if (!user || !user.role) {
+        console.error('Invalid user data.');
+        return;
+      }
+    
+      if (user.role === 'Admin') {
         this.employeeService.getAllEmployees().subscribe({
-            next: (data) => {
-                this.employees = data;
-            },
-            error: (err) => {
-                console.error('Error fetching employees:', err);
-            }
+          next: (data) => {
+            this.employees = data;
+          },
+          error: (err) => {
+            console.error('Error fetching all employees:', err);
+          }
         });
+      } else if (user.role === 'Dept_User' && user.department_id) {
+        // // Debugging
+        // console.log(user.department_id);
+        this.employeeService.getEmployeesByDeptId(user.department_id).subscribe({
+          next: (data) => {
+            // // Debugging
+            console.log("data recieved in employee component", data);
+            this.employees = data;
+          },
+          error: (err) => {
+            console.error(`Error fetching employees for department_id ${user.department_id}:`, err);
+          }
+        });
+      } else {
+        console.warn('User role is not allowed to load employees or missing department_id.');
+      }
     }
+    
 
     openNewEmployeeDialog() {
       this.selectedEmployee = this.getEmptyEmployee(); // reset to empty
@@ -93,7 +119,8 @@ export class EmployeeListComponent implements OnInit {
               summary: 'Success',
               detail: 'Employee updated successfully!'
             });
-            this.loadEmployees();
+            const user = this.authService.getCurrentUser()
+            this.loadEmployees(user);
             this.employeeDialogVisible = false;
           },
           error: (error) => {
@@ -112,7 +139,8 @@ export class EmployeeListComponent implements OnInit {
               summary: 'Success',
               detail: 'Employee added successfully!'
             });
-            this.loadEmployees();
+            const user = this.authService.getCurrentUser()
+            this.loadEmployees(user);
             this.employeeDialogVisible = false;
           },
           error: (error) => {
@@ -143,7 +171,8 @@ export class EmployeeListComponent implements OnInit {
                 summary: 'Success',
                 detail: 'Employee deleted successfully!'
               });
-              this.loadEmployees(); // refresh list
+              const user = this.authService.getCurrentUser()
+              this.loadEmployees(user); // refresh list
             },
             error: (error) => {
               console.error('Error deleting employee:', error);

@@ -53,7 +53,22 @@ export const DELETE_EMPLOYEE = `
 `;
 
 
-export const GET_EMPLOYEE_BY_ID = `
-  SELECT * FROM employees WHERE emp_id = $1;
+export const GET_EMPLOYEES_BY_DEPT_ID = `
+  SELECT 
+    e.emp_id,
+    u.name AS employee_name,
+    u.email,
+    e.joining_date,
+    d.name AS department_name,
+    u.role,
+    u.status,
+    e.designation,
+    s.name AS supervisor_name
+  FROM employees e
+  JOIN users u ON e.user_id = u.user_id
+  LEFT JOIN departments d ON e.department_id = d.dept_id
+  LEFT JOIN employees es ON e.supervisor_id = es.emp_id
+  LEFT JOIN users s ON es.user_id = s.user_id
+  WHERE e.department_id = $1;
 `;
 

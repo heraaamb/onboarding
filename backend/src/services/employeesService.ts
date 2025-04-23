@@ -6,7 +6,7 @@ import {
     UPDATE_EMPLOYEE,
     DELETE_EMPLOYEE,
     EMPLOYEE_INSERT_QUERY,
-    GET_EMPLOYEE_BY_ID
+    GET_EMPLOYEES_BY_DEPT_ID
 } from '../queries/employees.queries';
 import { DELETE_TASK_EMPID } from '../queries/tasks.queries';
 import {DELETE_USER} from '../queries/users.queries'
@@ -32,7 +32,7 @@ export const createEmployee = async (data: any) => {
   const client = await pool.connect();
   
   // // Debugging
-  // console.log("employee data while creating: ",data);
+  console.log("employee data while creating: ",data);
   // console.log('role: ',data.role);
 
   if (data.role === 'Admin' || data.role === 'Dept_User'){
@@ -265,9 +265,10 @@ export const deleteEmployee = async (id: number) => {
 };
 
 
-export const getEmployeeById = async (id: number) => {
-    const employee = await pool.query(GET_EMPLOYEE_BY_ID, [id]);
+export const getEmployeesByDeptId = async (id: any) => {
+  console.log(id);
+    const employee = await pool.query(GET_EMPLOYEES_BY_DEPT_ID, [id]);
     // // Debugging
-    // console.log(employee.rows[0]);
-    return employee.rows[0];
+    console.log("employee rows",employee.rows);
+    return employee.rows;
 };

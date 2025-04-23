@@ -50,7 +50,7 @@ export class EmployeeDialogComponent {
     roles = [
         { label: 'Employee', value: 'Employee' },
         { label: 'Admin', value: 'Admin' },
-        { label: 'Department User', value: 'Department User' },
+        { label: 'Department User', value: 'Dept_User' },
         { label: 'Supervisor', value: 'Supervisor' }
     ];
 

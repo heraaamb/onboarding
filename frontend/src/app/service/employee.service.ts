@@ -15,12 +15,19 @@ export class EmployeeService {
 
    // employee.service.ts
     getAllEmployees(): Observable<any> {
-        return this.http.get('http://localhost:5000/api/employees');
+        return this.http.get(`${HOST_URL}/api/employees`);
     }
   
     getEmployeeById(id: number): Observable<Employee> {
         return this.http.get<Employee>(`${this.apiUrl}/${id}`);
     }
+
+    getEmployeesByDeptId(dept_id: number): Observable<Employee[]> {
+        console.log("dept id from service", dept_id);
+        return this.http.get<Employee[]>(`${this.apiUrl}/department/${dept_id}`);
+        
+    }
+    
 
     addEmployee(employee: Employee): Observable<any> {
         return this.http.post<{ message: string }>(`${this.apiUrl}`, employee);
