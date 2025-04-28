@@ -28,8 +28,8 @@
 
       <div *ngFor="let query of employeeQueries" class="p-fluid mt-4 border border-gray-200 p-3 rounded-md shadow-sm">
         <div class="field">
-          <label>{{ query.employeeName }}'s Query:</label>
-          <textarea pInputTextarea [(ngModel)]="query.query" rows="3" disabled fluid></textarea>
+          <label>{{ query.employee_name }}'s Query:</label>
+          <textarea pInputTextarea [(ngModel)]="query.query_text" rows="3" disabled fluid></textarea>
         </div>
 
         <div class="field">

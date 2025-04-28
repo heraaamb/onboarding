@@ -65,10 +65,16 @@ export class HelpComponent {
   }
 
   loadEmployeeQueries() {
-    this.employeeQueries = [
-      { id: 1, employeeName: 'John Doe', query: 'How to reset password?', response: '' },
-      { id: 2, employeeName: 'Jane Smith', query: 'How to access the dashboard?', response: '' },
-    ];
+    this.helpService.getAllEmployeeQueries().subscribe({
+      next: (data) => {
+        // // Debugging
+        console.log("data recieved in employee component", data);
+        this.employeeQueries = data;
+      },
+      error: (err) => {
+        console.error(`Error fetching employee qureries:`, err);
+      }
+    });
   }
 
   replyToQuery(queryId: number, responseMessage: string) {
