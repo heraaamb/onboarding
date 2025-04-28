@@ -3,11 +3,7 @@
 
     <!-- Help form for Employees only -->
     <div *ngIf="userRole === 'Employee'" class="p-fluid">
-      <div class="field">
-        <label for="email">Email</label>
-        <input id="email" type="email" pInputText [(ngModel)]="email" name="email" required fluid />
-      </div>
-
+      
       <div class="field">
         <label for="message">Message</label>
         <textarea id="message" pInputTextarea [(ngModel)]="message" name="message" rows="4" required fluid ></textarea>
@@ -38,7 +34,7 @@
         </div>
 
         <div class="field mt-2 text-center">
-          <button pButton type="button" label="Submit Reply" (click)="replyToQuery(query.id, responseMessage)" class="p-button-sm"></button>
+          <button pButton type="button" label="Submit Reply" (click)="replyToQuery(query.query_id, responseMessage)" class="p-button-sm"></button>
         </div>
 
         <div *ngIf="query.response" class="mt-2 text-blue-600 text-center">

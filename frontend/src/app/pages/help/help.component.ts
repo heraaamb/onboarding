@@ -45,16 +45,15 @@ export class HelpComponent {
   }
 
   submitForm() {
-    if (this.email && this.message) {
+    if (this.message) {
       const helpRequest: HelpRequest = {
-        email: this.email,
-        message: this.message
+        emp_id: this.user.emp_id,
+        query_text: this.message
       };
 
       this.helpService.submitHelpRequest(helpRequest).subscribe({
         next: () => {
           this.submitted = true;
-          this.email = '';
           this.message = '';
         },
         error: (err) => {
@@ -78,7 +77,7 @@ export class HelpComponent {
   }
 
   replyToQuery(queryId: number, responseMessage: string) {
-    const query = this.employeeQueries.find((q) => q.id === queryId);
+    const query = this.employeeQueries.find((q) => q.query_id === queryId);
     if (query) {
       query.response = responseMessage;
       this.responseMessage = '';

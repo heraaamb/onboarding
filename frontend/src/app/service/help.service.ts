@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { HOST_URL } from '../utils/utils';
 
 export interface HelpRequest {
-  email: string;
-  message: string;
+  emp_id: any;
+  query_text: string;
 }
 
 @Injectable({
