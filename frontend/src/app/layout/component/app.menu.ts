@@ -22,7 +22,7 @@ export class AppMenu {
         this.model = [
             {
                 label: '',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
+                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/dashboard'] }]
             },
             {
                 label: '',
@@ -31,6 +31,7 @@ export class AppMenu {
                     { label: 'Tasks', icon: 'pi pi-fw pi-check-square', routerLink: ['/pages/tasks'] },
                     { label: 'Profile', icon: 'pi pi-fw pi-user', routerLink: ['/pages/profile'] },
                     { label: 'Help', icon: 'pi pi-fw pi-question-circle', routerLink: ['/pages/help'] },
+                    { label: 'Document Upload', icon: 'pi pi-fw pi-file', routerLink: ['/pages/document-upload'] },
                 ]
             },
             // {
