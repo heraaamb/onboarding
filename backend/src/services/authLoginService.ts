@@ -15,7 +15,9 @@ export async function checkUserDetails(data: any) {
         WHERE u.email = $1`, [data.email]
     );
     // // Debugging
-    // console.log(result.rows);
+     console.log(result.rows);
+
+     
     if (result.rows.length === 0) {
         return { passwordCheckResult: false };
     }
@@ -34,7 +36,7 @@ export async function checkUserDetails(data: any) {
         expiresIn: parseInt(JWT_EXPIRES_IN || '3600', 10),
     };
 
-    const token = jwt.sign(payload, JWT_SECRET, signOptions);
+    const token = jwt.sign(payload, JWT_SECRET, signOptions);0.
 
     return {
         passwordCheckResult: true,

@@ -1,47 +1,57 @@
-import { Component } from '@angular/core';
-import { RippleModule } from 'primeng/ripple';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { CommonModule } from '@angular/common';
-import { Product, ProductService } from '../../service/product.service';
+import { RippleModule } from 'primeng/ripple';
+
+// Define your interface
+interface EmployeeTask {
+    employeeName: string;
+    department: string;
+    taskName: string;
+}
 
 @Component({
     standalone: true,
     selector: 'app-recent-sales-widget',
     imports: [CommonModule, TableModule, ButtonModule, RippleModule],
-    template: `<div class="card !mb-8">
-        <div class="font-semibold text-xl mb-4">Recent Sales</div>
-        <p-table [value]="products" [paginator]="true" [rows]="5" responsiveLayout="scroll">
-            <ng-template #header>
+    template: `
+    <div class="card !mb-8">
+        <div class="font-semibold text-xl mb-4">Recent Employee Tasks</div>
+        <p-table [value]="employeeTasks" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
                 <tr>
-                    <th>Image</th>
-                    <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-                    <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
-                    <th>View</th>
+                    <th pSortableColumn="employeeName">Employee <p-sortIcon field="employeeName"></p-sortIcon></th>
+                    <th pSortableColumn="department">Department <p-sortIcon field="department"></p-sortIcon></th>
+                    <th pSortableColumn="taskName">Task <p-sortIcon field="taskName"></p-sortIcon></th>
+                    <th>Action</th>
                 </tr>
             </ng-template>
-            <ng-template #body let-product>
+            <ng-template pTemplate="body" let-task>
                 <tr>
-                    <td style="width: 15%; min-width: 5rem;">
-                        <img src="https://primefaces.org/cdn/primevue/images/product/{{ product.image }}" class="shadow-lg" alt="{{ product.name }}" width="50" />
-                    </td>
-                    <td style="width: 35%; min-width: 7rem;">{{ product.name }}</td>
-                    <td style="width: 35%; min-width: 8rem;">{{ product.price | currency: 'USD' }}</td>
-                    <td style="width: 15%;">
-                        <button pButton pRipple type="button" icon="pi pi-search" class="p-button p-component p-button-text p-button-icon-only"></button>
+                    <td>{{ task.employeeName }}</td>
+                    <td>{{ task.department }}</td>
+                    <td>{{ task.taskName }}</td>
+                    <td>
+                        <button pButton pRipple type="button" icon="pi pi-search" class="p-button p-button-text p-button-icon-only"></button>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
-    </div>`,
-    providers: [ProductService]
+    </div>
+    `
 })
-export class RecentSalesWidget {
-    products!: Product[];
-
-    constructor(private productService: ProductService) { }
+export class RecentSalesWidget implements OnInit {
+    employeeTasks: EmployeeTask[] = [];
 
     ngOnInit() {
-        this.productService.getProductsSmall().then((data) => (this.products = data));
+        // Simulate fetching from a service
+        this.employeeTasks = [
+            { employeeName: 'Alice Johnson', department: 'HR', taskName: 'Onboarding Documents' },
+            { employeeName: 'Bob Smith', department: 'IT', taskName: 'Laptop Setup' },
+            { employeeName: 'Carol White', department: 'Finance', taskName: 'Expense Report Review' },
+            { employeeName: 'David Lee', department: 'Admin', taskName: 'Office Access' },
+            { employeeName: 'Eve Black', department: 'Project', taskName: 'Project Briefing' }
+        ];
     }
 }
