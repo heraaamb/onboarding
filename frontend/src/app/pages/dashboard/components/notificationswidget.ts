@@ -23,7 +23,7 @@ import { MenuModule } from 'primeng/menu';
                 </div>
                 <span class="text-surface-900 dark:text-surface-0 leading-normal"
                     >Richard Jones
-                    <span class="text-surface-700 dark:text-surface-100">has purchased a blue t-shirt for <span class="text-primary font-bold">$79.00</span></span>
+                    <span class="text-surface-700 dark:text-surface-100">has purchased a Fastners for <span class="text-primary font-bold">$79.00</span></span>
                 </span>
             </li>
             <li class="flex items-center py-2">
@@ -42,7 +42,7 @@ import { MenuModule } from 'primeng/menu';
                 </div>
                 <span class="text-surface-900 dark:text-surface-0 leading-normal"
                     >Keyser Wick
-                    <span class="text-surface-700 dark:text-surface-100">has purchased a black jacket for <span class="text-primary font-bold">$59.00</span></span>
+                    <span class="text-surface-700 dark:text-surface-100">has purchased a Screws and Bolts<span class="text-primary font-bold">$59.00</span></span>
                 </span>
             </li>
             <li class="flex items-center py-2 border-b border-surface">
