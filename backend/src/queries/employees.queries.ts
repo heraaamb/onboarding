@@ -16,6 +16,10 @@ export const GET_ALL_EMPLOYEES = `
   LEFT JOIN users s ON es.user_id = s.user_id;
 `;
 
+export const GET_NUMBER_OF_EMPLOYEES = `
+  SELECT COUNT(*) AS total_employees FROM employees;
+`;
+
 export const GET_EMPLOYEE_BY_ID = `
   SELECT 
     u.name AS employee_name, 

@@ -69,6 +69,16 @@ export const deleteEmployee = async (req: Request, res: Response) => {
     }
 };
 
+export const getNumberOfEmployees = async (req: Request, res: Response) => {
+    try {
+        const data = await employeeService.getNumberOfEmployees();
+        res.status(200).json(data[0]); // Send the first (and only) row
+    } catch (err) {
+        res.status(500).json({ error: `Failed to get number of employee: ${err}` });
+    }
+};
+
+
 export const getEmployeesByDeptId = async (req: Request, res: Response) => {
     try {
         console.log("request params: ",req.params);

@@ -3,9 +3,13 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import * as taskService from '../../../service/tasks.service';
+import { Task } from '../../../models/task.model';
+import { TaskService } from '../../../service/tasks.service';
+
 
 // Define your interface
-interface EmployeeTask {
+interface EmployeeTasks {
     employeeName: string;
     department: string;
     taskName: string;
@@ -18,7 +22,7 @@ interface EmployeeTask {
     template: `
     <div class="card !mb-8">
         <div class="font-semibold text-xl mb-4">Recent Employee Tasks</div>
-        <p-table [value]="employeeTasks" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+        <p-table [value]="tasks" [paginator]="true" [rows]="5" responsiveLayout="scroll">
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="employeeName">Employee <p-sortIcon field="employeeName"></p-sortIcon></th>
@@ -29,9 +33,9 @@ interface EmployeeTask {
             </ng-template>
             <ng-template pTemplate="body" let-task>
                 <tr>
-                    <td>{{ task.employeeName }}</td>
-                    <td>{{ task.department }}</td>
-                    <td>{{ task.taskName }}</td>
+                    <td>{{ task.employee_name }}</td>
+                    <td>{{ task.department_name }}</td>
+                    <td>{{ task.task_name }}</td>
                     <td>
                         <button pButton pRipple type="button" icon="pi pi-search" class="p-button p-button-text p-button-icon-only"></button>
                     </td>
@@ -41,17 +45,26 @@ interface EmployeeTask {
     </div>
     `
 })
-export class RecentSalesWidget implements OnInit {
-    employeeTasks: EmployeeTask[] = [];
+export class EmployeeTasksDashboard implements OnInit {
+    tasks: Task[] = [];
+      constructor(
+        private taskService: TaskService
+    ) {}
 
     ngOnInit() {
         // Simulate fetching from a service
-        this.employeeTasks = [
-            { employeeName: 'Alice Johnson', department: 'HR', taskName: 'Onboarding Documents' },
-            { employeeName: 'Bob Smith', department: 'IT', taskName: 'Laptop Setup' },
-            { employeeName: 'Carol White', department: 'Finance', taskName: 'Expense Report Review' },
-            { employeeName: 'David Lee', department: 'Admin', taskName: 'Office Access' },
-            { employeeName: 'Eve Black', department: 'Project', taskName: 'Project Briefing' }
-        ];
+        this.loadTasks();
+    }
+
+    loadTasks(){
+          this.taskService.getAllTasks().subscribe({
+            next: (data: any) => {
+                console.log("The tasks: ",data);
+                 this.tasks = data;
+            },
+            error:  (err) => {
+              console.error('Error fetching tasks:', err);
+            },
+        });
     }
 }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { NotificationsWidget } from './components/notificationswidget';
 import { StatsWidget } from './components/statswidget';
-import { RecentSalesWidget } from './components/recentsaleswidget';
+import { EmployeeTasksDashboard } from './components/empoyeeTasksDashboard';
 import { BestSellingWidget } from './components/bestsellingwidget';
 import { RevenueStreamWidget } from './components/revenuestreamwidget';
 
@@ -13,7 +13,7 @@ import { RevenueStreamWidget } from './components/revenuestreamwidget';
     imports: [
         CommonModule, // ✅ Needed for structural directives like *ngIf, *ngFor
         StatsWidget,
-        RecentSalesWidget,
+        EmployeeTasksDashboard,
         BestSellingWidget,
         RevenueStreamWidget,
         NotificationsWidget

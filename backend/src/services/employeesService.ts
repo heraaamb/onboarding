@@ -7,7 +7,8 @@ import {
     DELETE_EMPLOYEE,
     EMPLOYEE_INSERT_QUERY,
     GET_EMPLOYEES_BY_DEPT_ID,
-    GET_EMPLOYEE_BY_ID
+    GET_EMPLOYEE_BY_ID,
+    GET_NUMBER_OF_EMPLOYEES,
 } from '../queries/employees.queries';
 import { DELETE_TASK_EMPID } from '../queries/tasks.queries';
 import {DELETE_USER} from '../queries/users.queries'
@@ -283,4 +284,9 @@ export const getEmployeesByDeptId = async (id: any) => {
     // // Debugging
     console.log("employee rows",employee.rows);
     return employee.rows;
+};
+
+export const getNumberOfEmployees = async () => {
+  const result = await pool.query(GET_NUMBER_OF_EMPLOYEES);
+  return result.rows; // Returns [{ total_employees: 5 }]
 };

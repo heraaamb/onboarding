@@ -37,3 +37,7 @@ export class TaskService {
     return this.http.delete(`${this.baseUrl}/${taskId}`);
   }
 }
+
+export function getAllTasks() {
+    throw new Error('Function not implemented.');
+}
