@@ -6,6 +6,7 @@ import tasksRoutes from "./routes/tasksRoutes";
 import employeeQueriesRoute from "./routes/employeeQueriesRoute";
 import usersRoute from "./routes/usersRoute"
 import authloginRoute from "./routes/authLoginRoute"
+import documentUploadRoute from "./routes/DocumentUploadRoute"
 import pool from "./db/db";
 
 dotenv.config();
@@ -52,10 +53,11 @@ const registerRoutes = () => {
   app.use("/api/employee-queries", employeeQueriesRoute);
   app.use("/api/auth-login", authloginRoute);
   app.use("/api/help", authloginRoute);
+  app.use("/api/document", documentUploadRoute);
 };
 
 const handleErrors = () => {
-  app.use((req: Request, res: Response) => {
+  app.use((req: Request, res: Response) => { 
     res.status(404).send("Route not found");
   });
 };

@@ -16,6 +16,11 @@ export class DocumentUploadComponent {
 
     constructor(private messageService: MessageService) {}
 
+    // Method to handle file upload event
+    uploadFiles(event: { files: File[] }) {
+        
+    }
+
     onUpload(event: { files: File[] }) {
         this.uploadedFiles.push(...event.files);
 
