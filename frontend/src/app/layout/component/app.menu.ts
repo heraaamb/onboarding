@@ -27,7 +27,7 @@ export class AppMenu {
             {
                 label: '',
                 items: [
-                    { label: 'Employees', icon: 'pi pi-fw pi-check-square', routerLink: ['/pages/employee-list'] },
+                    { label: 'Employees', icon: 'pi pi-users', routerLink: ['/pages/employee-list'] },
                     { label: 'Tasks', icon: 'pi pi-fw pi-check-square', routerLink: ['/pages/tasks'] },
                     { label: 'Profile', icon: 'pi pi-fw pi-user', routerLink: ['/pages/profile'] },
                     { label: 'Help', icon: 'pi pi-fw pi-question-circle', routerLink: ['/pages/help'] },
