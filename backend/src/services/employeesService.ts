@@ -3,19 +3,12 @@ import pool from '../db/db';
 import {
     GET_ALL_EMPLOYEES,
     GET_ONBOARDING_EMPLOYEES,
-    UPDATE_EMPLOYEE,
-    DELETE_EMPLOYEE,
-    EMPLOYEE_INSERT_QUERY,
     GET_EMPLOYEES_BY_DEPT_ID,
     GET_EMPLOYEE_BY_ID,
     GET_NUMBER_OF_EMPLOYEES,
 } from '../queries/employees.queries';
-import { DELETE_TASK_EMPID } from '../queries/tasks.queries';
-import {DELETE_USER} from '../queries/users.queries'
 import { USER_INSERT_QUERY } from '../queries/users.queries';
-import crypto from 'crypto';
 // import { sendEmail } from '../services/emailService'; // A function to send emails
-import bcrypt from 'bcrypt';
 import {generatePassword, hashPassword, sendmail} from '../utils/utils'
 
 export const getAllEmployees = async () => {

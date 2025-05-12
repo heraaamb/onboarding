@@ -6,6 +6,7 @@ import tasksRoutes from "./routes/tasksRoutes";
 import employeeQueriesRoute from "./routes/employeeQueriesRoute";
 import usersRoute from "./routes/usersRoute"
 import authloginRoute from "./routes/authLoginRoute"
+import authChangePasswordRoute from "./routes/authChangePasswordRoute"
 import documentUploadRoute from "./routes/DocumentUploadRoute"
 import departmentsRoute from "./routes/DepartmentsRoute"
 import pool from "./db/db";
@@ -53,6 +54,7 @@ const registerRoutes = () => {
   app.use("/api/users", usersRoute);
   app.use("/api/employee-queries", employeeQueriesRoute);
   app.use("/api/auth-login", authloginRoute);
+  app.use("/api/auth-change-password", authChangePasswordRoute);
   app.use("/api/help", authloginRoute);
   app.use("/api/document-upload", documentUploadRoute);
   app.use("/api/departments", departmentsRoute);

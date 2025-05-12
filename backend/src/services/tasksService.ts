@@ -10,7 +10,6 @@ import {
     GET_DEPARTMENT_TASKS,
     GET_TASK_COUNT
 } from '../queries/tasks.queries';
-import { NumericAxisOptions } from 'aws-sdk/clients/quicksight';
 
 export const getAllTasks = async () => {
     const result = await pool.query(GET_ALL_TASKS);

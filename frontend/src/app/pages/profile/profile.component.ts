@@ -7,19 +7,40 @@ import { CardModule } from 'primeng/card';
 import { AvatarModule } from 'primeng/avatar';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../service/auth.service';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   standalone: true,
-  imports: [CommonModule, PanelModule, CardModule, AvatarModule, FormsModule]
+  imports: [
+    CommonModule,
+    PanelModule,
+    CardModule,
+    AvatarModule,
+    FormsModule,
+    ButtonModule,
+    InputTextModule,
+    ToastModule
+  ],
+  providers: [MessageService]
 })
 export class ProfileComponent implements OnInit {
   employee: Employee | null = null;
 
+  // Password form fields
+  currentPassword: string = '';
+  newPassword: string = '';
+  confirmPassword: string = '';
+  showChangePassword: boolean = false;
+
   constructor(
     private employeeService: EmployeeService,
     private authService: AuthService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -50,5 +71,37 @@ export class ProfileComponent implements OnInit {
         this.employee.joining_date.toISOString().split('T')[0] : '';
     }
     return 'Not Available';
+  }
+
+  // Change password method
+  changePassword() {
+    if (this.newPassword !== this.confirmPassword) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'New passwords do not match.'
+      });
+      return;
+    }
+
+    this.authService.changePassword(this.currentPassword, this.newPassword).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Password updated successfully.'
+        });
+        this.currentPassword = '';
+        this.newPassword = '';
+        this.confirmPassword = '';
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error?.message || 'Failed to change password.'
+        });
+      }
+    });
   }
 }
