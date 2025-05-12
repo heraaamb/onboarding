@@ -1,12 +1,24 @@
-import path from 'path';
+import fs from 'fs';
 
-export const uploadFile = async (file: Express.Multer.File) => {
-  return {
-    filename: file.filename,
-    originalname: file.originalname,
-    path: file.path,
-    mimetype: file.mimetype,
-    size: file.size,
-    extension: path.extname(file.originalname),
-  };
+export interface FileMetadata {
+  filename: string;
+  path: string;
+  originalname: string;
+  mimetype: string;
+  size: number;
+}
+
+// Example: You could store this in a DB instead
+
+export const saveFileMetadata = async (fileData: FileMetadata): Promise<void> => {
+    const metadataFile = 'document-uploads/metadata.json';
+
+    let existing: FileMetadata[] = [];
+    if (fs.existsSync(metadataFile)) {
+        const data = fs.readFileSync(metadataFile, 'utf-8');
+        existing = JSON.parse(data);
+    }
+
+    existing.push(fileData);
+    fs.writeFileSync(metadataFile, JSON.stringify(existing, null, 2));
 };

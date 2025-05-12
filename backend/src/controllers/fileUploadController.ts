@@ -1,20 +1,29 @@
+import { saveFileMetadata } from '../services/DocumentUploadService';
 import { Request, Response } from 'express';
-import * as fileUploadService from '../services/DocumentUploadService';
 
-export const uploadFile = async (req: Request, res: Response) => {
+export const uploadFile = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { files } = req.body; 
-    const file = req.file; // Correct way to access the uploaded file from multer
-    console.log('File:', file); // Log the file object for debugging
+      if (!req.file) {
+          res.status(400).json({ message: 'No file uploaded.' });
+          return;
+      }
 
-    if (!file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
+      const fileData = {
+          filename: req.file.filename,
+          path: req.file.path,
+          originalname: req.file.originalname,
+          mimetype: req.file.mimetype,
+          size: req.file.size,
+      };
 
-    const result = await fileUploadService.uploadFile(file);
-    res.status(200).json({ message: 'File uploaded successfully', data: result });
-  } catch (error) {
-    console.error('Error uploading file:', error);
-    res.status(500).json({ error: 'Failed to upload file' });
+      await saveFileMetadata(fileData);
+
+      res.status(200).json({
+          message: 'File uploaded successfully',
+          file: fileData
+      });
+  } catch (err) {
+      console.error('Upload error:', err);
+      res.status(500).json({ message: 'File upload failed' });
   }
 };

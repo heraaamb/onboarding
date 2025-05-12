@@ -54,7 +54,7 @@ const registerRoutes = () => {
   app.use("/api/employee-queries", employeeQueriesRoute);
   app.use("/api/auth-login", authloginRoute);
   app.use("/api/help", authloginRoute);
-  app.use("/api/document", documentUploadRoute);
+  app.use("/api/document-upload", documentUploadRoute);
   app.use("/api/departments", departmentsRoute);
 };
 
