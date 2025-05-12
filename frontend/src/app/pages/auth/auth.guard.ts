@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
     const currentUrl = state.url;
   
     if (userRole === 'Employee') {
-      const allowedRoutes = ['/pages/tasks', '/pages/help', '/pages/profile'];
+      const allowedRoutes = ['/pages/tasks', '/pages/help', '/pages/profile', '/pages/document-upload'];
       if (!allowedRoutes.includes(currentUrl)) {
         this.router.navigate(['/auth/access-denied']);
         return false;

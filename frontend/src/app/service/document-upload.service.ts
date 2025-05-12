@@ -7,21 +7,34 @@ import { HOST_URL } from '../utils/utils';
     providedIn: 'root'
 })
 export class DocumentUploadService {
-   
-    private apiUrl = `${HOST_URL}/api/document`;
+    private apiUrl = `${HOST_URL}/api/document-upload`;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {}
 
-    uploadFiles(files: File[]): Observable<any> {
+    // Upload a single file
+    uploadFile(file: File): Observable<any> {
         const formData = new FormData();
-        files.forEach(file => {
-            formData.append('files', file, file.name);
-        });
+        formData.append('file', file); // Match multer.single('file')
+
         return this.http.post(`${this.apiUrl}/upload`, formData, {
             reportProgress: true,
             observe: 'events'
         });
     }
+
+    // If you plan to support multiple file uploads, you'll need to change the backend
+    uploadMultipleFiles(files: File[]): Observable<any> {
+        const formData = new FormData();
+        files.forEach(file => {
+            formData.append('file', file); // Use same key if backend uses multer.array('file')
+        });
+
+        return this.http.post(`${this.apiUrl}/upload`, formData, {
+            reportProgress: true,
+            observe: 'events'
+        });
+    }
+
     getFiles(): Observable<any> {
         return this.http.get(`${this.apiUrl}/files`);
     }

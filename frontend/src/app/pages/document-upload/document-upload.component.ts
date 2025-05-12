@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { DocumentUploadService } from '../../service/document-upload.service';
 
 @Component({
   selector: 'app-document-upload',
@@ -12,22 +13,44 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class DocumentUploadComponent {
-    uploadedFiles: File[] = [];
+  uploadedFiles: File[] = [];
 
-    constructor(private messageService: MessageService) {}
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly documentUploadService: DocumentUploadService
+  ) {}
 
-    // Method to handle file upload event
-    uploadFiles(event: { files: File[] }) {
-        
+  onUpload(event: { files: File[] }): void {
+    const filesToUpload = event.files;
+
+    if (!filesToUpload || filesToUpload.length === 0) {
+      this.showMessage('warn', 'No Files', 'Please select files to upload.');
+      return;
     }
 
-    onUpload(event: { files: File[] }) {
-        this.uploadedFiles.push(...event.files);
+    this.documentUploadService.uploadMultipleFiles(filesToUpload).subscribe({
+      next: () => {
+        this.uploadedFiles = filesToUpload;
+        this.showMessage(
+          'success',
+          'Upload Success',
+          `${filesToUpload.length} file(s) uploaded successfully.`
+        );
+      },
+      error: (err: any) => {
+        console.error('Upload error:', err);
+        this.showMessage('error', 'Upload Failed', 'An error occurred during file upload.');
+      }
+    });
+  }
 
-        this.messageService.add({
-            severity: 'info',
-            summary: 'Upload Success',
-            detail: `${event.files.length} file(s) uploaded.`,
-        });
-    }
+  private showMessage(
+    severity: 'success' | 'info' | 'warn' | 'error',
+    summary: string,
+    detail: string
+  ): void {
+    this.messageService.clear(); // Clear previous toasts
+    this.messageService.add({ severity, summary, detail });
+  }
+  
 }
