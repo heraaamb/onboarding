@@ -7,6 +7,7 @@ import employeeQueriesRoute from "./routes/employeeQueriesRoute";
 import usersRoute from "./routes/usersRoute"
 import authloginRoute from "./routes/authLoginRoute"
 import documentUploadRoute from "./routes/DocumentUploadRoute"
+import departmentsRoute from "./routes/DepartmentsRoute"
 import pool from "./db/db";
 
 dotenv.config();
@@ -54,6 +55,7 @@ const registerRoutes = () => {
   app.use("/api/auth-login", authloginRoute);
   app.use("/api/help", authloginRoute);
   app.use("/api/document", documentUploadRoute);
+  app.use("/api/departments", departmentsRoute);
 };
 
 const handleErrors = () => {

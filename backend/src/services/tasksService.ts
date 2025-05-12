@@ -7,7 +7,8 @@ import {
     CREATE_TASK,
     UPDATE_TASK_STATUS,
     GET_EMPLOYEE_SPECIFIC_TASKS,
-    GET_DEPARTMENT_TASKS
+    GET_DEPARTMENT_TASKS,
+    GET_TASK_COUNT
 } from '../queries/tasks.queries';
 import { NumericAxisOptions } from 'aws-sdk/clients/quicksight';
 
@@ -16,6 +17,13 @@ export const getAllTasks = async () => {
     // // Debugging
     // console.log("tasks: ",result.rows);
     return result.rows;
+};
+
+export const getTasksCount = async () => {
+    const result = await pool.query(GET_TASK_COUNT);
+    // // Debugging
+    // console.log("tasks: ",result.rows);
+    return result.rows[0];
 };
 
 export const getEmployeeSpecificTasks = async (id:any) => {

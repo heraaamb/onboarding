@@ -16,6 +16,10 @@ export const GET_ALL_TASKS = `
   LEFT JOIN departments d ON ot.department_id = d.dept_id;
 `;
 
+export const GET_TASK_COUNT= `
+  SELECT COUNT(*) AS total_tasks FROM onboarding_tasks;
+`
+
 export const GET_DEPARTMENT_TASKS = `
   SELECT 
       ot.task_id,
