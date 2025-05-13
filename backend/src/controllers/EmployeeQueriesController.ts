@@ -13,6 +13,30 @@ export const getAllEmployeeQueries = async(req:Request, res:Response) => {
         res.status(500).json({ error: 'Failed to fetch employee queries' });
     }
 }
+export const getAllOpenEmployeeQueries = async(req:Request, res:Response) => {
+    try {
+        const queries = await employeeQueriesService.getAllOpenEmployeeQueries()
+        // // Debugging
+        // console.log(queries); 
+        res.json(queries)
+    } catch (error) {
+        // // Debugging
+        console.log(error);
+        res.status(500).json({ error: 'Failed to fetch open employee queries' });
+    }
+}
+export const replyToHelpRequest = async(req:Request, res:Response) => {
+    try {
+        const queries = await employeeQueriesService.replyToHelpRequest(req.body)
+        // // Debugging
+        // console.log(queries); 
+        res.json(queries)
+    } catch (error) {
+        // // Debugging
+        console.log(error);
+        res.status(500).json({ error: 'Failed to fetch employee queries' });
+    }
+}
 
 export const insertNewQuery = async(req:Request, res:Response) => {
     try {

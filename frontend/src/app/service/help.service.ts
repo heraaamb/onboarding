@@ -12,7 +12,9 @@ export interface HelpRequest {
   providedIn: 'root'
 })
 export class HelpService {
+
   private apiUrl = `${HOST_URL}/api/employee-queries`;
+
   constructor(private http: HttpClient) {}
 
   submitHelpRequest(request: HelpRequest): Observable<any> {
@@ -22,4 +24,21 @@ export class HelpService {
   getAllEmployeeQueries(): Observable<any> {
     return this.http.get(`${this.apiUrl}`);
   }
+
+  getEmployeeQueriesByUser(empId: string): Observable<any[]> {
+    return this.http.get<any[]>(`/api/queries/user/${empId}`);
+  }
+
+
+  getAllOpenEmployeeQueries(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/open`);
+  }
+
+  replyToHelpRequest(queryId: number, response: string) {
+    return this.http.post(`${this.apiUrl}/reply`, {
+      query_id: queryId,
+      response: response
+    });
+  }
+
 }

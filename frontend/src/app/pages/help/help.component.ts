@@ -4,9 +4,18 @@ import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PanelModule } from 'primeng/panel';
-import { HelpService, HelpRequest } from '../../service/help.service';
 import { InputTextarea } from 'primeng/inputtextarea';
+import { HelpService, HelpRequest } from '../../service/help.service';
 import { AuthService } from '../../service/auth.service';
+
+// ✅ Define the proper interface for employee queries
+interface EmployeeQuery {
+  query_id: number;
+  employee_name: string;
+  query_text: string;
+  response?: string;
+  responseMessage?: string;
+}
 
 @Component({
   selector: 'app-help',
@@ -22,30 +31,30 @@ import { AuthService } from '../../service/auth.service';
   ]
 })
 export class HelpComponent {
-  email: string = '';
   message: string = '';
   submitted: boolean = false;
-  query: string = '';
-  employeeQuerySubmitted: boolean = false;
   user: any = '';
   userRole: string = '';
-  employeeQueries: any[] = [];
-  responseMessage: string = '';
+  employeeQueries: EmployeeQuery[] = []; // ✅ Typed correctly
+  loading: boolean = false;
 
   constructor(
     private helpService: HelpService,
     private authService: AuthService
   ) {
-    this.user = this.authService.getCurrentUser(); // e.g., 'Admin', 'Employee', etc.
-    this.userRole = this.user.role; // e.g., 'Admin', 'Employee', etc.
+    this.user = this.authService.getCurrentUser();
+    this.userRole = this.user.role;
 
+    // Load queries based on role
     if (this.userRole === 'Admin' || this.userRole === 'Dept_User') {
       this.loadEmployeeQueries();
+    } else if (this.userRole === 'Employee') {
+      this.loadEmployeeQueriesForEmployee();
     }
   }
 
   submitForm() {
-    if (this.message) {
+    if (this.message.trim()) {
       const helpRequest: HelpRequest = {
         emp_id: this.user.emp_id,
         query_text: this.message
@@ -55,6 +64,8 @@ export class HelpComponent {
         next: () => {
           this.submitted = true;
           this.message = '';
+          setTimeout(() => (this.submitted = false), 3000);
+          this.loadEmployeeQueriesForEmployee();
         },
         error: (err) => {
           console.error('Error submitting help request:', err);
@@ -64,23 +75,48 @@ export class HelpComponent {
   }
 
   loadEmployeeQueries() {
-    this.helpService.getAllEmployeeQueries().subscribe({
-      next: (data) => {
-        // // Debugging
-        console.log("data recieved in employee component", data);
-        this.employeeQueries = data;
+    this.loading = true;
+    this.helpService.getAllOpenEmployeeQueries().subscribe({
+      next: (data: EmployeeQuery[]) => {
+        this.employeeQueries = data.map((query) => ({
+          ...query,
+          responseMessage: ''
+        }));
+        this.loading = false;
       },
       error: (err) => {
-        console.error(`Error fetching employee qureries:`, err);
+        console.error('Error fetching employee queries:', err);
+        this.loading = false;
       }
     });
   }
 
-  replyToQuery(queryId: number, responseMessage: string) {
+  loadEmployeeQueriesForEmployee() {
+    this.loading = true;
+    this.helpService.getEmployeeQueriesByUser(this.user.emp_id).subscribe({
+      next: (data: EmployeeQuery[]) => {
+        this.employeeQueries = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching employee queries:', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  replyToQuery(queryId: number) {
     const query = this.employeeQueries.find((q) => q.query_id === queryId);
-    if (query) {
-      query.response = responseMessage;
-      this.responseMessage = '';
+    if (query && query.responseMessage?.trim()) {
+      this.helpService.replyToHelpRequest(queryId, query.responseMessage).subscribe({
+        next: () => {
+          query.response = query.responseMessage;
+          query.responseMessage = '';
+        },
+        error: (err) => {
+          console.error('Error sending reply:', err);
+        }
+      });
     }
   }
 }
