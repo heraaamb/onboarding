@@ -92,11 +92,13 @@ export class HelpComponent {
     });
   }
 
-  loadEmployeeQueriesForEmployee() {
+    loadEmployeeQueriesForEmployee() {
     this.loading = true;
     this.helpService.getEmployeeQueriesByEmpID(this.user.emp_id).subscribe({
       next: (data: EmployeeQuery[]) => {
-        this.employeeQueries = data;
+        // Sort by descending query_id (newest first)
+        this.employeeQueries = data
+          .sort((a, b) => b.query_id - a.query_id);
         this.loading = false;
       },
       error: (err) => {
@@ -105,6 +107,7 @@ export class HelpComponent {
       }
     });
   }
+
 
   replyToQuery(queryId: number) {
     const query = this.employeeQueries.find((q) => q.query_id === queryId);
