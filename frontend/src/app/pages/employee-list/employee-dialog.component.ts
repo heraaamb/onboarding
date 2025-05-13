@@ -4,9 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
-import { ButtonLabel, ButtonModule } from 'primeng/button';
+import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
 import { Employee } from '../../models/employee.model';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HOST_URL } from '../../utils/utils';
@@ -22,7 +21,6 @@ import { HOST_URL } from '../../utils/utils';
         CalendarModule,
         ButtonModule,
         InputTextModule,
-        TextareaModule,
         HttpClientModule,
     ],
     templateUrl: './employee-dialog.component.html'
@@ -45,7 +43,6 @@ export class EmployeeDialogComponent {
     @Input() departments: any[] = [];
     @Output() save: EventEmitter<Employee> = new EventEmitter();
     @Output() close: EventEmitter<void> = new EventEmitter();
-    
 
     roles = [
         { label: 'Employee', value: 'Employee' },
@@ -53,11 +50,6 @@ export class EmployeeDialogComponent {
         { label: 'Department User', value: 'Dept_User' },
         { label: 'Supervisor', value: 'Supervisor' }
     ];
-
-    // statuses = [
-    //     { label: 'Active', value: 'Active' },
-    //     { label: 'Inactive', value: 'Inactive' }
-    // ];
 
     supervisorOptions: any[] = [];
 
@@ -67,21 +59,33 @@ export class EmployeeDialogComponent {
         this.fetchSupervisors();
     }
 
+    // Fetch supervisors based on department name
+    noSupervisors: boolean = false;
+
     fetchSupervisors() {
-        this.http.get<any[]>(`${HOST_URL}/api/users`).subscribe({
-            next: (data) => {
-                // Assuming each item has a name or employee_name
-                this.supervisorOptions = data.map(user => ({
-                    label: user.name,
-                    value: user.name
-                }));
-            },
-            error: (err) => {
-                console.error('Error fetching supervisors:', err);
-            }
-        });
+        if (this.employee.department_name) {
+            this.http.get<any[]>(`${HOST_URL}/api/users/supervisors?department=${encodeURIComponent(this.employee.department_name)}`).subscribe({
+                next: (data) => {
+                    this.supervisorOptions = data.map(user => ({
+                        label: user.name,
+                        value: user.name
+                    }));
+                    this.noSupervisors = this.supervisorOptions.length === 0;
+                },
+                error: (err) => {
+                    console.error('Error fetching supervisors:', err);
+                    this.supervisorOptions = [];
+                    this.noSupervisors = true;
+                }
+            });
+        }
     }
 
+
+    // Watch for department changes to load supervisors
+    onDepartmentChange() {
+        this.fetchSupervisors();
+    }
 
     hideDialog() {
         this.close.emit();
@@ -91,6 +95,7 @@ export class EmployeeDialogComponent {
         this.employee.status = 'Active';
         this.save.emit(this.employee);
     }
+
     onClose() {
         this.close.emit();
     }

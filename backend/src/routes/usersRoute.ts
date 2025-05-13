@@ -1,11 +1,12 @@
 import express from 'express';
-import { getUsers, createUser, updateUser, deleteUser } from '../controllers/UsersController';
+import { getUsers, createUser, updateUser, deleteUser, getSupervisorsByDepartment } from '../controllers/UsersController';
 // import auth from '../middleware/auth';
 // import authorize from '../middleware/authorizeRole';
 
 const router = express.Router();
 
 router.get('/', getUsers);
+router.get('/supervisors', getSupervisorsByDepartment);
 router.post('/', createUser);
 router.put('/:id', updateUser);
 router.delete('/:id', deleteUser);

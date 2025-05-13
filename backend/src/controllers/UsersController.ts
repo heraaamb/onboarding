@@ -9,6 +9,31 @@ export const getUsers = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Failed to fetch users' });
     }
 };
+export const getSupervisorsByDepartment = async (req: Request, res: Response) => {
+    try {
+        // Ensure the department is a string, if it's an array take the first element
+        const department = Array.isArray(req.query.department) ? req.query.department[0] : req.query.department;
+        
+        if (typeof department !== 'string') {
+            return res.status(400).json({ error: 'Department name is required and must be a string' });
+        }
+
+        // Fetch users from the specified department who are supervisors
+        const supervisors = await usersService.getSupervisorsByDepartment(department);
+        
+        if (supervisors.length === 0) {
+            return res.status(404).json({ message: 'No supervisors found for this department' });
+        }
+
+        // Respond with the list of supervisors
+        res.json(supervisors);
+    } catch (err) {
+        console.error('Error fetching supervisors by department:', err);
+        res.status(500).json({ error: 'Failed to fetch supervisors' });
+    }
+};
+
+
 
 export const createUser = async (req: Request, res: Response) => {
     try {

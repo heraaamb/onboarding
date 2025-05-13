@@ -5,6 +5,7 @@ import {
     CREATE_USER,
     UPDATE_USER,
     DELETE_USER,
+    GET_SUPERVISORS_BY_DEPARTMENT
 } from '../queries/users.queries';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
@@ -15,6 +16,26 @@ export const getAllUsers = async () => {
     console.log(result.rows);
     return result.rows;
 };
+
+export const getSupervisorsByDepartment = async (department: string) => {
+    try {
+        // Query to get users who are supervisors in the specified department
+        const result = await pool.query(GET_SUPERVISORS_BY_DEPARTMENT, [department]);
+
+        if (result.rows.length === 0) {
+            console.log(`No supervisors found for department: ${department}`);
+        } else {
+            console.log(`Fetched supervisors for department: ${department}`);
+        }
+
+        return result.rows;  // Return list of supervisors
+    } catch (err) {
+        console.error('Error fetching supervisors:', err);
+        throw new Error('Database error while fetching supervisors');
+    }
+};
+
+
 
 export const createUser = async (data: any) => {
     const plainPassword = crypto.randomBytes(8).toString('hex');

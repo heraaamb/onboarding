@@ -2,7 +2,8 @@ INSERT INTO departments (name) VALUES
 ('R&D'),        
 ('Operations'),
 ('HR'),        
-('IT');        
+('IT'),
+('Marketing');        
 
 INSERT INTO users (name, email, password_hash, role, department_id, status) VALUES
 -- Admins
