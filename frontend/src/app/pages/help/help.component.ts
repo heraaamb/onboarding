@@ -37,6 +37,7 @@ export class HelpComponent {
   userRole: string = '';
   employeeQueries: EmployeeQuery[] = []; // ✅ Typed correctly
   loading: boolean = false;
+  response:any;
 
   constructor(
     private helpService: HelpService,
@@ -93,7 +94,7 @@ export class HelpComponent {
 
   loadEmployeeQueriesForEmployee() {
     this.loading = true;
-    this.helpService.getEmployeeQueriesByUser(this.user.emp_id).subscribe({
+    this.helpService.getEmployeeQueriesByEmpID(this.user.emp_id).subscribe({
       next: (data: EmployeeQuery[]) => {
         this.employeeQueries = data;
         this.loading = false;

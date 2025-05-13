@@ -25,10 +25,9 @@ export class HelpService {
     return this.http.get(`${this.apiUrl}`);
   }
 
-  getEmployeeQueriesByUser(empId: string): Observable<any[]> {
-    return this.http.get<any[]>(`/api/queries/user/${empId}`);
+  getEmployeeQueriesByEmpID(empId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${empId}`);
   }
-
 
   getAllOpenEmployeeQueries(): Observable<any> {
     return this.http.get(`${this.apiUrl}/open`);
@@ -40,5 +39,4 @@ export class HelpService {
       response: response
     });
   }
-
 }

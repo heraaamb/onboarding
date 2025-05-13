@@ -4,7 +4,8 @@ import {
     GET_ALL_EMPLOYEE_QUERIES,
     INSERT_NEW_QUERY,
     GET_ALL_OPEN_EMPLOYEE_QUERIES,
-    REPLY_TO_QUERY
+    REPLY_TO_QUERY,
+    GET_QUERIES_BY_EMPID
 } from '../queries/employeQueries.queries';
 
 export const getAllEmployeeQueries = async() => {
@@ -16,6 +17,12 @@ export const getAllEmployeeQueries = async() => {
 
 export const getAllOpenEmployeeQueries = async() => {
     const result = await pool.query(GET_ALL_OPEN_EMPLOYEE_QUERIES);
+    // // Debugging
+    // console.log(result.rows);
+    return result.rows;
+};
+export const getQueriesByEmpID = async(emp_id:any) => {
+    const result = await pool.query(GET_QUERIES_BY_EMPID,[emp_id]);
     // // Debugging
     // console.log(result.rows);
     return result.rows;

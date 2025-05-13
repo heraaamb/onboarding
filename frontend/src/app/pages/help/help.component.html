@@ -1,6 +1,6 @@
 <div class="card flex justify-center">
   <p-panel header="Help & Support" [toggleable]="true" styleClass="w-full md:w-4/5 shadow-md">
-  
+
     <!-- Help form for Employees -->
     <div *ngIf="userRole === 'Employee'" class="p-fluid space-y-4 p-4">
       <div>
@@ -17,32 +17,44 @@
     </div>
 
     <!-- Section to display queries raised by the employee -->
-    <div *ngIf="userRole === 'Employee'" class="p-fluid space-y-4 p-4 mt-8">
-      <h3 class="text-xl font-semibold text-blue-800">Your Queries</h3>
+    <div *ngIf="userRole === 'Employee'" class="p-fluid p-4 mt-8">
+      <h3 class="text-2xl font-bold text-blue-700 mb-6 text-center border-b pb-2">Your Help & Support Queries</h3>
 
-      <ng-container *ngIf="employeeQueries?.length > 0; else noEmployeeQueries">
-        <div *ngFor="let query of employeeQueries" class="border border-gray-200 rounded-lg shadow-sm p-4 space-y-3 bg-white">
-          <div class="flex justify-between items-center">
-            <p class="text-gray-700 font-medium">
-              <i class="pi pi-user mr-2 text-blue-500"></i>{{ query.employee_name }}
-            </p>
-            <span class="px-2 py-1 text-xs rounded-full"
-                  [ngClass]="{
-                    'bg-yellow-100 text-yellow-800': !query.response,
-                    'bg-green-100 text-green-800': query.response
-                  }">
-              {{ query.response ? 'Responded' : 'Pending' }}
-            </span>
-          </div>
+      <p *ngIf="loading" class="text-center text-gray-500 italic">Loading your queries...</p>
 
-          <div>
-            <label class="text-sm font-semibold text-gray-600">Query:</label>
-            <p class="p-2 bg-gray-50 rounded text-gray-800 border">{{ query.query_text }}</p>
-          </div>
+      <ng-container *ngIf="!loading && employeeQueries.length > 0; else noEmployeeQueries">
+        <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+          <div *ngFor="let query of employeeQueries" class="bg-white rounded-xl shadow-lg p-5 space-y-4 border hover:shadow-xl transition-shadow duration-300">
+            <!-- Header Row -->
+            <div class="flex justify-between items-center">
+              <div class="flex items-center space-x-2">
+                <i class="pi pi-user text-blue-500 text-lg"></i>
+                <p class="text-gray-800 font-semibold">{{ query.employee_name }}</p>
+              </div>
+              <span class="text-xs px-3 py-1 rounded-full font-medium"
+                    [ngClass]="{
+                      'bg-yellow-100 text-yellow-800': !query.response,
+                      'bg-green-100 text-green-800': query.response
+                    }">
+                {{ query.response ? 'Responded' : 'Pending' }}
+              </span>
+            </div>
 
-          <div *ngIf="query.response">
-            <label class="text-sm font-semibold text-gray-600">Response:</label>
-            <p class="p-2 bg-green-50 rounded text-green-800 border">{{ query.response }}</p>
+            <!-- Query Text -->
+            <div>
+              <label class="block text-sm text-gray-600 font-medium mb-1">Your Query</label>
+              <div class="bg-gray-50 border border-gray-200 rounded-md p-3 text-gray-800">
+                {{ query.query_text }}
+              </div>
+            </div>
+
+            <!-- Response Text -->
+            <div *ngIf="query.response">
+              <label class="block text-sm text-gray-600 font-medium mb-1">Response</label>
+              <div class="bg-green-50 border border-green-200 rounded-md p-3 text-green-800">
+                {{ query.response }}
+              </div>
+            </div>
           </div>
         </div>
       </ng-container>
@@ -56,7 +68,9 @@
     <div *ngIf="userRole === 'Admin' || userRole === 'Dept_User'" class="p-4 space-y-6">
       <h3 class="text-xl font-semibold text-blue-800">Employee Queries</h3>
 
-      <ng-container *ngIf="employeeQueries?.length > 0; else noAdminQueries">
+      <p *ngIf="loading" class="text-center text-gray-500 italic">Loading employee queries...</p>
+
+      <ng-container *ngIf="!loading && employeeQueries.length > 0; else noAdminQueries">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div *ngFor="let query of employeeQueries" class="border border-gray-200 rounded-lg shadow-sm p-4 space-y-3 bg-white">
             <div class="flex justify-between items-center">
