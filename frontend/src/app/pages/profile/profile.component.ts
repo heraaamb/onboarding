@@ -94,6 +94,7 @@ export class ProfileComponent implements OnInit {
         this.currentPassword = '';
         this.newPassword = '';
         this.confirmPassword = '';
+        this.showChangePassword = false;
       },
       error: (err) => {
         this.messageService.add({

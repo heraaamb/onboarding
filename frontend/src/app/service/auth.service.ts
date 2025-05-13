@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { HOST_URL } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:3000/api/auth';  // Adjust this to match your backend route
+  private apiUrl = ``;  // Adjust this to match your backend route
 
   constructor(private http: HttpClient) {}
 
@@ -46,7 +47,7 @@ export class AuthService {
     });
 
     return this.http.post(
-      `${this.apiUrl}/auth-change-password`,
+      `${HOST_URL}/api/auth-change-password`,
       { currentPassword, newPassword },
       { headers }
     );
